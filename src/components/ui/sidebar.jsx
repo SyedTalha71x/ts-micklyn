@@ -1,37 +1,37 @@
+/* eslint-disable no-unused-vars */
 import { NavLink } from "react-router-dom";
 
-const Sidebar = () => {
+const Sidebar = ({ activeItem, setActiveItem, openModal, isMobile }) => {
   const menuItems = [
-      { name: "Manage Wallet", path: "/settings/manage-wallet" },
-      { name: "Wallet Connections", path: "/settings/wallet-connections" },
-      { name: "Address Book", path: "/settings/address-book" },
-      { name: "Activity", path: "/settings/activity" },
-      { name: "Security & Privacy", path: "/settings/security-privacy" },
-      { name: "System Status", path: "/settings/system-status" },
+    { name: "Manage Wallet", path: "/settings/manage-wallet" },
+    { name: "Wallet Connections", path: "/settings/wallet-connections" },
+    { name: "Address Book", path: "/settings/address-book" },
+    { name: "Activity", path: "/settings/activity" },
+    { name: "Security & Privacy", path: "/settings/security-privacy" },
+    { name: "System Status", path: "/settings/system-status" },
     { name: "Preferences", path: "/settings/preferences" },
     { name: "Price Alert", path: "/settings/price-alert" },
     { name: "Notification", path: "/settings/notification" },
   ];
 
-  return (
-    <div className="w-64  p-4">
-        <div className="space-y-3">
+  const handleItemClick = (path) => {
+    setActiveItem(path);
+    openModal(path);
+  };
 
-      {menuItems.map((item) => (
-          <NavLink
-          key={item.path}
-          to={item.path}
-          className={({ isActive }) =>
-            `block py-2 px-3 rounded-md text-sm  manrope-font ${
-                isActive
-                ? "bg-primary text-primary-foreground"
-                : "hover:bg-accent"
-            }`
-        }
-        >
-          {item.name}
-        </NavLink>
-      ))}
+  return (
+    <div className="w-full p-4">
+      <div className="space-y-3">
+        {menuItems.map((item) => (
+          <div
+            key={item.path}
+            onClick={() => handleItemClick(item.path)}
+            className={`block py-2 px-3 rounded-md text-sm manrope-font cursor-pointer 
+              ${activeItem === item.path ? "bg-primary text-primary-foreground" : "hover:bg-accent"}`}
+          >
+            {item.name}
+          </div>
+        ))}
       </div>
     </div>
   );
