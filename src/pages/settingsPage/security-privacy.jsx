@@ -7,7 +7,7 @@ const SecurityPrivacy = () => {
   const [hideBalance, setHideBalance] = useState(false)
 
   return (
-    <div className="w-full space-y-2 manrope-font ">
+    <div className="w-full space-y-2 manrope-font text-sm ">
       <h2 className="text-lg manrope-font">Safe guard</h2>
 
       <div className="space-y-4">

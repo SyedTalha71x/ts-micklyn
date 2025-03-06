@@ -15,6 +15,8 @@ import PriceAlert from "./pages/settingsPage/price-alert";
 import Notification from "./pages/settingsPage/notification";
 import SecurityPrivacy from "./pages/settingsPage/security-privacy";
 
+import MobileSidebar from "./components/ui/mobile-sidebar";
+
 
 
 function App() {
@@ -27,6 +29,8 @@ function App() {
             <Route path="verify-otp" element={<VerifyOtp />} />
 
             <Route path="settings" element={<SettingsLayout />}>
+            <Route path="management" element={<MobileSidebar />} />
+
               <Route path="preferences" element={<PreferencesPage />} />
               <Route path="manage-wallet" element={<ManageWallet />} />  
               <Route path="wallet-connections" element={<WalletConnections />} />
