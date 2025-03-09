@@ -6,3 +6,9 @@
   font-optical-sizing: auto;
   font-weight: 600;
 }
+
+.manrope-font-bold{
+  font-family: "Manrope", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+}

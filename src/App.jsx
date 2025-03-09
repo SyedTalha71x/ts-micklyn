@@ -16,6 +16,8 @@ import Notification from "./pages/settingsPage/notification";
 import SecurityPrivacy from "./pages/settingsPage/security-privacy";
 
 import MobileSidebar from "./components/ui/mobile-sidebar";
+import Home from "./pages/home";
+import Chat from "./pages/chat";
 
 
 
@@ -25,8 +27,12 @@ function App() {
       <div>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<CreateAccount />} />
+          <Route path="/" element={<Home />} />
+
+            <Route path="/create-account" element={<CreateAccount />} />
             <Route path="verify-otp" element={<VerifyOtp />} />
+            <Route path="chat" element={<Chat />} />
+
 
             <Route path="settings" element={<SettingsLayout />}>
             <Route path="management" element={<MobileSidebar />} />
