@@ -2,7 +2,7 @@ import React from 'react'
 
 const AddressBook = () => {
   return (
-    <div>AddressBook</div>
+    <div className='dark:text-white'>AddressBook</div>
   )
 }
 

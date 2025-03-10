@@ -1,76 +1,82 @@
-import  React from "react"
-import { useRef, useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import CreateAccountPicture from '../../public/Layer_1.svg'
-
+import React from "react";
+import { useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import CreateAccountPicture from "../../public/Layer_1.svg";
+import CreateAccountPictureDark from "../../public/Layer_1_black.svg";
 
 export default function OTPVerification() {
-  const [otp, setOtp] = useState(["", "", "", ""])
-  const inputRefs = [
-    useRef(null),
-    useRef(null),
-    useRef(null),
-    useRef(null),
-  ]
+  const [otp, setOtp] = useState(["", "", "", ""]);
+  const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
 
   const handleChange = (index, value) => {
     // Only allow numbers
-    if (!/^\d*$/.test(value)) return
+    if (!/^\d*$/.test(value)) return;
 
-    const newOtp = [...otp]
-    newOtp[index] = value.slice(-1) // Only take the last digit
+    const newOtp = [...otp];
+    newOtp[index] = value.slice(-1); // Only take the last digit
 
-    setOtp(newOtp)
+    setOtp(newOtp);
 
     // Auto focus next input
     if (value && index < 3) {
-      inputRefs[index + 1].current?.focus()
+      inputRefs[index + 1].current?.focus();
     }
-  }
+  };
 
   const handleKeyDown = (index, e) => {
     if (e.key === "Backspace" && !otp[index] && index > 0) {
-      inputRefs[index - 1].current?.focus()
+      inputRefs[index - 1].current?.focus();
     }
-  }
+  };
 
   const handlePaste = (e) => {
-    e.preventDefault()
-    const pastedData = e.clipboardData.getData("text").slice(0, 4).split("")
-    const newOtp = [...otp]
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData("text").slice(0, 4).split("");
+    const newOtp = [...otp];
 
     pastedData.forEach((value, index) => {
       if (index < 4 && /^\d$/.test(value)) {
-        newOtp[index] = value
+        newOtp[index] = value;
       }
-    })
+    });
 
-    setOtp(newOtp)
+    setOtp(newOtp);
 
     // Focus last filled input or first empty input
-    const lastFilledIndex = newOtp.findLastIndex((value) => value !== "")
-    const focusIndex = lastFilledIndex === 3 ? 3 : lastFilledIndex + 1
-    inputRefs[focusIndex]?.current?.focus()
-  }
+    const lastFilledIndex = newOtp.findLastIndex((value) => value !== "");
+    const focusIndex = lastFilledIndex === 3 ? 3 : lastFilledIndex + 1;
+    inputRefs[focusIndex]?.current?.focus();
+  };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    const otpString = otp.join("")
-    console.log("Submitted OTP:", otpString)
+    e.preventDefault();
+    const otpString = otp.join("");
+    console.log("Submitted OTP:", otpString);
     // Add your submission logic here
-  }
+  };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
+    <div className="flex min-h-screen items-center dark:bg-black justify-center bg-gray-50 p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="flex flex-col items-center space-y-4 pt-6">
-          <div className="flex h-20 w-20 items-center justify-center rounded-lg border">
-                     <img src={CreateAccountPicture} className="h-full w-full" alt="" />
-                   </div>
+          <div className="flex h-20 w-20 items-center justify-center rounded-lg border bg-white dark:bg-black">
+            <img
+              src={CreateAccountPicture}
+              className="h-full w-full block dark:hidden"
+              alt="Light Mode Image"
+            />
+            <img
+              src={CreateAccountPictureDark}
+              className="h-full w-full hidden dark:block"
+              alt="Dark Mode Image"
+            />
+          </div>
           <h1 className="text-xl font-semibold">Create Account</h1>
-          <p className="text-sm text-muted-foreground text-center">Enter the verification code sent to abc@gmail.com</p>
+          <p className="text-sm text-muted-foreground text-center">
+            Enter the verification code sent to abc@gmail.com
+          </p>
         </CardHeader>
 
         <CardContent>
@@ -94,10 +100,15 @@ export default function OTPVerification() {
             </div>
 
             <div className="space-y-2">
-              <Button type="submit" className="w-full" variant="outline">
+              <Button type="submit" className="w-full dark:bg-[#232428]" variant="outline">
                 Submit
               </Button>
-              <Button type="button" variant="outline" className="w-full" onClick={() => window.history.back()}>
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full dark:bg-[#232428]"
+                onClick={() => window.history.back()}
+              >
                 Back
               </Button>
             </div>
@@ -105,6 +116,5 @@ export default function OTPVerification() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
-

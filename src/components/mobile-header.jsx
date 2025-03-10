@@ -1,42 +1,40 @@
-import { Bell } from "lucide-react"
+import { Bell, Menu } from "lucide-react"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
+import NotificationIcon from '../../public/octicon_history-16.svg'
+import VectorSvg from '../../public/Vector.svg'
 
-export default function MobileHeader() {
+
+export default function MobileHeader({ onMenuClick }) {
   return (
-    <div className="p-4 border-b">
+    <div className="p-4 ">
       <div className="flex items-center justify-between">
-        <Button variant="ghost" size="icon" className="h-8 w-8">
+        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onMenuClick}>
           <span className="sr-only">Menu</span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="h-4 w-4"
-          >
-            <line x1="4" x2="20" y1="12" y2="12" />
-            <line x1="4" x2="20" y1="6" y2="6" />
-            <line x1="4" x2="20" y1="18" y2="18" />
-          </svg>
+          <Menu className="h-4 w-4 dark:text-white" />
         </Button>
-        <span className="font-semibold">Bell Finance</span>
-        <Button variant="ghost" size="icon" className="h-8 w-8">
-          <Bell className="h-4 w-4" />
-          <span className="sr-only">Notifications</span>
+        <span className="font-semibold flex dark:text-white gap-1 text-sm">Bell <div className="text-gray-400">:$69155.4</div></span>
+        <Button variant="ghost" size="icon" className="h-5 w-5">
+            <img
+                        src={NotificationIcon}
+                        className=" block dark:hidden"
+                        alt="Light Mode Image"
+                      />
+                      <img
+                        src={VectorSvg}
+                        className=" hidden dark:block"
+                        alt="Dark Mode Image"
+                      />
         </Button>
       </div>
 
-      <div className="mt-6 flex items-center gap-3">
-        <Avatar className="h-10 w-10 border border-border">
-          <AvatarFallback className="bg-muted text-xs">CC</AvatarFallback>
+      <div className="mt-6 flex items-center gap-3 p-2 rounded-xl border border-gray-300">
+        <Avatar className="h-8 w-8 border border-border">
+          <AvatarFallback className="bg-muted text-xs dark:text-white">CC</AvatarFallback>
         </Avatar>
-        <div>
-          <h2 className="text-sm font-medium">Top Trending Crypto Currency</h2>
-          <p className="text-xs text-muted-foreground">Updated 2 mins ago · 10 February 2023</p>
+        <div className="">
+          <h2 className="text-sm font-bold dark:text-white">Top Trending Crypto Currency</h2>
+          <p className="text-xs text-gray-400">Here are today top trending crypto..</p>
         </div>
       </div>
     </div>

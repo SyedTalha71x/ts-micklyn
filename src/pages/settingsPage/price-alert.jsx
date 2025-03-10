@@ -2,7 +2,7 @@ import React from 'react'
 
 const PriceAlert = () => {
   return (
-    <div>PriceAlert</div>
+    <div className='dark:text-white'>PriceAlert</div>
   )
 }
 

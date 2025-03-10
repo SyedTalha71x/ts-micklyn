@@ -2,7 +2,7 @@ import React from 'react'
 
 const WalletConnections = () => {
   return (
-    <div>WalletConnections</div>
+    <div className='dark:text-white'>WalletConnections</div>
   )
 }
 

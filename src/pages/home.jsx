@@ -1,97 +1,88 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import HomeImage from '../../public/Layer_1.svg'
+import HomeImage from "../../public/Layer_1.svg"
+import VectorSvg from '../../public/Layer_1_black.svg'
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white">
-      <header className=" border-gray-100 py-4 px-4">
+    <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white">
+      <header className="border-b border-gray-200 dark:border-gray-700 py-4 px-4">
         <div className="container flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="relative h-10 w-10">
-              <img 
-                src={HomeImage}
-                alt="NomicsAI Logo" 
-                fill 
-                className="object-contain"
-              />
+              <img src={HomeImage} alt="NomicsAI Logo" className="object-contain" />
             </div>
             <span className="font-semibold manrope-font-bold">NomicsAI</span>
           </div>
-          <Button variant="ghost" size="sm">
+          <Button variant="ghost" size="sm" className="text-black dark:text-white border border-black dark:border-white hover:bg-gray-100 dark:hover:bg-gray-700">
             API Status →
           </Button>
         </div>
       </header>
 
       <section className="container py-12">
-        <p className="mx-auto max-w-3xl text-center text-sm text-gray-600">
-          Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem ipsum is simply dummy text of the
+        <p className="mx-auto max-w-3xl text-center text-sm text-gray-600 dark:text-gray-300">
+          Lorem ipsum is simply dummy text of the printing and typesetting industry.
         </p>
       </section>
 
       <section className="container py-4">
         <div className="mx-auto max-w-md text-center">
-          <div className="mx-auto mb-4 gap-3 flex h-20 w-20 items-center justify-center">
-            <img 
-              src={HomeImage}
-              alt="NomicsAI Logo" 
-            />
-          <h2 className="text-3xl manrope-font-bold font-semibold">NomicsAI</h2>
+          <div className="flex justify-center items-center mb-4">
+            <div className="h-20 w-20 relative">
+              <img
+                src={HomeImage}
+                className="h-full w-full block dark:hidden"
+                alt="Light Mode Image"
+              />
+              <img
+                src={VectorSvg}
+                className="h-full w-full hidden dark:block"
+                alt="Dark Mode Image"
+              />
+            </div>
+            <h2 className="text-3xl manrope-font-bold font-semibold">NomicsAI</h2>
           </div>
-          <p className="text-gray-800 text-xl font-bold manrope-font-bold">Lorem ipsum is simply dummy</p>
+          <p className="text-gray-800 dark:text-gray-200 text-xl font-bold">Lorem ipsum is simply dummy</p>
         </div>
       </section>
 
       <section className="max-w-3xl w-full mx-auto py-8">
         <div className="grid gap-6 md:grid-cols-2">
-          <Card className="border border-gray-400 rounded-xl">
-            <CardContent className="p-4">
-              <h3 className="mb-2 font-medium manrope-font-bold text-lg">Lorem ipsum is simply dummy text</h3>
-              <p className="text-sm text-gray-500">Lorem ipsum is simply</p>
-            </CardContent>
-          </Card>
-          <Card className="border border-gray-400 rounded-xl">
-            <CardContent className="p-4">
-              <h3 className="mb-2 font-medium manrope-font-bold text-lg">Lorem ipsum is simply dummy text</h3>
-              <p className="text-sm text-gray-500">Lorem ipsum is simply</p>
-            </CardContent>
-          </Card>
+          {[...Array(2)].map((_, i) => (
+            <Card key={i} className="border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-[#101010] rounded-xl">
+              <CardContent className="p-4">
+                <h3 className="mb-2 font-medium text-lg">Lorem ipsum is simply dummy text</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Lorem ipsum is simply</p>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </section>
 
       <section className="max-w-3xl w-full mx-auto py-12">
-        <h2 className="mb-4 text-center text-3xl manrope-font-bold ">Lorem ipsum is simply dummy</h2>
-        <p className="mx-auto max-w-3xl text-center text-sm text-gray-800">
-          Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem ipsum is simply dummy text of
-          the lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem ipsum is simply dummy
+        <h2 className="mb-4 text-center text-3xl text-black dark:text-white">Lorem ipsum is simply dummy</h2>
+        <p className="mx-auto max-w-3xl text-center text-sm text-gray-600 dark:text-gray-300">
+          Lorem ipsum is simply dummy text of the printing and typesetting industry.
         </p>
       </section>
 
       <section className="max-w-6xl w-full mx-auto overflow-x-auto py-8">
         <Table className="w-full border-collapse">
           <TableHeader>
-            <TableRow className="bg-gray-50">
-              <TableHead className="border px-4 py-2 font-bold text-black text-left">Lorem ipsum is</TableHead>
-              <TableHead className="border px-4 py-2 font-bold text-black text-center">Lorem ipsum is</TableHead>
-              <TableHead className="border px-4 py-2 font-bold text-black text-center">Lorem ipsum</TableHead>
-              <TableHead className="border px-4 py-2 font-bold text-black text-center">Lorem ipsum</TableHead>
-              <TableHead className="border px-4 py-2 font-bold text-black text-center">Lorem</TableHead>
-              <TableHead className="border px-4 py-2 font-bold text-black text-center">Lorem</TableHead>
-              <TableHead className="border px-4 py-2 font-bold text-black text-center">Lorem</TableHead>
+            <TableRow className="bg-gray-100 dark:bg-gray-800">
+              {[...Array(7)].map((_, i) => (
+                <TableHead key={i} className="border px-4 py-2 font-bold text-black dark:text-white text-center">Lorem ipsum</TableHead>
+              ))}
             </TableRow>
           </TableHeader>
           <TableBody>
             {tableData.map((row, index) => (
-              <TableRow key={index} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                <TableCell className="border px-4 py-2">{row.name}</TableCell>
-                <TableCell className="border px-4 py-2 text-center">{row.col1}</TableCell>
-                <TableCell className="border px-4 py-2 text-center">{row.col2}</TableCell>
-                <TableCell className="border px-4 py-2 text-center">{row.col3}</TableCell>
-                <TableCell className="border px-4 py-2 text-center">{row.col4}</TableCell>
-                <TableCell className="border px-4 py-2 text-center">{row.col5}</TableCell>
-                <TableCell className="border px-4 py-2 text-center">{row.col6}</TableCell>
+              <TableRow key={index} className={index % 2 === 0 ? "bg-white dark:bg-gray-900" : "bg-gray-50 dark:bg-gray-800"}>
+                {Object.values(row).map((value, i) => (
+                  <TableCell key={i} className="border px-4 py-2 text-center text-black dark:text-white">{value}</TableCell>
+                ))}
               </TableRow>
             ))}
           </TableBody>

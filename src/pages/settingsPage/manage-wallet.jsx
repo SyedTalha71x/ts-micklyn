@@ -15,12 +15,12 @@ const ManageWallet = () => {
 
   return (
     <div className="w-full ">
-      <h2 className="text-lg font-medium mb-4">Select Wallet</h2>
+      <h2 className="text-lg font-medium mb-4 dark:text-white">Select Wallet</h2>
       <div className="space-y-2">
         {walletOptions.map((wallet) => (
           <Card
             key={wallet.name}
-            className={`p-4 cursor-pointer  transition-colors ${
+            className={`p-4 cursor-pointer  transition-colors dark:bg-[#232428] ${
               selectedWallet === wallet.name ? "border-2" : "border-gray-200"
             }`}
             onClick={() => setSelectedWallet(wallet.name)}

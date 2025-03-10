@@ -22,9 +22,10 @@ import Chat from "./pages/chat";
 
 
 function App() {
+
   return (
     <>
-      <div>
+      <div className="light">
         <BrowserRouter>
           <Routes>
           <Route path="/" element={<Home />} />

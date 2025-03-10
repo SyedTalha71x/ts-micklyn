@@ -1,4 +1,4 @@
-import Sidebar from "@/components/ui/sidebar";
+import Sidebar from "@/components/sidebar";
 import { ChevronLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
@@ -56,8 +56,8 @@ const SettingsLayout = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen p-4 bg-gray-50">
-      <div className="flex flex-col w-full max-w-4xl bg-white shadow-lg rounded-lg overflow-hidden">
+    <div className="flex justify-center items-center min-h-screen p-4 dark:bg-black bg-gray-50">
+      <div className="flex flex-col w-full max-w-4xl bg-white dark:bg-[#101010] shadow-lg rounded-lg overflow-hidden">
         <div className="p-6 flex items-center justify-between">
           {isMobile && showContent ? (
             <>
@@ -72,7 +72,7 @@ const SettingsLayout = () => {
               <div className="w-6"></div>
             </>
           ) : (
-            <h1 className="text-xl p-4 manrope-font w-full md:text-left text-center">
+            <h1 className="text-xl p-4 dark:text-white manrope-font w-full md:text-left text-center">
               Account Setting
             </h1>
           )}
@@ -113,7 +113,7 @@ const SettingsLayout = () => {
           )}
           {/* Mobile content view */}
           {isMobile && showContent && (
-            <main className="flex-1 p-4 overflow-y-auto">
+            <main className="flex-1 p-4 overflow-y-auto ">
               <Outlet />
             </main>
           )}

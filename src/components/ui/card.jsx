@@ -10,7 +10,22 @@ function Card({
     <div
       data-slot="card"
       className={cn(
-        "bg-card text-card-foreground manrope-font border border-slate-300 flex flex-col gap-6 rounded-xl shadow-md py-6",
+        "bg-card text-card-foreground dark:border-gray-700 dark:bg-[#232428] manrope-font border border-slate-300  flex flex-col gap-6 rounded-xl shadow-md py-6",
+        className
+      )}
+      {...props} />
+  );
+}
+
+function Card2({
+  className,
+  ...props
+}) {
+  return (
+    <div
+      data-slot="card"
+      className={cn(
+        " text-card-foreground dark:border-gray-700  manrope-font border border-slate-300  flex flex-col gap-6 rounded-xl shadow-md py-6",
         className
       )}
       {...props} />
@@ -93,4 +108,4 @@ function CardFooter({
   );
 }
 
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent, Card1, CardContent1 }
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent, Card1, CardContent1, Card2 }

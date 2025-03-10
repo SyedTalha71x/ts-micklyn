@@ -2,7 +2,7 @@ import React from 'react'
 
 const SystemStatus = () => {
   return (
-    <div>SystemStatus</div>
+    <div className='dark:text-white'>SystemStatus</div>
   )
 }
 

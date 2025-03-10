@@ -23,7 +23,6 @@ export default function ChatInput() {
       <Input className="flex-1" placeholder="Ask anything about crypto..." />
       <Button size="icon" className="rounded-full bg-primary text-primary-foreground">
         <Send className="h-4 w-4" />
-        <span className="sr-only">Send</span>
       </Button>
     </div>
   )
