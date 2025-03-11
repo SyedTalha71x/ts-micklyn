@@ -40,16 +40,16 @@ export default function Chat() {
         </div>
 
         <div className="flex-1 md:flex hidden flex-col ">
-          <div className="p-4">
+          {/* <div className="p-4">
             <TotalBalance />
-          </div>
+          </div> */}
 
           {/* Placeholder for financial chart */}
-          {/* <div className="flex justify-center p-3 ">
+          <div className=" ">
             <div className="w-full">
               <FinancialChart />
             </div>
-          </div> */}
+          </div>
         </div>
       </div>
 

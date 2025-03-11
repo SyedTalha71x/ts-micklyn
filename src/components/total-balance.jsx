@@ -8,7 +8,7 @@ export default function TotalBalance() {
   const handleSettingsRedirect = () => {
     window.location.href = '/settings/manage-wallet'
   }
-  
+
 
   return (
     <div className="flex justify-between">

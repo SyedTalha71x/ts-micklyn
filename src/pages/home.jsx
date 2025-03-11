@@ -53,7 +53,7 @@ export default function Home() {
           {[...Array(2)].map((_, i) => (
             <Card key={i} className="border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-[#101010] rounded-xl">
               <CardContent className="p-4">
-                <h3 className="mb-2 font-medium text-lg">Lorem ipsum is simply dummy text</h3>
+                <h3 className="mb-2 font-bold text-lg">Lorem ipsum is simply dummy text</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">Lorem ipsum is simply</p>
               </CardContent>
             </Card>
@@ -62,9 +62,9 @@ export default function Home() {
       </section>
 
       <section className="max-w-3xl w-full mx-auto py-12">
-        <h2 className="mb-4 text-center text-3xl text-black dark:text-white">Lorem ipsum is simply dummy</h2>
+        <h2 className="mb-4 text-center text-3xl font-bold text-black dark:text-white">Lorem ipsum is simply dummy</h2>
         <p className="mx-auto max-w-3xl text-center text-sm text-gray-600 dark:text-gray-300">
-          Lorem ipsum is simply dummy text of the printing and typesetting industry.
+          Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus omnis aperiam fugit exercitationem id, inventore repudiandae excepturi quasi praesentium suscipit!
         </p>
       </section>
 

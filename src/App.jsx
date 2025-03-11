@@ -18,7 +18,7 @@ import SecurityPrivacy from "./pages/settingsPage/security-privacy";
 import MobileSidebar from "./components/ui/mobile-sidebar";
 import Home from "./pages/home";
 import Chat from "./pages/chat";
-
+import GraphChat from './pages/graph-chat'
 
 
 function App() {
@@ -33,6 +33,7 @@ function App() {
             <Route path="/create-account" element={<CreateAccount />} />
             <Route path="verify-otp" element={<VerifyOtp />} />
             <Route path="chat" element={<Chat />} />
+            <Route path="graph-chat" element={<GraphChat />} />
 
 
             <Route path="settings" element={<SettingsLayout />}>
