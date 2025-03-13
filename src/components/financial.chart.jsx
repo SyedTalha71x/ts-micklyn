@@ -269,21 +269,21 @@ export default function FinancialChart() {
   const [selectedPeriod, setSelectedPeriod] = useState("7Days");
 
   return (
-    <div className="w-[90%] mr-auto mt-2.5">
+    <div className="md:w-[90%] w-full mr-auto md:mt-2.5 mt-0">
       <div className="flex mb-3 justify-between items-center">
         <div>
-          <div className="border border-gray-400 text-sm flex rounded-lg cursor-pointer gap-3 py-2 px-6">
+          <div className="border border-gray-400 dark:text-white text-sm flex rounded-lg cursor-pointer gap-3 py-2 px-6">
             <span className="font-bold">Interval: 1Hour</span>
             <div>
               <MdKeyboardArrowDown size={20} />
             </div>
           </div>
         </div>
-        <div className="p-3 rounded-lg border border-gray-500 cursor-pointer">
+        <div className="p-3 rounded-lg border dark:text-white border-gray-500 cursor-pointer">
           <IoAnalytics size={20}/>
         </div>
       </div>
-      <Card className=" overflow-hidden relative">
+      <Card className=" overflow-hidden relative dark:bg-[#101010]">
         <CardContent className="p-0">
           <div className="p-2 text-xs border-b flex flex-wrap gap-2">
             <span>MA 10 close 0 SMA 0</span>

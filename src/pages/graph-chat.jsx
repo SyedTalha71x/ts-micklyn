@@ -1,20 +1,21 @@
-"use client"
-
-import { useState } from "react"
+/* eslint-disable no-unused-vars */
+import { useState, useEffect } from "react"
+import { useLocation } from "react-router-dom"
 import CryptoTable from "@/components/crypto-table"
-import MobileHeader from "@/components/mobile-header"
 import NavigationTabs from "@/components/navigation-tabs"
 import TotalBalance from "@/components/total-balance"
 import FinancialChart from "@/components/financial.chart"
+import MobileHeaderChat from "@/components/mobile-header-chat"
 
 export default function Chat() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const pathname = useLocation()
+  const isGraphChat = pathname === "/graph-chat"
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Mobile Header - Only visible on mobile */}
       <div className="md:hidden">
-        <MobileHeader onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
+        <MobileHeaderChat onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
       </div>
 
       <div className="flex flex-1 flex-col md:flex-row">
@@ -39,14 +40,10 @@ export default function Chat() {
           <CryptoTable />
         </div>
 
-        <div className="flex-1 md:flex hidden flex-col ">
-          {/* <div className="p-4">
-            <TotalBalance />
-          </div> */}
-
-          {/* Placeholder for financial chart */}
-          <div className=" ">
-            <div className="w-full">
+        {/* Main content area - Make chart scrollable on small screens */}
+        <div className="flex-1 flex flex-col w-full">
+          <div className="flex-1 p-3">
+            <div className=" w-full">
               <FinancialChart />
             </div>
           </div>
@@ -61,4 +58,3 @@ export default function Chat() {
     </div>
   )
 }
-
