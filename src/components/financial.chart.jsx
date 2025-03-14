@@ -328,7 +328,7 @@ export default function FinancialChart() {
             </div>
 
             {/* Price indicators */}
-            <div className="absolute right-2 top-2 text-xs">
+            {/* <div className="absolute right-2 top-2 text-xs">
               <Badge
                 variant="outline"
                 className="bg-zinc-800 text-white mb-1 block"
@@ -338,9 +338,9 @@ export default function FinancialChart() {
               <span className="block text-right">
                 {mockData.highLow.high.toFixed(2)}
               </span>
-            </div>
+            </div> */}
 
-            <div className="absolute right-2 bottom-20 text-xs">
+            {/* <div className="absolute right-2 bottom-20 text-xs">
               <Badge
                 variant="outline"
                 className="bg-zinc-800 text-white mb-1 block"
@@ -350,7 +350,7 @@ export default function FinancialChart() {
               <span className="block text-right">
                 {mockData.highLow.low.toFixed(2)}
               </span>
-            </div>
+            </div> */}
 
             <div className="w-full h-full pr-16">
               <CandlestickChart data={mockData.prices} />
