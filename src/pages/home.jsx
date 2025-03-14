@@ -5,6 +5,9 @@ import HomeImage from "../../public/Layer_1.svg"
 import VectorSvg from '../../public/Layer_1_black.svg'
 
 export default function Home() {
+  const redirectToChat = () =>{
+    window.location.href = '/chat'
+  }
   return (
     <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white">
       <header className="border-b border-gray-200 dark:border-gray-700 py-4 px-4">
@@ -15,9 +18,12 @@ export default function Home() {
             </div>
             <span className="font-semibold manrope-font-bold">NomicsAI</span>
           </div>
-          <Button variant="ghost" size="sm" className="text-black dark:text-white border border-black dark:border-white hover:bg-gray-100 dark:hover:bg-gray-700">
+          <div onClick={redirectToChat}>
+
+          <Button  variant="ghost" size="sm" className="text-black dark:text-white border border-black dark:border-white hover:bg-gray-100 dark:hover:bg-gray-700">
             API Status →
           </Button>
+          </div>
         </div>
       </header>
 
@@ -71,7 +77,7 @@ export default function Home() {
       <section className="max-w-6xl w-full mx-auto overflow-x-auto py-8">
         <Table className="w-full border-collapse">
           <TableHeader>
-            <TableRow className="bg-gray-100 dark:bg-gray-800">
+            <TableRow className="bg-gray-100 dark:bg-black">
               {[...Array(7)].map((_, i) => (
                 <TableHead key={i} className="border px-4 py-2 font-bold text-black dark:text-white text-center">Lorem ipsum</TableHead>
               ))}
@@ -79,9 +85,14 @@ export default function Home() {
           </TableHeader>
           <TableBody>
             {tableData.map((row, index) => (
-              <TableRow key={index} className={index % 2 === 0 ? "bg-white dark:bg-gray-900" : "bg-gray-50 dark:bg-gray-800"}>
+              <TableRow key={index} className={index % 2 === 0 ? "bg-white dark:bg-black" : "bg-gray-50 dark:bg-black"}>
                 {Object.values(row).map((value, i) => (
-                  <TableCell key={i} className="border px-4 py-2 text-center text-black dark:text-white">{value}</TableCell>
+                  <TableCell 
+                    key={i} 
+                    className={`border px-4 py-2 text-center text-black dark:text-white ${i === 2 ? "bg-[#E8E8E8] dark:bg-[#E8E8E8] dark:text-black" : ""}`}
+                  >
+                    {value}
+                  </TableCell>
                 ))}
               </TableRow>
             ))}

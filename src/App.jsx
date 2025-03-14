@@ -25,7 +25,7 @@ function App() {
 
   return (
     <>
-      <div className="light">
+      <div className="dark">
         <BrowserRouter>
           <Routes>
           <Route path="/" element={<Home />} />

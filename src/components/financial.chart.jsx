@@ -2,12 +2,11 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { X, ArrowDown } from "lucide-react";
+import { X, ArrowDown, Settings } from "lucide-react";
 import { IoAnalytics } from "react-icons/io5";
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MdKeyboardArrowDown } from "react-icons/md";
-
 
 // Mock data for the chart
 const mockData = {
@@ -265,7 +264,12 @@ const mockData = {
   percentChange: 1.76,
 };
 
+const handleSettingsRedirect = () => {
+  window.location.href = "/settings/manage-wallet";
+};
+
 export default function FinancialChart() {
+  // eslint-disable-next-line no-unused-vars
   const [selectedPeriod, setSelectedPeriod] = useState("7Days");
 
   return (
@@ -279,11 +283,24 @@ export default function FinancialChart() {
             </div>
           </div>
         </div>
-        <div className="p-3 rounded-lg border dark:text-white border-gray-500 cursor-pointer">
-          <IoAnalytics size={20}/>
+        <div className="flex gap-3">
+          <div className="p-3 rounded-lg border dark:text-white border-gray-500 cursor-pointer">
+            <IoAnalytics size={20} />
+          </div>
+          <div>
+            <div onClick={handleSettingsRedirect}>
+              <button
+                size="sm"
+                className="rounded-lg cursor-pointer text-white bg-primary p-3 border dark:border-gray-600 dark:bg-[#101010] dark:hover:bg-gray-600"
+              >
+                <Settings size={20} className="dark:text-gray-200" />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-      <Card className=" overflow-hidden relative dark:bg-[#101010]">
+
+      <Card className="overflow-hidden relative dark:bg-[#101010]">
         <CardContent className="p-0">
           <div className="p-2 text-xs border-b flex flex-wrap gap-2">
             <span>MA 10 close 0 SMA 0</span>
@@ -301,6 +318,15 @@ export default function FinancialChart() {
           </div>
 
           <div className="relative h-[100px] md:h-[200px]">
+            {/* Price Scale */}
+            <div className="absolute right-0 top-0 bottom-0 w-16 bg-white/5 flex flex-col justify-between text-xs px-2 py-2 border-l">
+              <div className="text-right">59000.00</div>
+              <div className="text-right">58500.00</div>
+              <div className="text-right">58000.00</div>
+              <div className="text-right">57500.00</div>
+              <div className="text-right">57000.00</div>
+            </div>
+
             {/* Price indicators */}
             <div className="absolute right-2 top-2 text-xs">
               <Badge
@@ -326,42 +352,60 @@ export default function FinancialChart() {
               </span>
             </div>
 
-            {/* Candlestick Chart */}
-            <div className="w-full h-full">
+            <div className="w-full h-full pr-16">
               <CandlestickChart data={mockData.prices} />
             </div>
           </div>
 
-          {/* Volume Chart */}
-          <div className="h-[80px] border-t">
-            <VolumeChart data={mockData.prices} />
+          <div className="h-[80px]  pr-16 relative">
+            <div className="absolute right-0 bottom-0 w-16 bg-white/5 flex items-center justify-center text-xs px-2 border-l h-full">
+              <div className="text-right font-medium">59089.33</div>
+            </div>
+
+            {/* Add padding at the bottom to make room for labels */}
+            <div className="w-full h-[calc(100%-20px)]">
+              <VolumeChart data={mockData.prices} />
+            </div>
+
+            <div className="absolute bottom-0 left-0 right-16 text-gray-500 flex justify-between text-xs px-2 py-1 bg-white/5 dark:bg-black/20 ">
+              <div>09:00</div>
+              <div>12:00</div>
+              <div>15:00</div>
+              <div>18:00</div>
+              <div>21:00</div>
+              <div>00:00</div>
+              {/* <div>03:00</div>
+              <div>06:00</div>
+              <div>09:00</div> */}
+            </div>
           </div>
 
-          {/* Time period selector */}
           <div className="border-t p-2">
-            <Tabs
-              value={selectedPeriod}
-              onValueChange={setSelectedPeriod}
-              className="w-full"
-            >
-              <TabsList className="grid grid-cols-4 h-8">
-                <TabsTrigger value="7Days" className="text-xs h-7">
-                  7 Days
-                </TabsTrigger>
-                <TabsTrigger value="30Days" className="text-xs h-7">
-                  30 Days
-                </TabsTrigger>
-                <TabsTrigger value="90Days" className="text-xs h-7">
-                  90 Days
-                </TabsTrigger>
-                <TabsTrigger value="YTD" className="text-xs h-7">
-                  YTD
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
+            <div className="flex items-center border border-gray-300 rounded-xl">
+              <div className="flex-grow grid grid-cols-5 text-center text-sm">
+                <div className="flex flex-col py-2">
+                  <span className="font-medium dark:text-gray-300">7 Days</span>
+                  <span className="text-green-600 dark:text-white font-bold">+1.76%</span>
+                </div>
+                <div className="flex flex-col py-2">
+                  <span className="font-medium dark:text-gray-300">30 Days</span>
+                  <span className="text-green-600 dark:text-white font-bold">+1.76%</span>
+                </div>
+                <div className="flex flex-col py-2">
+                  <span className="font-medium dark:text-gray-300">90 Days</span>
+                  <span className="text-green-600 dark:text-white font-bold">+1.76%</span>
+                </div>
+                <div className="flex flex-col py-2">
+                  <span className="font-medium dark:text-gray-300">YTD</span>
+                  <span className="text-green-600 dark:text-white font-bold">+1.76%</span>
+                </div>
+              </div>
+              <Button variant="ghost" size="sm" className="mr-2">
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
 
-          {/* Close button */}
           <Button
             variant="ghost"
             size="icon"
@@ -397,7 +441,8 @@ function CandlestickChart({ data }) {
           {/* Candlesticks */}
           {data.map((item, index) => {
             const x = (index / data.length) * 100;
-            const width = 0.8 * (100 / data.length);
+            // Make candles thinner as shown in the image
+            const width = 0.5 * (100 / data.length);
 
             // Calculate normalized positions
             const range = 59100 - 57500;
@@ -414,7 +459,7 @@ function CandlestickChart({ data }) {
             const bodyY = isUp ? closeY : openY;
 
             return (
-              <g key={`candle-${index}`}>
+              <g key={`candle-${index}`} >
                 {/* Wick */}
                 <line
                   x1={`${x + width / 2}%`}
@@ -453,7 +498,7 @@ function VolumeChart({ data }) {
         <g>
           {data.map((item, index) => {
             const x = (index / data.length) * 100;
-            const width = 0.8 * (100 / data.length);
+            const width = 0.4 * (100 / data.length); // Reduced width
             const height = (item.volume / maxVolume) * 100;
             const y = 100 - height;
 
