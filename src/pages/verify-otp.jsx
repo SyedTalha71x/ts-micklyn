@@ -2,7 +2,7 @@ import React from "react";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, Card3, CardContent, CardHeader } from "@/components/ui/card";
 import CreateAccountPicture from "../../public/Layer_1.svg";
 import CreateAccountPictureDark from "../../public/Layer_1_black.svg";
 
@@ -59,7 +59,7 @@ export default function OTPVerification() {
 
   return (
     <div className="flex min-h-screen items-center dark:bg-black justify-center bg-gray-50 p-4">
-      <Card className="w-full max-w-md">
+      <Card3 className="w-full max-w-md">
         <CardHeader className="flex flex-col items-center space-y-4 pt-6">
           <div className="flex h-20 w-20 items-center justify-center rounded-lg border bg-white dark:bg-black">
             <img
@@ -114,7 +114,7 @@ export default function OTPVerification() {
             </div>
           </form>
         </CardContent>
-      </Card>
+      </Card3>
     </div>
   );
 }

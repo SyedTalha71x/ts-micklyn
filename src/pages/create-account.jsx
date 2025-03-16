@@ -7,6 +7,7 @@ import {
   CardContent,
   CardHeader,
   CardFooter,
+  Card3,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import CreateAccountPicture from "../../public/Layer_1.svg";
@@ -17,7 +18,7 @@ export default function CreateAccount() {
 
   return (
     <div className="flex min-h-screen items-center dark:bg-black justify-center bg-gray-50 p-4">
-      <Card className="w-full max-w-md">
+      <Card3 className="w-full max-w-md">
         <CardHeader className="flex flex-col items-center space-y-4 pt-6">
           <div className="flex h-20 w-20 items-center justify-center rounded-lg border bg-white dark:bg-black">
             <img
@@ -111,7 +112,7 @@ export default function CreateAccount() {
             </a>
           </p>
         </CardFooter>
-      </Card>
+      </Card3>
     </div>
   );
 }

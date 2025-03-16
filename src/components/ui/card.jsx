@@ -17,6 +17,21 @@ function Card({
   );
 }
 
+function Card3({
+  className,
+  ...props
+}) {
+  return (
+    <div
+      data-slot="card"
+      className={cn(
+        "bg-card text-card-foreground dark:border-gray-700 dark:bg-[#101010] manrope-font border border-slate-300  flex flex-col gap-6 rounded-xl shadow-md py-6",
+        className
+      )}
+      {...props} />
+  );
+}
+
 function Card2({
   className,
   ...props
@@ -108,4 +123,4 @@ function CardFooter({
   );
 }
 
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent, Card1, CardContent1, Card2 }
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent, Card1, CardContent1, Card2, Card3 }

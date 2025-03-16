@@ -11,10 +11,12 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { useState } from 'react';
+import { useTheme } from '../../Context/ThemeContext'; 
 
 const PreferencesPage = () => {
   const [walletCurrencyOpen, setWalletCurrencyOpen] = useState(false);
   const [selectedWalletCurrency, setSelectedWalletCurrency] = useState('gbp');
+  const { theme, toggleTheme } = useTheme(); 
   
   const toggleWalletCurrency = () => {
     setWalletCurrencyOpen(!walletCurrencyOpen);
@@ -110,14 +112,16 @@ const PreferencesPage = () => {
                 </Select>
               </div>
               <div>
-                <Select>
+                <Select
+                  value={theme}
+                  onValueChange={toggleTheme}
+                >
                   <SelectTrigger className="w-full dark:bg-[#232428] dark:text-white">
                     <SelectValue placeholder="Theme" />
                   </SelectTrigger>
                   <SelectContent className={`dark:bg-[#232428] dark:text-white`}>
-                    <SelectItem  value="light">Light</SelectItem>
+                    <SelectItem value="light">Light</SelectItem>
                     <SelectItem value="dark">Dark</SelectItem>
-                    <SelectItem value="system">System</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

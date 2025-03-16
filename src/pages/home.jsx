@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, Card3, CardContent } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import HomeImage from "../../public/Layer_1.svg"
 import VectorSvg from '../../public/Layer_1_black.svg'
@@ -57,12 +57,12 @@ export default function Home() {
       <section className="max-w-3xl w-full mx-auto py-8">
         <div className="grid gap-6 md:grid-cols-2">
           {[...Array(2)].map((_, i) => (
-            <Card key={i} className="border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-[#101010] rounded-xl">
+            <Card3 key={i} className="border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-[#101010] rounded-xl">
               <CardContent className="p-4">
                 <h3 className="mb-2 font-bold text-lg">Lorem ipsum is simply dummy text</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">Lorem ipsum is simply</p>
               </CardContent>
-            </Card>
+            </Card3>
           ))}
         </div>
       </section>

@@ -1,35 +1,57 @@
-export const initializeTheme = () => {
-    // On page load or when changing themes, best to add inline in `head` to avoid FOUC
-    document.documentElement.classList.toggle(
-      "dark",
-      localStorage.theme === "dark" ||
-        (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)
-    );
+/* eslint-disable react-refresh/only-export-components */
+// ThemeContext.js
+import React, { createContext, useContext, useState, useEffect } from 'react';
+
+// Create the context
+const ThemeContext = createContext();
+
+// Create a provider component
+export const ThemeProvider = ({ children }) => {
+  // Check if there's a saved theme in localStorage, otherwise default to 'light'
+  const [theme, setTheme] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem('theme');
+      return savedTheme || 'light';
+    }
+    return 'light';
+  });
+
+  // Function to toggle theme
+  const toggleTheme = (newTheme) => {
+    setTheme(newTheme);
   };
-  
-  export const setLightTheme = () => {
-    // Whenever the user explicitly chooses light mode
-    localStorage.theme = "light";
-    document.documentElement.classList.remove("dark");
+
+  // Apply theme changes to the document
+  useEffect(() => {
+    // Save to localStorage
+    localStorage.setItem('theme', theme);
+    
+    // Apply class to document
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
+
+  // Create the value object to be provided to consumers
+  const value = {
+    theme,
+    toggleTheme,
   };
-  
-  export const setDarkTheme = () => {
-    // Whenever the user explicitly chooses dark mode
-    localStorage.theme = "dark";
-    document.documentElement.classList.add("dark");
-  };
-  
-  export const setSystemTheme = () => {
-    // Whenever the user explicitly chooses to respect the OS preference
-    localStorage.removeItem("theme");
-    document.documentElement.classList.toggle(
-      "dark",
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-    );
-  };
-  
-  export const getCurrentTheme = () => {
-    if (localStorage.theme === "dark") return "dark";
-    if (localStorage.theme === "light") return "light";
-    return "system";
-  };
+
+  return (
+    <ThemeContext.Provider value={value}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
+
+// Custom hook for using the theme context
+export const useTheme = () => {
+  const context = useContext(ThemeContext);
+  if (context === undefined) {
+    throw new Error('useTheme must be used within a ThemeProvider');
+  }
+  return context;
+};
