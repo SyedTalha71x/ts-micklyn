@@ -36,7 +36,7 @@ export default function CryptoTable({ onClose }) {
   }, [activeTab]);
 
   return (
-    <div className="relative border border-gray-300 dark:border-gray-600 p-2 rounded-xl h-full overflow-auto bg-white dark:bg-[#101010] dark:text-white">
+    <div className="relative border border-[#A0AEC0] dark:border-gray-600 p-2 rounded-xl h-full overflow-auto bg-white dark:bg-[#101010] dark:text-white">
       {/* Close Button */}
       <button
         onClick={onClose}
@@ -52,7 +52,7 @@ export default function CryptoTable({ onClose }) {
           className="absolute left-0 top-0 bottom-0 w-1/2 bg-gray-300 dark:bg-[#353535] rounded-md shadow-md"
         />
         <button
-          className={`relative flex-1 py-2 px-4 rounded-md text-sm font-medium z-10 ${
+          className={`relative flex-1 py-2 inter-font px-4 rounded-md text-sm font-medium z-10 ${
             activeTab === "watchlist"
               ? "text-black dark:text-white"
               : "text-gray-700 dark:text-gray-400"
@@ -62,7 +62,7 @@ export default function CryptoTable({ onClose }) {
           Watchlist
         </button>
         <button
-          className={`relative flex-1 py-2 px-4 rounded-md text-sm font-medium z-10 ${
+          className={`relative flex-1 py-2 inter-font px-4 rounded-md text-sm font-medium z-10 ${
             activeTab === "history"
               ? "text-black dark:text-white"
               : "text-gray-700 dark:text-gray-400"
@@ -80,16 +80,16 @@ export default function CryptoTable({ onClose }) {
             {cryptoData.map((crypto) => (
               <div key={crypto.name} className="flex justify-between items-center">
                 <div className="flex flex-col">
-                  <span className="font-bold text-sm">{crypto.name}</span>
-                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                  <span className="inter-font-400 text-sm">{crypto.name}</span>
+                  <span className="text-xs inter-font-400 text-gray-500 dark:text-gray-400">
                     {crypto.fullName}
                   </span>
                 </div>
                 <div className="flex flex-col items-end">
-                  <span className="font-bold text-sm">{crypto.value}</span>
+                  <span className="inter-font-400 text-sm">{crypto.value}</span>
                   <span
                     className={`text-xs ${
-                      crypto.change.startsWith("+") ? "text-green-500" : "text-red-500"
+                      crypto.change.startsWith("+") ? "text-black" : "text-red-500"
                     }`}
                   >
                     {crypto.change}
@@ -101,7 +101,7 @@ export default function CryptoTable({ onClose }) {
         )}
 
         {activeTab === "history" && (
-          <div className="py-8 text-center text-gray-500 dark:text-gray-400">
+          <div className="py-8 text-center text-sm text-gray-500 dark:text-gray-400">
             History information would be displayed here
           </div>
         )}

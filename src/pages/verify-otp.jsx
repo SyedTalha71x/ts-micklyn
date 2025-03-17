@@ -1,5 +1,4 @@
-import React from "react";
-import { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, Card3, CardContent, CardHeader } from "@/components/ui/card";
@@ -8,7 +7,22 @@ import CreateAccountPictureDark from "../../public/Layer_1_black.svg";
 
 export default function OTPVerification() {
   const [otp, setOtp] = useState(["", "", "", ""]);
+  const [isMobile, setIsMobile] = useState(false);
   const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
+
+  // Check if the screen size is mobile
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkIsMobile);
+    };
+  }, []);
 
   const handleChange = (index, value) => {
     // Only allow numbers
@@ -58,63 +72,132 @@ export default function OTPVerification() {
   };
 
   return (
-    <div className="flex min-h-screen items-center dark:bg-black justify-center bg-gray-50 p-4">
-      <Card3 className="w-full max-w-md">
-        <CardHeader className="flex flex-col items-center space-y-4 pt-6">
-          <div className="flex h-20 w-20 items-center justify-center rounded-lg border bg-white dark:bg-black">
-            <img
-              src={CreateAccountPicture}
-              className="h-full w-full block dark:hidden"
-              alt="Light Mode Image"
-            />
-            <img
-              src={CreateAccountPictureDark}
-              className="h-full w-full hidden dark:block"
-              alt="Dark Mode Image"
-            />
+    <div className={`flex min-h-screen items-center justify-center dark:bg-black ${isMobile ? 'bg-white' : 'bg-gray-50'} p-4`}>
+      {isMobile ? (
+        // Mobile view without card
+        <div className="w-full max-w-md">
+          <div className="flex flex-col items-center space-y-4 pt-6">
+            <div className="flex h-16 w-16 items-center justify-center rounded-lg">
+              <img
+                src={CreateAccountPicture}
+                className="h-full w-full block dark:hidden"
+                alt="Light Mode Image"
+              />
+              <img
+                src={CreateAccountPictureDark}
+                className="h-full w-full hidden dark:block"
+                alt="Dark Mode Image"
+              />
+            </div>
+            <h1 className="text-lg manrope-font-700">Create Account</h1>
+            <p className="text-sm text-muted-foreground text-center">
+              Enter the verification code sent to abc@gmail.com
+            </p>
           </div>
-          <h1 className="text-xl font-semibold">Create Account</h1>
-          <p className="text-sm text-muted-foreground text-center">
-            Enter the verification code sent to abc@gmail.com
-          </p>
-        </CardHeader>
 
-        <CardContent>
-          <form onSubmit={handleSubmit}>
-            <div className="flex justify-center gap-2 mb-6">
-              {otp.map((digit, index) => (
-                <Input
-                  key={index}
-                  type="text"
-                  inputMode="numeric"
-                  maxLength={1}
-                  value={digit}
-                  onChange={(e) => handleChange(index, e.target.value)}
-                  onKeyDown={(e) => handleKeyDown(index, e)}
-                  onPaste={handlePaste}
-                  ref={inputRefs[index]}
-                  className="w-12 h-12 text-center text-lg"
-                  autoFocus={index === 0}
-                />
-              ))}
-            </div>
+          <div className="mt-6">
+            <form onSubmit={handleSubmit}>
+              <div className="flex justify-center gap-2 mb-6">
+                {otp.map((digit, index) => (
+                  <Input
+                    key={index}
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={1}
+                    value={digit}
+                    onChange={(e) => handleChange(index, e.target.value)}
+                    onKeyDown={(e) => handleKeyDown(index, e)}
+                    onPaste={handlePaste}
+                    ref={inputRefs[index]}
+                    className="w-12 h-12 text-center text-lg border border-[#687588]"
+                    autoFocus={index === 0}
+                  />
+                ))}
+              </div>
 
-            <div className="space-y-2">
-              <Button type="submit" className="w-full dark:bg-[#232428]" variant="outline">
-                Submit
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full dark:bg-[#232428]"
-                onClick={() => window.history.back()}
-              >
-                Back
-              </Button>
+              <div className="space-y-2">
+                <Button 
+                  type="submit" 
+                  className="w-full text-sm h-10 border border-[#687588]" 
+                  variant="outline"
+                >
+                  Submit
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full text-sm h-10 border border-[#687588]"
+                  onClick={() => window.history.back()}
+                >
+                  Back
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      ) : (
+        // Desktop view with Card3
+        <Card3 className="w-full max-w-md">
+          <CardHeader className="flex flex-col items-center space-y-4 pt-6">
+            <div className="flex h-20 w-20 items-center justify-center rounded-lg border bg-white dark:bg-black">
+              <img
+                src={CreateAccountPicture}
+                className="h-full w-full block dark:hidden"
+                alt="Light Mode Image"
+              />
+              <img
+                src={CreateAccountPictureDark}
+                className="h-full w-full hidden dark:block"
+                alt="Dark Mode Image"
+              />
             </div>
-          </form>
-        </CardContent>
-      </Card3>
+            <h1 className="text-xl font-semibold">Create Account</h1>
+            <p className="text-sm text-muted-foreground text-center">
+              Enter the verification code sent to abc@gmail.com
+            </p>
+          </CardHeader>
+
+          <CardContent className="space-y-4">
+            <form onSubmit={handleSubmit}>
+              <div className="flex justify-center gap-2 mb-6">
+                {otp.map((digit, index) => (
+                  <Input
+                    key={index}
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={1}
+                    value={digit}
+                    onChange={(e) => handleChange(index, e.target.value)}
+                    onKeyDown={(e) => handleKeyDown(index, e)}
+                    onPaste={handlePaste}
+                    ref={inputRefs[index]}
+                    className="w-12 h-12 text-center text-lg dark:border-gray-400"
+                    autoFocus={index === 0}
+                  />
+                ))}
+              </div>
+
+              <div className="space-y-2">
+                <Button 
+                  type="submit" 
+                  className="w-full dark:bg-[#232428]" 
+                  variant="outline"
+                >
+                  Submit
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full dark:bg-[#232428]"
+                  onClick={() => window.history.back()}
+                >
+                  Back
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card3>
+      )}
     </div>
   );
 }

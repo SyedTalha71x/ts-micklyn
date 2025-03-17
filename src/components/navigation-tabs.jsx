@@ -1,43 +1,73 @@
-import React from 'react';
-import Icon from '../../public/Icon.svg';
-import { CiMail } from "react-icons/ci";
+/* eslint-disable no-unused-vars */
+import { useState } from "react";
+import Icon from "../../public/Icon.svg";
+import { IoWalletOutline } from "react-icons/io5";
+import Wallet from "../../public/wallet.svg";
 
 const NavigationTabsWithChat = () => {
+  const [activeWallet, setActiveWallet] = useState(1);
+  const [totalWallets, setTotalWallets] = useState(2); // Example: user has 2 wallets
+
+  const switchWallet = () => {
+    // Cycle through wallets
+    setActiveWallet((prev) => (prev % totalWallets) + 1);
+  };
+
   return (
-    <div className="max-w-3xl mx-auto p-4 ">
+    <div className="max-w-3xl mx-auto p-4">
       {/* Navigation Cards */}
       <div className="flex justify-between items-center gap-3 mb-4">
-        <div className="bg-white dark:bg-[#101010] rounded-xl p-4 shadow-sm border border-gray-300 dark:border-gray-700 flex-1">
+        <div className="bg-white dark:bg-[#101010] rounded-xl p-4 shadow-sm border border-[#A0AEC0] dark:border-gray-700 flex-1">
           <h3 className="font-bold text-md dark:text-white">Holding</h3>
-          <p className="text-xs text-gray-500 dark:text-gray-400">Lorem ipsum is simply</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">
+            Lorem ipsum is simply
+          </p>
         </div>
-        
-        <div className="bg-white dark:bg-[#101010] rounded-xl p-4 shadow-sm border border-gray-300 dark:border-gray-700 flex-1">
+
+        <div className="bg-white dark:bg-[#101010] rounded-xl p-4 shadow-sm border border-[#A0AEC0] dark:border-gray-700 flex-1">
           <h3 className="font-bold text-md dark:text-white">Trending</h3>
-          <p className="text-xs text-gray-500 dark:text-gray-400">Lorem ipsum is simply</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">
+            Lorem ipsum is simply
+          </p>
         </div>
-        
-        <div className="bg-white dark:bg-[#101010] md:block hidden rounded-xl p-4 shadow-sm border border-gray-300 dark:border-gray-700 flex-1">
+
+        <div className="bg-white dark:bg-[#101010] md:block hidden rounded-xl p-4 shadow-sm border border-[#A0AEC0] dark:border-gray-700 flex-1">
           <h3 className="font-bold text-md dark:text-white">Gainers</h3>
-          <p className="text-xs text-gray-500 dark:text-gray-400">Lorem ipsum is simply</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">
+            Lorem ipsum is simply
+          </p>
         </div>
       </div>
-      
-      {/* Chat Input */}
-      <div className="mt-4 flex items-center gap-2 bg-white dark:bg-[#101010] rounded-xl border border-gray-300 dark:border-gray-700 p-2 shadow-sm flex-nowrap">
-        {/* Left Email Icon */}
-        <div className="flex items-center justify-center h-8 w-8 rounded-full dark:text-white  shrink-0">
-          <CiMail className="h-5 w-5 cursor-pointer dark:text-white" />
+
+      <div className="mt-4 flex flex-col items-center gap-2 bg-white dark:bg-[#101010] rounded-xl border border-[#A0AEC0] dark:border-gray-700 p-2 shadow-sm w-full">
+        <div className="w-full">
+          <input
+            className="w-full bg-transparent border-none outline-none text-sm px-2 dark:text-gray-200 dark:placeholder-gray-700"
+            placeholder="Write message here..."
+          />
         </div>
-        
-        <input 
-          className="flex-1 min-w-0 bg-transparent border-none outline-none text-sm px-2 w-full dark:text-gray-200 dark:placeholder-gray-500"
-          placeholder="Write message here..."
-        />
-        
-        <button className="h-10 w-10 rounded-full bg-black text-white flex items-center justify-center shrink-0">
-          <img src={Icon} alt="Send" />
-        </button>
+
+        <div className="flex justify-between items-center w-full">
+          <div
+            className="flex items-center justify-center h-8 w-8 relative cursor-pointer shrink-0"
+            onClick={switchWallet}
+          >
+            <img src={Wallet} alt="" />
+            {totalWallets > 1 && (
+              <span className="absolute -top-1 -right-1 text-xs bg-gray-200 dark:bg-gray-700 rounded-full h-4 w-4 flex items-center justify-center dark:text-white">
+                {activeWallet}
+              </span>
+            )}
+          </div>
+
+          <button className="h-8 w-8 rounded-full bg-black text-white flex items-center justify-center shrink-0">
+            <img
+              src={Icon}
+              alt="Send"
+              className="h-4 w-4"
+            />
+          </button>
+        </div>
       </div>
     </div>
   );
