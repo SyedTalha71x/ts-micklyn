@@ -9,8 +9,8 @@ export default function Home() {
     window.location.href = '/chat'
   }
   return (
-    <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white">
-      <header className="border-b border-gray-200 dark:border-gray-700 py-4 px-4">
+    <div className="min-h-screen bg-white dark:bg-[#000000] text-black dark:text-white">
+      <header className="  py-4 px-4">
         <div className="container flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="relative h-10 w-10">
@@ -29,7 +29,7 @@ export default function Home() {
 
       <section className="container py-12">
         <p className="mx-auto max-w-3xl text-center text-sm text-gray-600 dark:text-gray-300">
-          Lorem ipsum is simply dummy text of the printing and typesetting industry.
+          Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem ipsum, dolor 
         </p>
       </section>
 
@@ -48,19 +48,19 @@ export default function Home() {
                 alt="Dark Mode Image"
               />
             </div>
-            <h2 className="text-3xl manrope-font-bold font-semibold">NomicsAI</h2>
+            <h2 className="text-3xl manrope-font-bold ml-2 font-semibold">NomicsAI</h2>
           </div>
-          <p className="text-gray-800 dark:text-gray-200 text-xl font-bold">Lorem ipsum is simply dummy</p>
+          <p className="text-gray-800 dark:text-gray-200 manrope-font-bold text-xl ">Lorem ipsum is simply dummy</p>
         </div>
       </section>
 
-      <section className="max-w-3xl w-full mx-auto py-8">
+      <section className="max-w-3xl p-2 w-full mx-auto py-8">
         <div className="grid gap-6 md:grid-cols-2">
           {[...Array(2)].map((_, i) => (
-            <Card3 key={i} className="border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-[#101010] rounded-xl">
+            <Card3 key={i} className="border border-[#A0AEC0] dark:border-[#505050] bg-gray-50 dark:bg-[#101010] rounded-xl">
               <CardContent className="p-4">
                 <h3 className="mb-2 font-bold text-lg">Lorem ipsum is simply dummy text</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Lorem ipsum is simply</p>
+                <p className="text-sm text-gray-400 dark:text-gray-400">Lorem ipsum is simply</p>
               </CardContent>
             </Card3>
           ))}
@@ -68,8 +68,8 @@ export default function Home() {
       </section>
 
       <section className="max-w-3xl w-full mx-auto py-12">
-        <h2 className="mb-4 text-center text-3xl font-bold text-black dark:text-white">Lorem ipsum is simply dummy</h2>
-        <p className="mx-auto max-w-3xl text-center text-sm text-gray-600 dark:text-gray-300">
+        <h2 className="mb-4 text-center md:text-3xl text-2xl font-bold text-black dark:text-white">Lorem ipsum is simply dummy</h2>
+        <p className="mx-auto max-w-3xl text-center text-[16px] text-gray-600 dark:text-gray-300">
           Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus omnis aperiam fugit exercitationem id, inventore repudiandae excepturi quasi praesentium suscipit!
         </p>
       </section>
@@ -79,7 +79,7 @@ export default function Home() {
           <TableHeader>
             <TableRow className="bg-gray-100 dark:bg-black">
               {[...Array(7)].map((_, i) => (
-                <TableHead key={i} className="border px-4 py-2 font-bold text-black dark:text-white text-center">Lorem ipsum</TableHead>
+                <TableHead key={i} className={`border px-4 py-2 font-bold  ${i === 2 ? "bg-[#E8E8E8] dark:bg-[#101010] dark:text-white" : ""} text-black dark:text-white text-center`}>Lorem ipsum</TableHead>
               ))}
             </TableRow>
           </TableHeader>
@@ -89,7 +89,7 @@ export default function Home() {
                 {Object.values(row).map((value, i) => (
                   <TableCell 
                     key={i} 
-                    className={`border px-4 py-2 text-center text-black dark:text-white ${i === 2 ? "bg-[#E8E8E8] dark:bg-[#E8E8E8] dark:text-black" : ""}`}
+                    className={`border px-4 py-2 text-center text-black dark:text-white ${i === 2 ? "bg-[#E8E8E8] dark:bg-[#101010] dark:text-white" : ""}`}
                   >
                     {value}
                   </TableCell>
@@ -104,9 +104,9 @@ export default function Home() {
 }
 
 const tableData = [
-  { name: "English", col1: "test", col2: "750.00", col3: "Lorem ipsum", col4: "Lorem", col5: "53.0", col6: "44.1" },
-  { name: "Lorem ipsum is", col1: "0.18", col2: "750", col3: "21%", col4: "0.040", col5: "50.2", col6: "37.2" },
-  { name: "Lorem ipsum", col1: "0.076", col2: "2.00", col3: "21%", col4: "0.055", col5: "51.3", col6: "38.0" },
+  { name: "English", col1: "test", col2: "750.00", col3: "Lorem ipsum", col4: "Lorem", col5: "-", col6: "-" },
+  { name: "Lorem ipsum is", col1: "0.18", col2: "750", col3: "21%", col4: "0.040", col5: "-", col6: "-" },
+  { name: "Lorem ipsum", col1: "0.076", col2: "2.00", col3: "21%", col4: "0.055", col5: "-", col6: "-" },
   { name: "Lorem ipsum", col1: "65.2", col2: "60.0", col3: "52.3", col4: "54.8", col5: "50.2", col6: "37.2" },
   { name: "Lorem ipsum", col1: "48.0", col2: "45.2", col3: "47.6", col4: "73.2", col5: "74.8", col6: "72.4" },
   { name: "Lorem ipsum", col1: "49.0", col2: "40.2", col3: "41.7", col4: "54.7", col5: "40.2", col6: "39.1" },

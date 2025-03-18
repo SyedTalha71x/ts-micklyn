@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useRef, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,6 +24,9 @@ export default function OTPVerification() {
       window.removeEventListener('resize', checkIsMobile);
     };
   }, []);
+
+  // Check if all OTP digits are filled
+  const isOtpComplete = otp.every(digit => digit !== "");
 
   const handleChange = (index, value) => {
     // Only allow numbers
@@ -68,7 +72,10 @@ export default function OTPVerification() {
     e.preventDefault();
     const otpString = otp.join("");
     console.log("Submitted OTP:", otpString);
-    // Add your submission logic here
+  };
+
+  const renderPlaceholder = (index) => {
+    return otp[index] === "" ? "-" : "";
   };
 
   return (
@@ -90,7 +97,7 @@ export default function OTPVerification() {
               />
             </div>
             <h1 className="text-lg manrope-font-700">Create Account</h1>
-            <p className="text-sm text-muted-foreground text-center">
+            <p className="text-sm text-black dark:text-white manrope-font-500 text-center">
               Enter the verification code sent to abc@gmail.com
             </p>
           </div>
@@ -111,25 +118,24 @@ export default function OTPVerification() {
                     ref={inputRefs[index]}
                     className="w-12 h-12 text-center text-lg border border-[#687588]"
                     autoFocus={index === 0}
+                    placeholder="-"
                   />
                 ))}
               </div>
+              <div className="flex justify-center items-center mb-4">
+
+                <span className="text-sm text-black dark:text-white manrope-font-500 text-center">A new one will be available in 45 sec</span>
+              </div>
+
 
               <div className="space-y-2">
                 <Button 
                   type="submit" 
-                  className="w-full text-sm h-10 border border-[#687588]" 
+                  className="w-full text-sm  manrope-font-700 dark:bg-[#232428] h-10 border border-[#687588] dark:border-none" 
                   variant="outline"
+                  disabled={!isOtpComplete}
                 >
-                  Submit
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="w-full text-sm h-10 border border-[#687588]"
-                  onClick={() => window.history.back()}
-                >
-                  Back
+                  Confirm
                 </Button>
               </div>
             </form>
@@ -151,8 +157,8 @@ export default function OTPVerification() {
                 alt="Dark Mode Image"
               />
             </div>
-            <h1 className="text-xl font-semibold">Create Account</h1>
-            <p className="text-sm text-muted-foreground text-center">
+            <h1 className="text-xl manrope-font-700">Create Account</h1>
+            <p className="text-sm text-black dark:text-white manrope-font-500 text-center">
               Enter the verification code sent to abc@gmail.com
             </p>
           </CardHeader>
@@ -171,24 +177,30 @@ export default function OTPVerification() {
                     onKeyDown={(e) => handleKeyDown(index, e)}
                     onPaste={handlePaste}
                     ref={inputRefs[index]}
-                    className="w-12 h-12 text-center text-lg dark:border-gray-400"
+                    className="w-12 h-12 text-center text-lg border border-[#000000] dark:bg-[#080808] dark:border-gray-400"
                     autoFocus={index === 0}
+                    placeholder="-"
                   />
                 ))}
               </div>
+              <div className="flex justify-center items-center mb-4">
+
+<span className="text-sm text-black dark:text-white manrope-font-500 text-center">A new one will be available in 45 sec</span>
+</div>
 
               <div className="space-y-2">
                 <Button 
                   type="submit" 
-                  className="w-full dark:bg-[#232428]" 
+                  className="w-full border manrope-font-700 border-[#CECECE] dark:bg-[#232428] dark:border-none" 
                   variant="outline"
+                  disabled={!isOtpComplete}
                 >
-                  Submit
+                  Confirm
                 </Button>
                 <Button
                   type="button"
                   variant="outline"
-                  className="w-full dark:bg-[#232428]"
+                  className="w-full text-sm h-10 border text-[#000000] dark:text-white dark:bg-[#232428] manrope-font-700 border-[#CECECE] dark:border-none"
                   onClick={() => window.history.back()}
                 >
                   Back

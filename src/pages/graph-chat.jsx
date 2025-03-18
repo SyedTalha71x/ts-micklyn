@@ -13,7 +13,7 @@ export default function Chat() {
   const isGraphChat = pathname === "/graph-chat"
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background dark:bg-black flex flex-col">
       <div className="md:hidden">
         <MobileHeaderChat onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
       </div>
@@ -40,10 +40,9 @@ export default function Chat() {
           <CryptoTable />
         </div>
 
-        {/* Main content area - Make chart scrollable on small screens */}
-        <div className="flex-1 flex flex-col w-full">
-          <div className="flex-1 p-3">
-            <div className=" w-full">
+        <div className="lg:w-[70%] w-full ml-auto">
+          <div className=" p-3">
+            <div className=''>
               <FinancialChart />
             </div>
           </div>

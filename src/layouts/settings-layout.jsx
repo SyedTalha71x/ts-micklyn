@@ -56,7 +56,7 @@ const SettingsLayout = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen p-4 dark:bg-black bg-gray-50">
+    <div className="flex justify-center items-center min-h-screen   p-4 dark:bg-black bg-gray-50">
       <div className="flex flex-col w-full max-w-4xl bg-white dark:bg-[#101010] shadow-lg rounded-lg overflow-hidden">
         <div className="p-6 flex items-center justify-between">
           {isMobile && showContent ? (

@@ -52,9 +52,9 @@ const NavigationTabsWithChat = () => {
             className="flex items-center justify-center h-8 w-8 relative cursor-pointer shrink-0"
             onClick={switchWallet}
           >
-            <img src={Wallet} alt="" />
+            <img src={Wallet} alt="" className="dark:invert" />
             {totalWallets > 1 && (
-              <span className="absolute -top-1 -right-1 text-xs bg-gray-200 dark:bg-gray-700 rounded-full h-4 w-4 flex items-center justify-center dark:text-white">
+              <span className="absolute -top-1 -right-1 text-xs bg-gray-200 dark:bg-gray-600 rounded-full h-4 w-4 flex items-center justify-center dark:text-white">
                 {activeWallet}
               </span>
             )}

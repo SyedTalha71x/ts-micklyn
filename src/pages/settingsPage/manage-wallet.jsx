@@ -21,7 +21,7 @@ const ManageWallet = () => {
           <Card
             key={wallet.name}
             className={`p-4 cursor-pointer  transition-colors dark:bg-[#232428] ${
-              selectedWallet === wallet.name ? "border-2" : "border-gray-200"
+              selectedWallet === wallet.name ? "border border-[#000000] dark:border-[#FFFFFF]" : "border-[#A0AEC0] dark:border-none"
             }`}
             onClick={() => setSelectedWallet(wallet.name)}
           >

@@ -1,6 +1,7 @@
 import {
   Card,
   Card2,
+  Card4,
   CardContent
 } from '@/components/ui/card';
 import {
@@ -28,7 +29,7 @@ const PreferencesPage = () => {
   };
 
   return (
-    <Card2 className="w-full max-w-2xl">
+    <Card4 className="w-full max-w-2xl">
       <CardContent className="py-4">
         <div className="space-y-4">
           <div>
@@ -129,7 +130,7 @@ const PreferencesPage = () => {
           </div>
         </div>
       </CardContent>
-    </Card2>
+    </Card4>
   );
 };
 

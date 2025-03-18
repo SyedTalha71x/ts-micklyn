@@ -11,7 +11,7 @@ export default function Chat() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background dark:bg-black flex flex-col">
       {/* Mobile Header - Only visible on mobile */}
       <div className="md:hidden">
         <MobileHeader onMenuClick={() => setSidebarOpen(!sidebarOpen)} />

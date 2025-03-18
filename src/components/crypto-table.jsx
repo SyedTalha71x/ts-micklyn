@@ -49,7 +49,7 @@ export default function CryptoTable({ onClose }) {
       <div className="relative flex cursor-pointer gap-2 p-1 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-md">
         <div
           ref={tabIndicatorRef}
-          className="absolute left-0 top-0 bottom-0 w-1/2 bg-gray-300 dark:bg-[#353535] rounded-md shadow-md"
+          className="absolute left-0 top-0 bottom-0 w-1/2 bg-gray-300 dark:bg-[#232428] rounded-md shadow-md"
         />
         <button
           className={`relative flex-1 py-2 inter-font px-4 rounded-md text-sm font-medium z-10 ${
@@ -65,7 +65,7 @@ export default function CryptoTable({ onClose }) {
           className={`relative flex-1 py-2 inter-font px-4 rounded-md text-sm font-medium z-10 ${
             activeTab === "history"
               ? "text-black dark:text-white"
-              : "text-gray-700 dark:text-gray-400"
+              : "text-gray-700  dark:text-gray-400"
           }`}
           onClick={() => setActiveTab("history")}
         >
@@ -78,10 +78,10 @@ export default function CryptoTable({ onClose }) {
         {activeTab === "watchlist" && (
           <div className="space-y-4">
             {cryptoData.map((crypto) => (
-              <div key={crypto.name} className="flex justify-between items-center">
+              <div key={crypto.name} className="flex justify-between items-center dark:border-b  dark:border-[#505050]">
                 <div className="flex flex-col">
                   <span className="inter-font-400 text-sm">{crypto.name}</span>
-                  <span className="text-xs inter-font-400 text-gray-500 dark:text-gray-400">
+                  <span className="text-xs inter-font-400 mb-2 text-gray-500 dark:text-gray-400">
                     {crypto.fullName}
                   </span>
                 </div>
@@ -89,7 +89,7 @@ export default function CryptoTable({ onClose }) {
                   <span className="inter-font-400 text-sm">{crypto.value}</span>
                   <span
                     className={`text-xs ${
-                      crypto.change.startsWith("+") ? "text-black" : "text-red-500"
+                      crypto.change.startsWith("+") ? "text-black dark:text-[#9F9FA0]" : "text-red-500 dark:text-white"
                     }`}
                   >
                     {crypto.change}
