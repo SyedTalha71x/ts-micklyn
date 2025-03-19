@@ -18,7 +18,7 @@ const MobileSidebar = ({ activeItem, setActiveItem, onItemClick }) => {
           <div
             key={item.path}
             onClick={() => onItemClick(item.path)}
-            className="flex justify-between items-center p-4 rounded-lg border bg-white shadow-sm text-sm cursor-pointer"
+            className="flex justify-between items-center p-4 rounded-lg border bg-white dark:bg-[#1B1C1E] shadow-sm text-sm cursor-pointer"
           >
             <span>{item.name}</span>
             <span className="text-gray-400">›</span>

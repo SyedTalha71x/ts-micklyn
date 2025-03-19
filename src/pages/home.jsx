@@ -57,7 +57,7 @@ export default function Home() {
       <section className="max-w-3xl p-2 w-full mx-auto py-8">
         <div className="grid gap-6 md:grid-cols-2">
           {[...Array(2)].map((_, i) => (
-            <Card3 key={i} className="border border-[#A0AEC0] dark:border-[#505050] bg-gray-50 dark:bg-[#101010] rounded-xl">
+            <Card3 key={i} className={`border border-[#A0AEC0] dark:border-[#505050] bg-gray-50 dark:bg-[#101010] rounded-xl ${i === 1 ? 'md:block hidden': ''}`}>
               <CardContent className="p-4">
                 <h3 className="mb-2 font-bold text-lg">Lorem ipsum is simply dummy text</h3>
                 <p className="text-sm text-gray-400 dark:text-gray-400">Lorem ipsum is simply</p>
