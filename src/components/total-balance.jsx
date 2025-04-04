@@ -1,13 +1,35 @@
 import { Eye, EyeOff, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { FireApi } from "@/hooks/fireApi";
+import toast from "react-hot-toast";
 
 export default function TotalBalance() {
   const [showBalance, setShowBalance] = useState(false);
+  const [usdt, setUsdt] = useState(0);
+  const [usdc, setUsdc] = useState(0);
+  const [blockchain, setBlockchain] = useState("ETH");
 
   const handleSettingsRedirect = () => {
     window.location.href = "/settings/manage-wallet";
   };
+
+  const GetUserBalance = async () => {
+    try {
+      const response = await FireApi(`/get-user-balance?address=${import.meta.env.VITE_WALLET_ADDRESS}`, "GET");
+      console.log(response?.balance, "response");
+      setUsdt(response?.balance?.usdt);
+      setUsdc(response?.balance?.usdc);
+      setBlockchain(response?.balance?.blockchain);
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    GetUserBalance();
+  }, []);
 
   return (
     <div className="flex justify-between">
@@ -27,8 +49,14 @@ export default function TotalBalance() {
             )}
           </Button>
         </div>
-        <p className="text-[12px] inter-font-400 text-gray-400 dark:text-gray-400">
-          USD: {showBalance ? "$29,850.15" : "••••••••"}
+        <p className="text-[12px] flex flex-col inter-font-400 text-gray-400 dark:text-gray-400">
+          BlockChain: {showBalance ? blockchain : "••••••••"}
+        </p>
+        <p className="text-[12px] flex flex-col inter-font-400 text-gray-400 dark:text-gray-400">
+          USDT: {showBalance ? usdt : "••••••••"}
+        </p>
+        <p className="text-[12px] flex flex-col inter-font-400 text-gray-400 dark:text-gray-400">
+          USDC: {showBalance ? usdc : "••••••••"}
         </p>
       </div>
       <div onClick={handleSettingsRedirect}>

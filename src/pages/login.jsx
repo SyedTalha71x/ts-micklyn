@@ -13,17 +13,19 @@ import CreateAccountPictureDark from "../../public/Layer_1_black.svg";
 import Google from "../../public/google.svg";
 import Apple from "../../public/apple.svg";
 import { useNavigate } from "react-router-dom";
-import { FireApi } from "@/hooks/fireApi";
 import toast from "react-hot-toast";
+import { FireApi } from "@/hooks/fireApi";
 import { Loader } from "lucide-react";
 
-export default function CreateAccount() {
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isMobile, setIsMobile] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
+  const isFormEmpty = !password || !email;
+
   // Check if the screen size is mobile
   useEffect(() => {
     const checkIsMobile = () => {
@@ -38,21 +40,18 @@ export default function CreateAccount() {
     };
   }, []);
 
-  const HandleLoginNavigate = () => {
-    navigate("/login");
-  };
-
-  const HandleSignup = async (e) => {
+  const HandleUserLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const response = await FireApi("/register", "POST", {
+      const response = await FireApi("/login", "POST", {
         email,
         password,
       });
       console.log(response, "response");
-      toast.success(response.message);
-      navigate("/login");
+      localStorage.setItem("user-visited-dashboard", response?.token);
+      toast.success(response.message || "User Login Successful");
+      navigate("/");
     } catch (error) {
       console.log(error, "error");
       toast.error(error.message);
@@ -61,7 +60,9 @@ export default function CreateAccount() {
     }
   };
 
-  const isFormEmpty = !password || !email;
+  const HandleRegisterNavigate = () => {
+    navigate("/create-account");
+  };
 
   return (
     <div
@@ -85,11 +86,11 @@ export default function CreateAccount() {
                 alt="Dark Mode Image"
               />
             </div>
-            <h1 className="text-lg manrope-font-700">Create Account</h1>
+            <h1 className="text-lg manrope-font-700">Login Account</h1>
           </div>
 
           <div className="space-y-4 mt-4">
-            <form className="space-y-4" onSubmit={HandleSignup}>
+            <form className="space-y-4" onSubmit={HandleUserLogin}>
               <Input
                 type="email"
                 placeholder="Abc@gmail.com"
@@ -97,6 +98,7 @@ export default function CreateAccount() {
                 onChange={(e) => setEmail(e.target.value)}
                 className="text-sm border border-[#687588] dark:bg-[#080808]"
               />
+
               <Input
                 type="password"
                 placeholder="password"
@@ -104,7 +106,7 @@ export default function CreateAccount() {
                 onChange={(e) => setPassword(e.target.value)}
                 className="text-sm border border-[#687588] dark:bg-[#080808]"
               />
-
+              
               <Button
                 variant="outline"
                 className={`w-full text-sm h-10 ${
@@ -115,8 +117,8 @@ export default function CreateAccount() {
                 type="submit"
                 disabled={isFormEmpty || isLoading}
               >
-                {isLoading ? <Loader className="animate-spin"/> : "Confirm"}
-                </Button>
+                {isLoading ? <Loader className="animate-spin" /> : "Confirm"}
+              </Button>
             </form>
 
             <div className="flex items-center justify-center">
@@ -143,13 +145,13 @@ export default function CreateAccount() {
           </div>
 
           <div className="flex manrope-font-500 justify-center py-4">
-            <p className="text-md text-muted-foreground">
-              Already have an account{" "}
+            <p className="text-sm text-muted-foreground manrope-font-500">
+              Don't have an account.{" "}
               <span
-                onClick={() => HandleLoginNavigate()}
+                onClick={() => HandleRegisterNavigate()}
                 className="font-bold text-foreground hover:underline cursor-pointer"
               >
-                Login!
+                Register!
               </span>
             </p>
           </div>
@@ -170,11 +172,11 @@ export default function CreateAccount() {
                 alt="Dark Mode Image"
               />
             </div>
-            <h1 className="text-xl manrope-font-700">Create Account</h1>
+            <h1 className="text-xl manrope-font-700">Login Account</h1>
           </CardHeader>
 
           <CardContent className="space-y-4">
-            <form className="space-y-4" onSubmit={HandleSignup}>
+            <form className="space-y-4" onSubmit={HandleUserLogin}>
               <Input
                 type="email"
                 placeholder="Abc@gmail.com"
@@ -200,8 +202,8 @@ export default function CreateAccount() {
                 type="submit"
                 disabled={isFormEmpty || isLoading}
               >
-                {isLoading ? <Loader className="animate-spin"/> : "Confirm"}
-                </Button>
+                {isLoading ? <Loader className="animate-spin" /> : "Confirm"}
+              </Button>
             </form>
 
             <div className="flex items-center justify-center">
@@ -229,12 +231,12 @@ export default function CreateAccount() {
 
           <CardFooter className="flex justify-center pb-6">
             <p className="text-sm text-muted-foreground manrope-font-500">
-              Already have an account.{" "}
+              Don't have an account.{" "}
               <span
-                onClick={() => HandleLoginNavigate()}
+                onClick={() => HandleRegisterNavigate()}
                 className="font-bold text-foreground hover:underline cursor-pointer"
               >
-                Login!
+                Register!
               </span>
             </p>
           </CardFooter>
