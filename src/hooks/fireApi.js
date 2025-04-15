@@ -1,4 +1,5 @@
-export const baseUrl = "http://192.168.18.50:8000";
+// server ip 
+export const baseUrl = "http://64.23.166.88:8016";
 
 export const FireApi = async (url, method, data = null) => {
   const token = localStorage.getItem("user-visited-dashboard");

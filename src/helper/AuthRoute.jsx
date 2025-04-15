@@ -3,11 +3,11 @@ import React, { Suspense } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
 const AuthRoute = () => {
-  const isAuthenticated = localStorage.getItem("user-visited-dashboard");
+  // const isAuthenticated = localStorage.getItem("user-visited-dashboard");
 
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
+  // if (!isAuthenticated) {
+  //   return <Navigate to="/login" replace />;
+  // }
 
   return (
     <Suspense fallback={<Loader/>}>

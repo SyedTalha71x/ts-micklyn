@@ -28,7 +28,7 @@ const TransferToken = () => {
     setMessage('');
 
     try {
-      const response = await FireApi('/transfer-token', 'POST', {
+      const response = await FireApi('/ethereum/transfer-token', 'POST', {
         sender: {
           address: formData.senderAddress,
           secretKey: formData.senderSecretKey,

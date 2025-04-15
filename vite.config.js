@@ -13,5 +13,8 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  
+  server: {
+    host: '0.0.0.0', // Allows access from other devices
+    port: 5174,      // Your specified port
+  },
 })
