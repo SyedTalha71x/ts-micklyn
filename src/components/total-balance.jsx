@@ -34,7 +34,7 @@ export default function TotalBalance() {
       }));
     } catch (error) {
       console.log(error);
-      toast.error(error.message);
+      // toast.error(error.message);
       setBalances(prev => ({...prev, ETH: {...prev.ETH, loading: false}}));
     }
   };
@@ -57,7 +57,7 @@ export default function TotalBalance() {
       }));
     } catch (error) {
       console.log(error);
-      toast.error(error.message);
+      // toast.error(error.message);
       setBalances(prev => ({...prev, POL: {...prev.POL, loading: false}}));
     }
   };
@@ -80,7 +80,7 @@ export default function TotalBalance() {
       }));
     } catch (error) {
       console.log(error);
-      toast.error(error.message);
+      // toast.error(error.message);
       setBalances(prev => ({...prev, SOL: {...prev.SOL, loading: false}}));
     }
   };

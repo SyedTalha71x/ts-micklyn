@@ -53,7 +53,7 @@ export default function Chat() {
         </div>
       </div>
 
-      <div className="fixed bottom-0 lg:w-[70%] w-full ml-auto left-0 right-0">
+      <div className="fixed bottom-0 lg:w-[100%] md:w-[70%] md:right-5 md:mt-4 w-full ml-auto left-0 lg:-right-32">
         <div className="flex-1">
           <NavigationTabs />
         </div>
