@@ -3,11 +3,43 @@ import { Card, Card3, CardContent } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import HomeImage from "../../public/Layer_1.svg"
 import VectorSvg from '../../public/Layer_1_black.svg'
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import Fade from '@mui/material/Fade';
+import Typography from '@mui/material/Typography';
+import React from "react"
+import { Close } from "@radix-ui/react-dialog"
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: "auto",
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+  outline: 'none',
+  border: 'none',
+  borderRadius: '8px',
+
+};
 
 export default function Home() {
-  const redirectToChat = () =>{
-    window.location.href = '/chat'
-  }
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const redirectToLogin = () =>{
+    localStorage.removeItem("user-visited-dashboard");
+    window.location.href = '/login'
+  };
+
   return (
     <div className="min-h-screen bg-white dark:bg-[#000000] text-black dark:text-white">
       <header className="  py-4 px-4">
@@ -18,7 +50,7 @@ export default function Home() {
             </div>
             <span className="font-semibold manrope-font-bold">NomicsAI</span>
           </div>
-          <div onClick={redirectToChat}>
+          <div onClick={redirectToLogin}>
 
           <Button  variant="ghost" size="sm" className="text-black dark:text-white border border-black dark:border-white hover:bg-gray-100 dark:hover:bg-gray-700">
             API Status →
@@ -50,20 +82,25 @@ export default function Home() {
             </div>
             <h2 className="text-3xl manrope-font-bold ml-2 font-semibold">NomicsAI</h2>
           </div>
-          <p className="text-gray-800 dark:text-gray-200 manrope-font-bold text-xl ">Lorem ipsum is simply dummy</p>
+          <p className="text-gray-800 dark:text-gray-200 manrope-font-bold text-xl ">Your AI Edge in Every Trade</p>
         </div>
       </section>
 
       <section className="max-w-3xl p-2 w-full mx-auto py-8">
         <div className="grid gap-6 md:grid-cols-2">
-          {[...Array(2)].map((_, i) => (
-            <Card3 key={i} className={`border border-[#A0AEC0] dark:border-[#505050] bg-gray-50 dark:bg-[#101010] rounded-xl ${i === 1 ? 'md:block hidden': ''}`}>
-              <CardContent className="p-4">
-                <h3 className="mb-2 font-bold text-lg">Lorem ipsum is simply dummy text</h3>
-                <p className="text-sm text-gray-400 dark:text-gray-400">Lorem ipsum is simply</p>
+            <Card3 className={`border cursor-pointer border-[#A0AEC0] dark:border-[#505050] bg-gray-50 dark:bg-[#101010] rounded-xl hover:shadow-lg hover:bg-gray-100 transition-all `} onClick={redirectToLogin}>
+              <CardContent className="p-4 ">
+                <h3 className="mb-2 font-bold text-lg">Start Now</h3>
+                <p className="text-sm text-gray-400 dark:text-gray-400">Step into the future of trading with personal AI trading assistant.</p>
               </CardContent>
             </Card3>
-          ))}
+            <Card3 className={`border border-[#A0AEC0] dark:border-[#505050] bg-gray-50 dark:bg-[#101010] rounded-xl hover:shadow-lg hover:bg-gray-100 transition-all hover:cursor-pointer`} onClick={handleOpen}>
+              <CardContent className="p-4">
+                <h3 className="mb-2 font-bold text-lg">Get NomicsAI App</h3>
+                <p className="text-sm text-gray-400 dark:text-gray-400">Step into the future of trading – scan to start with your AI assistant on our app.</p>
+              </CardContent>
+            </Card3>
+            <p></p>
         </div>
       </section>
 
@@ -99,6 +136,27 @@ export default function Home() {
           </TableBody>
         </Table>
       </section>
+
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+          },
+        }}
+      >
+        <Fade in={open}>
+          <Box sx={style}>
+           <img src="/qr-code.png" width={"90%"} height={"90%"}/>
+           <Button onClick={handleClose} className={"hover:cursor-pointer"}>Close</Button>
+          </Box>
+        </Fade>
+      </Modal>
+
     </div>
   )
 }

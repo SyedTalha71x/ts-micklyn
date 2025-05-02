@@ -114,9 +114,10 @@ export default function TotalBalance() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-lg font-semibold dark:text-white">Wallet Balances</h2>
-        <div className="flex gap-2">
-          <Button
+
+        <div className="flex items-center gap-4">
+        <h2 className="text-lg font-semibold dark:text-white">Wallet Balances </h2>
+        <Button
             variant="ghost"
             size="icon"
             className="h-8 w-8 dark:hover:bg-gray-700"
@@ -128,6 +129,10 @@ export default function TotalBalance() {
               <Eye className="h-4 w-4 dark:text-gray-300" />
             )}
           </Button>
+        </div>
+
+        <div className="flex gap-2">
+          
           <Button
             size="icon"
             className="h-8 w-8 rounded-lg cursor-pointer text-white bg-primary dark:border-gray-600 dark:bg-[#101010] dark:hover:bg-gray-600"
@@ -138,9 +143,9 @@ export default function TotalBalance() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid-cols-1 md:grid-cols-3 gap-6 hidden md:block md:w-1/4 lg:w-1/6 ">
         {/* Ethereum Card */}
-        <div className="border border-[#A0AEC0] dark:border-gray-600 p-4 rounded-xl dark:bg-[#101010]">
+        <div className="border border-[#A0AEC0] dark:border-gray-600 p-4 rounded-xl mb-2 dark:bg-[#101010]">
           <div className="flex justify-between items-start">
             <div>
               <h3 className="text-sm font-medium dark:text-white">{blockchainNames.ETH}</h3>
@@ -168,7 +173,7 @@ export default function TotalBalance() {
         </div>
 
         {/* Polygon Card */}
-        <div className="border border-[#A0AEC0] dark:border-gray-600 p-4 rounded-xl dark:bg-[#101010]">
+        <div className="border border-[#A0AEC0] dark:border-gray-600 p-4 rounded-xl mb-2 dark:bg-[#101010]">
           <div className="flex justify-between items-start">
             <div>
               <h3 className="text-sm font-medium dark:text-white">{blockchainNames.POL}</h3>

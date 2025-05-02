@@ -13,8 +13,16 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  // server: {
+  //   host: '0.0.0.0',
+  //   port: 5174, 
+  // },
   server: {
-    host: '0.0.0.0', // Allows access from other devices
-    port: 5174,      // Your specified port
+    host: '0.0.0.0',
+    port: 5173, 
+    allowedHosts: [
+      'localhost',
+      '4fdb-2400-adc1-120-cd00-d829-d98d-e8f3-9ab.ngrok-free.app', 
+    ],
   },
 })

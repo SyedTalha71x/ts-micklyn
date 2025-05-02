@@ -35,21 +35,14 @@ export default function Chat() {
         )}
 
         {/* Original desktop layout - CryptoTable in column */}
-        <div className="hidden p-4 md:block md:w-1/4 lg:w-1/5">
+        {/* <div className="hidden p-4 md:block md:w-1/4 lg:w-1/5">
           <CryptoTable />
-        </div>
+        </div> */}
 
         <div className="flex-1 md:flex hidden flex-col ">
           <div className="p-4">
             <TotalBalance />
           </div>
-
-          {/* Placeholder for financial chart */}
-          {/* <div className="flex justify-center p-3 ">
-            <div className="w-full">
-              <FinancialChart />
-            </div>
-          </div> */}
         </div>
       </div>
 
