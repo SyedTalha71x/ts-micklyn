@@ -42,23 +42,22 @@ export default function Login() {
 
   const HandleUserLogin = async (e) => {
     e.preventDefault();
-    // setIsLoading(true);
-    navigate("/chat");
-    // try {
-    //   const response = await FireApi("/login", "POST", {
-    //     email,
-    //     password,
-    //   });
-    //   console.log(response, "response");
-    //   localStorage.setItem("user-visited-dashboard", response?.token);
-    //   toast.success(response.message || "User Login Successful");
-    //   navigate("/");
-    // } catch (error) {
-    //   console.log(error, "error");
-    //   toast.error(error.message);
-    // } finally {
-    //   setIsLoading(false);
-    // }
+    setIsLoading(true);
+    try {
+      const response = await FireApi("/login", "POST", {
+        email,
+        password,
+      });
+      console.log(response, "response");
+      localStorage.setItem("user-visited-dashboard", response?.token);
+      toast.success(response.message || "User Login Successful");
+      navigate("/chat");
+    } catch (error) {
+      console.log(error, "error");
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const HandleRegisterNavigate = () => {

@@ -2,7 +2,6 @@ import { Eye, EyeOff, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
 import { FireApi } from "@/hooks/fireApi";
-import toast from "react-hot-toast";
 
 export default function TotalBalance() {
   const [showBalance, setShowBalance] = useState(false);

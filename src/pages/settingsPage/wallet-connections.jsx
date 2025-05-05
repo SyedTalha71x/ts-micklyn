@@ -39,10 +39,7 @@ const WalletConnections = () => {
     setLoading(true);
 
     try {
-      const response = await FireApi("/create-wallet", "POST", {
-        user_id: Number(formData.user_id),
-        chain: formData.chain,
-      });
+      const response = await FireApi(`/create-wallet/${formData.chain}`, "POST");
 
       setCreatedWallet(response);
       localStorage.setItem("wallet-address", JSON.stringify(response.address));
@@ -54,7 +51,7 @@ const WalletConnections = () => {
       toast.success("Wallet created successfully!");
     } catch (error) {
       console.error("Error creating wallet:", error);
-      toast.error(error.response?.data?.message || "Failed to create wallet");
+      toast.error(error?.message || "Failed to create wallet");
     } finally {
       setLoading(false);
     }

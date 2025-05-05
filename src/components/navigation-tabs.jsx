@@ -14,11 +14,14 @@ const NavigationTabsWithChat = () => {
   const [address, setAddress] = useState("");
   const [loading, setLoading] = useState(false);
   const [recording, setRecording] = useState(false);
+  const [myToken, setMyToken] = useState(null);
 
   const messageContainerRef = useRef(null);
 
   useEffect(() => {
     const storeAddress = localStorage.getItem("address");
+    const userVisitToken = localStorage.getItem("user-visited-dashboard");
+    setMyToken(userVisitToken);
     setAddress(storeAddress);
   }, []);
 
@@ -54,40 +57,10 @@ const NavigationTabsWithChat = () => {
       ]);
     });
 
-    // newSocket.on("chat_response", (data) => {
-    //   console.log("Chat Response:", data);
-    //   setLoading(false);
-    //   if (data.reply) {
-    //     setMessages((prev) => [
-    //       ...prev,
-    //       { wallet: "Chat", content: data?.reply || data?.reply?.data },
-    //     ]);
-    //   }
-    // });
-
-    // newSocket.on("chat_response", (data) => {
-    //   console.log("Chat Response:", data);
-    //   setLoading(false);
-
-    //   if (data.reply) {
-    //     const isJson = typeof data.reply === "object" && data.reply !== null;
-
-    //     setMessages((prev) => [
-    //       ...prev,
-    //       {
-    //         wallet: "Chat",
-    //         content: isJson ? data.reply : data.reply,
-    //         isJson, // Add a flag to indicate if the content is JSON
-    //       },
-    //     ]);
-    //   }
-    // });
-
     newSocket.on("chat_response", (data) => {
       console.log("Chat Response:", data);
       setLoading(false);
 
-      // Extract the reply from the nested structure
       const reply = data?.data?.reply;
 
       if (typeof reply === "string") {
@@ -137,8 +110,12 @@ const NavigationTabsWithChat = () => {
         event: "chat_message",
         data: {
           user_input: text,
-          address: address || "0xE274274fE850788FDA67d6DfD26Cee5ab51b34C3",
+          address: address || import.meta.env.VITE_WALLET_ADDRESS,
+          solana_address : import.meta.env.VITE_SOLANA_WALLET_ADDRESS,
+          ethereum_address : import.meta.env.VITE_ETHEREUM_WALLET_ADDRESS,
+          polygon_address : import.meta.env.VITE_POLYGON_WALLET_ADDRESS,
           chat_history: "",
+          bearer_token: myToken,
         },
       };
 
