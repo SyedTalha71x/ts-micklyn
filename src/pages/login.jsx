@@ -49,7 +49,28 @@ export default function Login() {
         password,
       });
       console.log(response, "response");
-      localStorage.setItem("user-visited-dashboard", response?.token);
+      localStorage.setItem("user-visited-dashboard", response?.data?.token);
+
+      response?.data?.wallets?.forEach((wallet) => {
+        switch (wallet.chain.toUpperCase()) {
+          case "SOLANA":
+            localStorage.setItem("solana-address", wallet.address);
+            break;
+          case "ETH":
+            localStorage.setItem("eth-address", wallet.address);
+            break;
+          case "POLYGON":
+            localStorage.setItem("polygon-address", wallet.address);
+            break;
+          case "BSC":
+            localStorage.setItem("bsc-address", wallet.address);
+            break;
+          default:
+            console.warn(`Unknown chain: ${wallet.chain}`);
+        }
+      });
+
+      
       toast.success(response.message || "User Login Successful");
       navigate("/chat");
     } catch (error) {

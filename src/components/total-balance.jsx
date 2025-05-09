@@ -11,6 +11,29 @@ export default function TotalBalance() {
     SOL: { usdt: 0, usdc: 0, loading: true, address: "" }
   });
 
+  const [addresses, setAddresses] = useState({
+    ETH: "",
+    POL: "",
+    SOL: "",
+    BSC: "",
+  });
+
+  useEffect(() => {
+    // Retrieve addresses from localStorage
+    const ethAddress = localStorage.getItem("eth-address");
+    const polygonAddress = localStorage.getItem("polygon-address");
+    const solanaAddress = localStorage.getItem("solana-address");
+    const bscAddress = localStorage.getItem("bsc-address");
+
+    setAddresses({
+      ETH: ethAddress || "",
+      POL: polygonAddress || "",
+      SOL: solanaAddress || "",
+      BSC: bscAddress || "",
+    });
+  }, []);
+  
+
   const handleSettingsRedirect = () => {
     window.location.href = "/settings/manage-wallet";
   };
@@ -19,7 +42,7 @@ export default function TotalBalance() {
     try {
       setBalances(prev => ({...prev, ETH: {...prev.ETH, loading: true}}));
       const response = await FireApi(
-        `/ethereum/get-user-balance?address=${import.meta.env.VITE_ETHEREUM_WALLET_ADDRESS}`,
+        `/ethereum/get-user-balance?address=${addresses.ETH}`,
         "GET"
       );
       setBalances(prev => ({
@@ -42,7 +65,7 @@ export default function TotalBalance() {
     try {
       setBalances(prev => ({...prev, POL: {...prev.POL, loading: true}}));
       const response = await FireApi(
-        `/polygon/get-user-balance?address=${import.meta.env.VITE_POLYGON_WALLET_ADDRESS}`,
+        `/polygon/get-user-balance?address=${addresses.POL}`,
         "GET"
       );
       setBalances(prev => ({
@@ -65,7 +88,7 @@ export default function TotalBalance() {
     try {
       setBalances(prev => ({...prev, SOL: {...prev.SOL, loading: true}}));
       const response = await FireApi(
-        `/solana/get-user-balance?address=${import.meta.env.VITE_SOLANA_WALLET_ADDRESS}`,
+        `/solana/get-user-balance?address=${addresses.SOL}`,
         "GET"
       );
       setBalances(prev => ({
@@ -85,10 +108,10 @@ export default function TotalBalance() {
   };
 
   useEffect(() => {
-    GetEthBalance();
-    GetPolygonBalance();
-    GetSolanaBalance();
-  }, []);
+    if (addresses.ETH) GetEthBalance();
+    if (addresses.POL) GetPolygonBalance();
+    if (addresses.SOL) GetSolanaBalance();
+  }, [addresses]);
 
   const formatBalance = (value) => {
     if (!showBalance) return "••••••••";
