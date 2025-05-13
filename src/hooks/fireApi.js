@@ -1,14 +1,14 @@
 // server ip 
-export const baseUrl = "http://64.23.166.88:8016";
+// export const baseUrl = "http://64.23.166.88:8016";
 
 // local ip of daniyal backend
-// export const baseUrl = "http://192.168.18.50:8001";
+export const baseUrl = "http://192.168.18.52:8001";
 
 // local ip of waqar backend
-// export const baseUrl = "http://192.168.18.115:5019";
+// export const chatBaseUrl = "http://192.168.18.115:5019";
 
-// local ip of zaid backend 
-// export const baseUrl = "http://192.168.18.173:5019";
+// server ip of Python backend 
+export const chatBaseUrl = "http://64.23.166.88:5019";
 
 
 export const FireApi = async (url, method, data = null) => {
