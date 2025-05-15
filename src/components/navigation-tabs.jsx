@@ -399,7 +399,7 @@ const NavigationTabsWithChat = () => {
       )}
 
       {!messages.some((msg) => msg.wallet === "You") && (
-        <h2 className="text-2xl font-bold mb-4 dark:text-white max-w-5xl mx-auto text-center mt-[30rem]">
+        <h2 className="text-2xl font-bold mb-4 dark:text-white max-w-5xl mx-auto text-center">
           What can I help with?
         </h2>
       )}

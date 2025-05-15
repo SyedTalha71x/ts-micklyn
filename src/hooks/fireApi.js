@@ -1,8 +1,8 @@
 // server ip 
-// export const baseUrl = "http://64.23.166.88:8016";
+export const baseUrl = "http://64.23.166.88:8016";
 
 // local ip of daniyal backend
-export const baseUrl = "http://192.168.18.52:8001";
+// export const baseUrl = "http://192.168.18.52:8001";
 
 // local ip of waqar backend
 // export const chatBaseUrl = "http://192.168.18.115:5019";
