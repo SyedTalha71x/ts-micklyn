@@ -28,6 +28,12 @@ const NavigationTabsWithChat = () => {
   const hasHandledIntents = useRef({ intent0: false, intent1: false });
   const [finalReply, setFinalReply] = useState(null);
 
+  const [userAddresses, setUserAddresses] = useState({
+    solana: '',
+    ethereum: '',
+    polygon: '',
+  });
+
   // Voice recording animation states
   const [audioLevels, setAudioLevels] = useState([]);
   const animationFrameRef = useRef(null);
@@ -37,6 +43,23 @@ const NavigationTabsWithChat = () => {
   const microphoneRef = useRef(null);
   const [recordingTime, setRecordingTime] = useState(0);
   const [showRecordingModal, setShowRecordingModal] = useState(false);
+
+  useEffect(() => {
+  // Get addresses from localStorage
+  const solanaAddress = localStorage.getItem('solana-address') || '';
+  const ethereumAddress = localStorage.getItem('eth-address') || '';
+  const polygonAddress = localStorage.getItem('polygon-address') || '';
+  const bscAddress = localStorage.getItem('bsc-address') || '';
+
+  // Update state with the addresses
+  setUserAddresses({
+    solana: solanaAddress,
+    ethereum: ethereumAddress,
+    polygon: polygonAddress,
+    bsc: bscAddress
+  });
+}, []);
+
   // Initialize user data from localStorage
   useEffect(() => {
     const storeAddress = localStorage.getItem("address");
@@ -166,9 +189,9 @@ const NavigationTabsWithChat = () => {
         data: {
           user_input: lastUserMessage,
           address: address || import.meta.env.VITE_WALLET_ADDRESS,
-          solana_address: import.meta.env.VITE_SOLANA_WALLET_ADDRESS,
-          ethereum_address: import.meta.env.VITE_ETHEREUM_WALLET_ADDRESS,
-          polygon_address: import.meta.env.VITE_POLYGON_WALLET_ADDRESS,
+          solana_address: userAddresses?.solana || 'dont have user adress',
+          ethereum_address: userAddresses?.ethereum || 'dont have user adress',
+          polygon_address: userAddresses?.polygon || 'dont have user adress',
           chat_history: messages,
           bearer_token: myToken,
           is_confirmed1:
@@ -219,9 +242,9 @@ const NavigationTabsWithChat = () => {
         event: "chat_message",
         data: {
           user_input: text,
-          solana_address: import.meta.env.VITE_SOLANA_WALLET_ADDRESS,
-          ethereum_address: import.meta.env.VITE_ETHEREUM_WALLET_ADDRESS,
-          polygon_address: import.meta.env.VITE_POLYGON_WALLET_ADDRESS,
+          solana_address: userAddresses?.solana || 'dont have user adress',
+          ethereum_address: userAddresses?.ethereum || 'dont have user adress',
+          polygon_address: userAddresses?.polygon || 'dont have user adress',
           chat_history: chatHistory,
           bearer_token: myToken,
           is_confirmed1: false,
