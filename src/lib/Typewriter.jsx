@@ -10,7 +10,7 @@ const letterVariants = {
   visible: { opacity: 1, transition: { opacity: { duration: 0.01 } } }, 
 };
 
-export const Typewriter = ({ text, ...rest }) => (
+export const Typewriter = ({ text = "", ...rest }) => (
   <motion.p
     key={text}
     variants={sentenceVariants}
@@ -18,10 +18,12 @@ export const Typewriter = ({ text, ...rest }) => (
     animate="visible"
     {...rest}
   >
-    {text.split("").map((char, i) => (
-      <motion.span key={`${char}-${i}`} variants={letterVariants}>
-        {char}
-      </motion.span>
-    ))}
+    {String(text)
+      .split("")
+      .map((char, i) => (
+        <motion.span key={`${char}-${i}`} variants={letterVariants}>
+          {char}
+        </motion.span>
+      ))}
   </motion.p>
 );

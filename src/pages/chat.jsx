@@ -39,7 +39,7 @@ export default function Chat() {
           <CryptoTable />
         </div> */}
 
-        <div className="flex-1 md:flex hidden flex-col ">
+        <div className="flex-1 md:flex hidden flex-col">
           <div className="p-4">
             <TotalBalance />
           </div>
