@@ -28,10 +28,15 @@
 //   const hasHandledIntents = useRef({ intent0: false, intent1: false });
 //   const [finalReply, setFinalReply] = useState(null);
 
+//   // New state for better intent handling
+//   const [currentIntentIndex, setCurrentIntentIndex] = useState(0);
+//   const [processedIntents, setProcessedIntents] = useState([]);
+//   const [allIntentsData, setAllIntentsData] = useState(null);
+
 //   const [userAddresses, setUserAddresses] = useState({
-//     solana: '',
-//     ethereum: '',
-//     polygon: '',
+//     solana: "",
+//     ethereum: "",
+//     polygon: "",
 //   });
 
 //   // Voice recording animation states
@@ -45,20 +50,20 @@
 //   const [showRecordingModal, setShowRecordingModal] = useState(false);
 
 //   useEffect(() => {
-//   // Get addresses from localStorage
-//   const solanaAddress = localStorage.getItem('solana-address') || '';
-//   const ethereumAddress = localStorage.getItem('eth-address') || '';
-//   const polygonAddress = localStorage.getItem('polygon-address') || '';
-//   const bscAddress = localStorage.getItem('bsc-address') || '';
+//     // Get addresses from localStorage
+//     const solanaAddress = localStorage.getItem("solana-address") || "";
+//     const ethereumAddress = localStorage.getItem("eth-address") || "";
+//     const polygonAddress = localStorage.getItem("polygon-address") || "";
+//     const bscAddress = localStorage.getItem("bsc-address") || "";
 
-//   // Update state with the addresses
-//   setUserAddresses({
-//     solana: solanaAddress,
-//     ethereum: ethereumAddress,
-//     polygon: polygonAddress,
-//     bsc: bscAddress
-//   });
-// }, []);
+//     // Update state with the addresses
+//     setUserAddresses({
+//       solana: solanaAddress,
+//       ethereum: ethereumAddress,
+//       polygon: polygonAddress,
+//       bsc: bscAddress,
+//     });
+//   }, []);
 
 //   // Initialize user data from localStorage
 //   useEffect(() => {
@@ -80,6 +85,9 @@
 
 //   useEffect(() => {
 //     hasHandledIntents.current = { intent0: false, intent1: false };
+//     setCurrentIntentIndex(0);
+//     setProcessedIntents([]);
+//     setAllIntentsData(null);
 //   }, [setUserId]);
 
 //   // Auto-scroll to bottom of chat
@@ -113,26 +121,110 @@
 //       ]);
 //     });
 
+//     // newSocket.on("chat_response", (data) => {
+//     //   setLoading(false);
+//     //   const reply = data?.data?.reply;
+//     //   const checkConfirmation = data?.data;
+
+//     //   setCheckConfirmation(checkConfirmation);
+
+//     //   // If it's a single intent or final response, show it immediately
+//     //   if (typeof reply === "object" && reply !== null && Array.isArray(reply)) {
+//     //     if (reply.length === 1) {
+//     //       // Single intent - show immediately
+//     //       setMessages((prev) => [
+//     //         ...prev,
+//     //         {
+//     //           wallet: "Chat",
+//     //           content: reply[0],
+//     //           isJson: true,
+//     //         },
+//     //       ]);
+//     //     } else if (reply.length > 1) {
+//     //       // Multiple intents - store for sequential processing
+//     //       setAllIntentsData(checkConfirmation);
+//     //       setCurrentIntentIndex(0);
+//     //       setProcessedIntents([]);
+//     //     }
+//     //   } else if (typeof reply === "object" && reply !== null) {
+//     //     // Non-array object response
+//     //     setMessages((prev) => [
+//     //       ...prev,
+//     //       {
+//     //         wallet: "Chat",
+//     //         content: reply,
+//     //         isJson: true,
+//     //       },
+//     //     ]);
+//     //   }
+
+//     //   if (typeof reply === "string") {
+//     //     setFinalReply(reply);
+//     //   }
+//     // });
 //     newSocket.on("chat_response", (data) => {
 //       setLoading(false);
-//       const reply = data?.data?.reply;
-//       const checkConfirmation = data?.data;
+
+//       // Parse the JSON string
+//       let parsedData;
+//       try {
+//         parsedData = JSON.parse(data);
+//       } catch (error) {
+//         console.log("Error parsing socket data:", error);
+//         console.error("Failed to parse socket data:", data);
+//         return;
+//       }
+
+//       console.log("Parsed socket data:", parsedData);
+
+//       const reply = parsedData?.data?.reply;
+//       const checkConfirmation = parsedData;
 
 //       setCheckConfirmation(checkConfirmation);
 
-//       // If it's a JSON response (array), show it immediately
-//       if (typeof reply === "object" && reply !== null) {
+//       // Check if reply is an array
+//       if (Array.isArray(reply)) {
+//         // If it's an array with one element that's a string (like your first response)
+//         if (reply.length === 1 && typeof reply[0] === "string") {
+//           setMessages((prev) => [
+//             ...prev,
+//             {
+//               wallet: "Chat",
+//               content: reply[0],
+//               isJson: false,
+//             },
+//           ]);
+//         }
+//         // If it's an array with wallet data (like your second response)
+//         else if (reply.length > 0 && reply[0].all_wallet_addresses) {
+//           console.log("Received wallet data:", reply[0].all_wallet_addresses);
+//           // setAllIntentsData(reply[0].all_wallet_addresses);
+//           setCurrentIntentIndex(0);
+//           setProcessedIntents([]);
+
+//           setMessages((prev) => [
+//             ...prev,
+//             {
+//               wallet: "Chat",
+//               content: reply[0].all_wallet_addresses,
+//               isJson: true,
+//             },
+//           ]);
+//         }
+//       }
+//       // Check if reply is an object (but not an array)
+//       else if (typeof reply === "object" && reply !== null) {
 //         setMessages((prev) => [
 //           ...prev,
 //           {
 //             wallet: "Chat",
-//             content: reply?.data || reply,
+//             content: reply[0].all_wallet_addresses,
 //             isJson: true,
 //           },
 //         ]);
 //       }
-
-//       if (typeof reply === "string") {
+//       // Check if reply is a string
+//       else if (typeof reply === "string") {
 //         setFinalReply(reply);
 //       }
 //     });
@@ -142,43 +234,45 @@
 //     };
 //   }, []);
 
+//   // Handle sequential intent processing
 //   useEffect(() => {
-//     if (checkConfirmation) {
-//       const { is_confirmed1, is_confirmed2, reply } = checkConfirmation;
+//     if (
+//       allIntentsData &&
+//       allIntentsData.reply &&
+//       allIntentsData.reply.length > 1
+//     ) {
+//       const { is_confirmed1, is_confirmed2, reply } = allIntentsData;
 
-//       // Show first modal
-//       if (
-//         is_confirmed1 === false &&
-//         reply?.length > 0 &&
-//         !hasHandledIntents.current.intent0
-//       ) {
+//       // Show first intent modal
+//       if (currentIntentIndex === 0 && !hasHandledIntents.current.intent0) {
 //         setPendingAction({ ...reply[0], intentIndex: 0 });
 //         setShowConfirmation(true);
 //         hasHandledIntents.current.intent0 = true;
 //       }
-//       // Show second modal
+//       // Show second intent modal after first is processed
 //       else if (
-//         (is_confirmed1 === true || is_confirmed1 === false) &&
-//         reply?.length > 1 &&
-//         !hasHandledIntents.current.intent1
+//         currentIntentIndex === 1 &&
+//         !hasHandledIntents.current.intent1 &&
+//         processedIntents.length === 1
 //       ) {
 //         setPendingAction({ ...reply[1], intentIndex: 1 });
 //         setShowConfirmation(true);
 //         hasHandledIntents.current.intent1 = true;
 //       }
-//       // After both intents, show final reply (from temp state)
-//       else if (
-//         (is_confirmed1 === true || is_confirmed1 === false) &&
-//         (is_confirmed2 === true || is_confirmed2 === false) &&
-//         finalReply
-//       ) {
+//       // Show final response after both intents are processed
+//       else if (processedIntents.length === 2 && finalReply) {
 //         setShowConfirmation(false);
 //         setFullResponse(finalReply);
 //         setIsTyping(true);
-//         setFinalReply(null); // clear after showing
+//         setFinalReply(null);
+//         // Reset for next interaction
+//         setAllIntentsData(null);
+//         setCurrentIntentIndex(0);
+//         setProcessedIntents([]);
+//         hasHandledIntents.current = { intent0: false, intent1: false };
 //       }
 //     }
-//   }, [checkConfirmation, finalReply]);
+//   }, [allIntentsData, currentIntentIndex, processedIntents, finalReply]);
 
 //   const handleConfirmation = (confirmed) => {
 //     setShowConfirmation(false);
@@ -189,9 +283,9 @@
 //         data: {
 //           user_input: lastUserMessage,
 //           address: address || import.meta.env.VITE_WALLET_ADDRESS,
-//           solana_address: userAddresses?.solana || 'dont have user adress',
-//           ethereum_address: userAddresses?.ethereum || 'dont have user adress',
-//           polygon_address: userAddresses?.polygon || 'dont have user adress',
+//           solana_address: userAddresses?.solana || "dont have user adress",
+//           ethereum_address: userAddresses?.ethereum || "dont have user adress",
+//           polygon_address: userAddresses?.polygon || "dont have user adress",
 //           chat_history: messages,
 //           bearer_token: myToken,
 //           is_confirmed1:
@@ -223,6 +317,23 @@
 //           status: confirmed ? "success" : "error",
 //         },
 //       ]);
+
+//       // Add the single intent data to messages (only the current intent)
+//       if (allIntentsData && allIntentsData.reply) {
+//         const currentIntent = allIntentsData.reply[pendingAction.intentIndex];
+//         setMessages((prev) => [
+//           ...prev,
+//           {
+//             wallet: "Chat",
+//             content: currentIntent,
+//             isJson: true,
+//           },
+//         ]);
+//       }
+
+//       // Update processed intents and move to next
+//       setProcessedIntents((prev) => [...prev, pendingAction.intentIndex]);
+//       setCurrentIntentIndex((prev) => prev + 1);
 //     }
 //   };
 
@@ -242,9 +353,9 @@
 //         event: "chat_message",
 //         data: {
 //           user_input: text,
-//           solana_address: userAddresses?.solana || 'dont have user adress',
-//           ethereum_address: userAddresses?.ethereum || 'dont have user adress',
-//           polygon_address: userAddresses?.polygon || 'dont have user adress',
+//           solana_address: userAddresses?.solana || "dont have user adress",
+//           ethereum_address: userAddresses?.ethereum || "dont have user adress",
+//           polygon_address: userAddresses?.polygon || "dont have user adress",
 //           chat_history: chatHistory,
 //           bearer_token: myToken,
 //           is_confirmed1: false,
@@ -260,31 +371,14 @@
 //       setMessages((prev) => [...prev, { wallet: "You", content: text }]);
 //       setMessage("");
 //       setLoading(true);
+
+//       // Reset intent handling for new message
+//       hasHandledIntents.current = { intent0: false, intent1: false };
+//       setCurrentIntentIndex(0);
+//       setProcessedIntents([]);
+//       setAllIntentsData(null);
 //     }
 //   };
-
-//   // const animateRecording = () => {
-//   //   const analyser = analyserRef.current;
-//   //   if (!analyser) return;
-
-//   //   const dataArray = new Uint8Array(analyser.frequencyBinCount);
-//   //   analyser.getByteFrequencyData(dataArray);
-
-//   //   // Calculate average volume
-//   //   let sum = 0;
-//   //   for (let i = 0; i < dataArray.length; i++) {
-//   //     sum += dataArray[i];
-//   //   }
-//   //   const average = sum / dataArray.length;
-
-//   //   // Update audio levels for visualization
-//   //   setAudioLevels((prev) => {
-//   //     const newLevels = [...prev, average];
-//   //     return newLevels.length > 8 ? newLevels.slice(-8) : newLevels;
-//   //   });
-
-//   //   animationFrameRef.current = requestAnimationFrame(animateRecording);
-//   // };
 
 //   const startRecording = async () => {
 //     try {
@@ -466,72 +560,70 @@
 //                 }`}
 //               >
 //                 <div
-//                   className={`px-3 py-2 rounded-lg text-sm max-w-[80%] text-left whitespace-pre-wrap ${getMessageColor()}`}
+//                   className={`px-3 py-2 rounded-lg text-sm max-w-md text-left whitespace-pre-wrap ${getMessageColor()}`}
 //                 >
 //                   {msg.wallet === "Chat" && isLast && isTyping ? (
 //                     <Typewriter text={fullResponse} className="relative" />
 //                   ) : msg.isJson ? (
 //                     <div className="mt-1">
-//                       {Array.isArray(msg.content) && msg.content.length > 1
-//                         ? msg.content.map((intent, intentIndex) => (
-//                             <div key={intentIndex} className="mb-4">
-//                               <h4 className="font-bold mb-2">
-//                                 Intent {intentIndex + 1}: {intent.action}
-//                               </h4>
-//                               <div className="pl-4">
-//                                 {Object.entries(intent)
-//                                   .filter(
-//                                     ([key]) =>
-//                                       !["success", "message", "status"].includes(key)
+//                       {Array.isArray(msg.content) ? (
+//                         <div>
+//                           <h4 className="font-bold mb-2">Wallet Addresses</h4>
+//                           <ul className="list-disc pl-5">
+//                             {msg.content.map((wallet, idx) => (
+//                               <li key={idx}>
+//                                 <strong>Address:</strong> {wallet.address}{" "}
+//                                 <br />
+//                                 <strong>Chain:</strong> {wallet.chain}
+//                               </li>
+//                             ))}
+//                           </ul>
+//                         </div>
+//                       ) : typeof msg.content === "object" &&
+//                         msg.content !== null ? (
+//                         <div>
+//                           <h4 className="font-bold mb-2">
+//                             {msg.content.action
+//                               ? `Action: ${msg.content.action}`
+//                               : "Transaction Details"}
+//                           </h4>
+//                           <div className="pl-4">
+//                             {Object.entries(msg.content)
+//                               .filter(
+//                                 ([key]) =>
+//                                   !["success", "message", "status"].includes(
+//                                     key
 //                                   )
-//                                   .map(([key, value]) => {
-//                                     return (
-//                                       <div key={key} className="mb-1">
-//                                         <strong>
-//                                           {key.charAt(0).toUpperCase() +
-//                                             key.slice(1)}
-//                                           :
-//                                         </strong>{" "}
-//                                         {value}
-//                                       </div>
-//                                     );
-//                                   })}
-//                               </div>
-//                             </div>
-//                           ))
-//                         : Object.entries(msg.content).map(([key, value]) => (
-//                             <div key={key} className="mb-1">
-//                               {typeof value === "object" && value !== null ? (
-//                                 <div>
-//                                   {Object.entries(value).map(
-//                                     ([nestedKey, nestedValue]) => (
-//                                       <div key={nestedKey}>
-//                                         <strong>
-//                                           {nestedKey.charAt(0).toUpperCase() +
-//                                             nestedKey.slice(1)}
-//                                           :
-//                                         </strong>{" "}
-//                                         {nestedValue}
-//                                       </div>
-//                                     )
-//                                   )}
+//                               )
+//                               .map(([key, value]) => (
+//                                 <div key={key} className="mb-1">
+//                                   <strong>
+//                                     {key.charAt(0).toUpperCase() + key.slice(1)}
+//                                     :
+//                                   </strong>{" "}
+//                                   {typeof value === "object"
+//                                     ? JSON.stringify(value)
+//                                     : value}
 //                                 </div>
-//                               ) : (
-//                                 <>{value}</>
-//                               )}
-//                             </div>
-//                           ))}
+//                               ))}
+//                           </div>
+//                         </div>
+//                       ) : (
+//                         <Typewriter
+//                           text={String(msg.content)}
+//                           className="relative"
+//                         />
+//                       )}
 //                     </div>
-//                   ) : typeof msg.content === "object" ? (
-//                     JSON.stringify(msg.content, null, 2)
-//                   ) : (
+//                   ) : typeof msg.content === "string" ? (
 //                     msg.content
+//                   ) : (
+//                     JSON.stringify(msg.content, null, 2)
 //                   )}
 //                 </div>
 //               </div>
 //             );
 //           })}
-
 //           {isTyping && typingText && (
 //             <div className="flex justify-start">
 //               <div className="px-3 py-2 rounded-lg text-sm text-gray-800 dark:text-gray-200 max-w-[80%] text-left whitespace-pre-wrap relative">
@@ -678,8 +770,6 @@
 
 // export default NavigationTabsWithChat;
 
-
-
 import { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import Icon from "../../public/Icon.svg";
@@ -687,6 +777,7 @@ import { chatBaseUrl } from "@/hooks/fireApi";
 import { Mic } from "lucide-react";
 import { jwtDecode } from "jwt-decode";
 import { Typewriter } from "@/lib/Typewriter";
+// import { c } from "vite/dist/node/moduleRunnerTransport.d-CXw_Ws6P";
 
 const NavigationTabsWithChat = () => {
   // State variables
@@ -709,16 +800,16 @@ const NavigationTabsWithChat = () => {
   const messageContainerRef = useRef(null);
   const hasHandledIntents = useRef({ intent0: false, intent1: false });
   const [finalReply, setFinalReply] = useState(null);
-  
+
   // New state for better intent handling
   const [currentIntentIndex, setCurrentIntentIndex] = useState(0);
   const [processedIntents, setProcessedIntents] = useState([]);
   const [allIntentsData, setAllIntentsData] = useState(null);
 
   const [userAddresses, setUserAddresses] = useState({
-    solana: '',
-    ethereum: '',
-    polygon: '',
+    solana: "",
+    ethereum: "",
+    polygon: "",
   });
 
   // Voice recording animation states
@@ -733,17 +824,17 @@ const NavigationTabsWithChat = () => {
 
   useEffect(() => {
     // Get addresses from localStorage
-    const solanaAddress = localStorage.getItem('solana-address') || '';
-    const ethereumAddress = localStorage.getItem('eth-address') || '';
-    const polygonAddress = localStorage.getItem('polygon-address') || '';
-    const bscAddress = localStorage.getItem('bsc-address') || '';
+    const solanaAddress = localStorage.getItem("solana-address") || "";
+    const ethereumAddress = localStorage.getItem("eth-address") || "";
+    const polygonAddress = localStorage.getItem("polygon-address") || "";
+    const bscAddress = localStorage.getItem("bsc-address") || "";
 
     // Update state with the addresses
     setUserAddresses({
       solana: solanaAddress,
       ethereum: ethereumAddress,
       polygon: polygonAddress,
-      bsc: bscAddress
+      bsc: bscAddress,
     });
   }, []);
 
@@ -805,39 +896,64 @@ const NavigationTabsWithChat = () => {
 
     newSocket.on("chat_response", (data) => {
       setLoading(false);
-      const reply = data?.data?.reply;
-      const checkConfirmation = data?.data;
 
-      setCheckConfirmation(checkConfirmation);
+      let parsedData;
 
-      // If it's a single intent or final response, show it immediately
-      if (typeof reply === "object" && reply !== null && Array.isArray(reply)) {
-        if (reply.length === 1) {
-          // Single intent - show immediately
+      if (typeof data === "string") {
+        parsedData = JSON.parse(data);
+      } else {
+        parsedData = data;
+      }
+      const reply = parsedData?.data?.reply;
+      console.log(Array.isArray(reply)); // true
+      console.log(typeof reply); // "object"
+      console.log(reply.length); // "object"
+      console.log("Parsed socket data:", reply);
+
+      if (reply && typeof reply === "object") {
+        Array.isArray(reply) &&
+          reply.forEach((item, index) => {
+            console.log(`Reply item ${index}:`, item);
+          });
+
+        const checkConfirmation = parsedData;
+        setCheckConfirmation(checkConfirmation);
+
+        // If it's a single intent or final response, show it immediately
+        if (
+          typeof reply === "object" &&
+          reply !== null &&
+          Array.isArray(reply)
+        ) {
+          if (reply.length === 1) {
+            // Single intent - show immediately
+            setMessages((prev) => [
+              ...prev,
+              {
+                wallet: "Chat",
+                content: reply[0],
+                isJson: true,
+              },
+            ]);
+          } 
+          if (reply.length == 2) {
+            // Multiple intents - store for sequential processing
+            console.log("Received multiple intents:");
+            setAllIntentsData(checkConfirmation);
+            setCurrentIntentIndex(0);
+            setProcessedIntents([]);
+          }
+        } else if (typeof reply === "object" && reply !== null) {
+          // Non-array object response
           setMessages((prev) => [
             ...prev,
             {
               wallet: "Chat",
-              content: reply[0],
+              content: reply,
               isJson: true,
             },
           ]);
-        } else if (reply.length > 1) {
-          // Multiple intents - store for sequential processing
-          setAllIntentsData(checkConfirmation);
-          setCurrentIntentIndex(0);
-          setProcessedIntents([]);
         }
-      } else if (typeof reply === "object" && reply !== null) {
-        // Non-array object response
-        setMessages((prev) => [
-          ...prev,
-          {
-            wallet: "Chat",
-            content: reply,
-            isJson: true,
-          },
-        ]);
       }
 
       if (typeof reply === "string") {
@@ -851,36 +967,60 @@ const NavigationTabsWithChat = () => {
   }, []);
 
   // Handle sequential intent processing
-  useEffect(() => {
-    if (allIntentsData && allIntentsData.reply && allIntentsData.reply.length > 1) {
-      const { is_confirmed1, is_confirmed2, reply } = allIntentsData;
-      
-      // Show first intent modal
-      if (currentIntentIndex === 0 && !hasHandledIntents.current.intent0) {
-        setPendingAction({ ...reply[0], intentIndex: 0 });
-        setShowConfirmation(true);
-        hasHandledIntents.current.intent0 = true;
-      }
-      // Show second intent modal after first is processed
-      else if (currentIntentIndex === 1 && !hasHandledIntents.current.intent1 && processedIntents.length === 1) {
-        setPendingAction({ ...reply[1], intentIndex: 1 });
-        setShowConfirmation(true);
-        hasHandledIntents.current.intent1 = true;
-      }
-      // Show final response after both intents are processed
-      else if (processedIntents.length === 2 && finalReply) {
-        setShowConfirmation(false);
-        setFullResponse(finalReply);
-        setIsTyping(true);
-        setFinalReply(null);
-        // Reset for next interaction
-        setAllIntentsData(null);
-        setCurrentIntentIndex(0);
-        setProcessedIntents([]);
-        hasHandledIntents.current = { intent0: false, intent1: false };
-      }
+ useEffect(() => {
+  if (
+    allIntentsData &&
+    allIntentsData.data?.reply &&
+    allIntentsData.data.reply.length > 0
+  ) {
+    const { is_confirmed1, is_confirmed2, reply } = allIntentsData.data;
+
+    // CASE: Only one intent
+    if (reply.length === 1 && !hasHandledIntents.current.intent0) {
+      setPendingAction({ ...reply[0], intentIndex: 0 });
+      setShowConfirmation(true);
+      hasHandledIntents.current.intent0 = true;
     }
-  }, [allIntentsData, currentIntentIndex, processedIntents, finalReply]);
+    // CASE: First of two intents
+    else if (
+      reply.length === 2 &&
+      currentIntentIndex === 0 &&
+      !hasHandledIntents.current.intent0
+    ) {
+      setPendingAction({ ...reply[0], intentIndex: 0 });
+      setShowConfirmation(true);
+      hasHandledIntents.current.intent0 = true;
+    }
+    // CASE: Second of two intents
+    else if (
+      reply.length === 2 &&
+      currentIntentIndex === 1 &&
+      !hasHandledIntents.current.intent1 &&
+      processedIntents.length === 1
+    ) {
+      setPendingAction({ ...reply[1], intentIndex: 1 });
+      setShowConfirmation(true);
+      hasHandledIntents.current.intent1 = true;
+    }
+
+    // CASE: Final reply, after processing all intents
+    else if (
+      processedIntents.length === reply.length &&
+      finalReply
+    ) {
+      setShowConfirmation(false);
+      setFullResponse(finalReply);
+      setIsTyping(true);
+      setFinalReply(null);
+      setAllIntentsData(null);
+      setCurrentIntentIndex(0);
+      setProcessedIntents([]);
+      hasHandledIntents.current = { intent0: false, intent1: false };
+    }
+  }
+}, [allIntentsData, currentIntentIndex, processedIntents, finalReply]);
+
+
 
   const handleConfirmation = (confirmed) => {
     setShowConfirmation(false);
@@ -891,9 +1031,9 @@ const NavigationTabsWithChat = () => {
         data: {
           user_input: lastUserMessage,
           address: address || import.meta.env.VITE_WALLET_ADDRESS,
-          solana_address: userAddresses?.solana || 'dont have user adress',
-          ethereum_address: userAddresses?.ethereum || 'dont have user adress',
-          polygon_address: userAddresses?.polygon || 'dont have user adress',
+          solana_address: userAddresses?.solana || "dont have user adress",
+          ethereum_address: userAddresses?.ethereum || "dont have user adress",
+          polygon_address: userAddresses?.polygon || "dont have user adress",
           chat_history: messages,
           bearer_token: myToken,
           is_confirmed1:
@@ -927,8 +1067,8 @@ const NavigationTabsWithChat = () => {
       ]);
 
       // Add the single intent data to messages (only the current intent)
-      if (allIntentsData && allIntentsData.reply) {
-        const currentIntent = allIntentsData.reply[pendingAction.intentIndex];
+      if (allIntentsData.data && allIntentsData.data.reply) {
+        const currentIntent = allIntentsData.data.reply[pendingAction.intentIndex];
         setMessages((prev) => [
           ...prev,
           {
@@ -940,8 +1080,8 @@ const NavigationTabsWithChat = () => {
       }
 
       // Update processed intents and move to next
-      setProcessedIntents(prev => [...prev, pendingAction.intentIndex]);
-      setCurrentIntentIndex(prev => prev + 1);
+      setProcessedIntents((prev) => [...prev, pendingAction.intentIndex]);
+      setCurrentIntentIndex((prev) => prev + 1);
     }
   };
 
@@ -961,9 +1101,9 @@ const NavigationTabsWithChat = () => {
         event: "chat_message",
         data: {
           user_input: text,
-          solana_address: userAddresses?.solana || 'dont have user adress',
-          ethereum_address: userAddresses?.ethereum || 'dont have user adress',
-          polygon_address: userAddresses?.polygon || 'dont have user adress',
+          solana_address: userAddresses?.solana || "dont have user adress",
+          ethereum_address: userAddresses?.ethereum || "dont have user adress",
+          polygon_address: userAddresses?.polygon || "dont have user adress",
           chat_history: chatHistory,
           bearer_token: myToken,
           is_confirmed1: false,
@@ -1175,16 +1315,21 @@ const NavigationTabsWithChat = () => {
                   ) : msg.isJson ? (
                     <div className="mt-1">
                       {/* Display single intent data */}
-                      {typeof msg.content === "object" && msg.content !== null ? (
+                      {typeof msg.content === "object" &&
+                      msg.content !== null ? (
                         <div>
                           <h4 className="font-bold mb-2">
-                            {msg.content.action ? `Action: ${msg.content.action}` : "Transaction Details"}
+                            {msg.content.action
+                              ? `Action: ${msg.content.action}`
+                              : "Transaction Details"}
                           </h4>
                           <div className="pl-4">
                             {Object.entries(msg.content)
                               .filter(
                                 ([key]) =>
-                                  !["success", "message", "status"].includes(key)
+                                  !["success", "message", "status"].includes(
+                                    key
+                                  )
                               )
                               .map(([key, value]) => {
                                 return (
@@ -1194,7 +1339,7 @@ const NavigationTabsWithChat = () => {
                                         key.slice(1)}
                                       :
                                     </strong>{" "}
-                                        {/* <Typewriter text={value} className="relative" /> */}
+                                    {/* <Typewriter text={value} className="relative" /> */}
                                     {value}
                                   </div>
                                 );
