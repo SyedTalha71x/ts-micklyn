@@ -925,7 +925,7 @@ const NavigationTabsWithChat = () => {
           reply !== null &&
           Array.isArray(reply)
         ) {
-          if (reply.length === 1) {
+          if (reply.length === 1 && typeof reply[0] === "string") {
             // Single intent - show immediately
             setMessages((prev) => [
               ...prev,
@@ -936,7 +936,7 @@ const NavigationTabsWithChat = () => {
               },
             ]);
           } 
-          if (reply.length == 2) {
+          if (reply.length == 1 && typeof reply[0] == "object" || reply.length == 2) {
             // Multiple intents - store for sequential processing
             console.log("Received multiple intents:");
             setAllIntentsData(checkConfirmation);
