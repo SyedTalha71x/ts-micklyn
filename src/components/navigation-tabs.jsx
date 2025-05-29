@@ -872,8 +872,134 @@ const NavigationTabsWithChat = () => {
   }, [messages, loading, typingText]);
 
   useEffect(() => {
+    hasHandledIntents.current = { intent0: false, intent1: false };
+    setCurrentIntentIndex(0);
+    setProcessedIntents([]);
+    setAllIntentsData(null);
+  }, [setUserId]);
+
+  const handleResponseByType = (
+    responseType,
+    reply,
+    fullReplyItem,
+    checkConfirmation
+  ) => {
+    switch (responseType) {
+      case "simple":
+        // Showing simple text response immediately
+        setMessages((prev) => [
+          ...prev,
+          {
+            wallet: "Chat",
+            content: reply,
+            isJson: false,
+            responseType: "simple",
+          },
+        ]);
+        break;
+
+      case "transaction":
+        // Transaction responses will be handled separately - don't add to messages here
+        console.log("Transaction response detected, will handle in flow");
+        setMessages((prev) => [
+          ...prev,
+          {
+            wallet: "Chat",
+            content: reply[0],
+            isJson: true,
+            responseType: "transaction",
+          },
+        ]);
+        break;
+
+      case "all_wallet_addresses":
+        // Handle wallet addresses display
+        const addresses = reply.all_wallet_addresses || reply;
+        let formattedAddresses;
+
+        if (Array.isArray(addresses)) {
+          // Format addresses with bold keys and proper spacing
+          formattedAddresses = addresses
+            .map(
+              (addr, index) =>
+                `🔹 Wallet ${index + 1}\n` +
+                `Chain: ${addr.chain}\n` +
+                `Address: ${addr.address}\n`
+            )
+            .join("\n");
+        } else {
+          formattedAddresses = JSON.stringify(addresses, null, 2);
+        }
+
+        setMessages((prev) => [
+          ...prev,
+          {
+            wallet: "Chat",
+            content: formattedAddresses,
+            isJson: false,
+            responseType: "all_wallet_addresses",
+            isMarkdown: true,
+          },
+        ]);
+        break;
+
+      case "get_token_balance":
+        // Show token balance
+        setMessages((prev) => [
+          ...prev,
+          {
+            wallet: "Chat",
+            content: reply,
+            isJson: true,
+            responseType: "get_token_balance",
+          },
+        ]);
+        break;
+
+      case "get_token_info":
+        // Show token info
+        setMessages((prev) => [
+          ...prev,
+          {
+            wallet: "Chat",
+            content: reply,
+            isJson: true,
+            responseType: "get_token_info",
+          },
+        ]);
+        break;
+
+      // Show user balance
+      case "get_user_balance":
+        setMessages((prev) => [
+          ...prev,
+          {
+            wallet: "Chat",
+            content: reply,
+            isJson: true,
+            responseType: "get_user_balance",
+          },
+        ]);
+        break;
+
+      default:
+        // Handle unknown response types
+        console.log(`Unknown response type: ${responseType}`);
+        setMessages((prev) => [
+          ...prev,
+          {
+            wallet: "Chat",
+            content: reply,
+            isJson: true,
+            responseType: responseType || "unknown",
+          },
+        ]);
+    }
+  };
+
+  useEffect(() => {
     const newSocket = io(chatBaseUrl, {
-      transports: ["socketio", "polling"],
+      transports: ["websocket", "polling"],
       reconnectionAttempts: 5,
       timeout: 1000000,
     });
@@ -894,70 +1020,100 @@ const NavigationTabsWithChat = () => {
       ]);
     });
 
-    newSocket.on("chat_response", (data) => {
+    newSocket.on("chat_response", (rawData) => {
       setLoading(false);
 
-      let parsedData;
+      let data;
 
-      if (typeof data === "string") {
-        parsedData = JSON.parse(data);
-      } else {
-        parsedData = data;
-      }
-      const reply = parsedData?.data?.reply;
-      console.log(Array.isArray(reply)); // true
-      console.log(typeof reply); // "object"
-      console.log(reply.length); // "object"
-      console.log("Parsed socket data:", reply);
-
-      if (reply && typeof reply === "object") {
-        Array.isArray(reply) &&
-          reply.forEach((item, index) => {
-            console.log(`Reply item ${index}:`, item);
-          });
-
-        const checkConfirmation = parsedData;
-        setCheckConfirmation(checkConfirmation);
-
-        // If it's a single intent or final response, show it immediately
-        if (
-          typeof reply === "object" &&
-          reply !== null &&
-          Array.isArray(reply)
-        ) {
-          if (reply.length === 1 && typeof reply[0] === "string") {
-            // Single intent - show immediately
-            setMessages((prev) => [
-              ...prev,
-              {
-                wallet: "Chat",
-                content: reply[0],
-                isJson: true,
-              },
-            ]);
-          } 
-          if (reply.length == 1 && typeof reply[0] == "object" || reply.length == 2) {
-            // Multiple intents - store for sequential processing
-            console.log("Received multiple intents:");
-            setAllIntentsData(checkConfirmation);
-            setCurrentIntentIndex(0);
-            setProcessedIntents([]);
-          }
-        } else if (typeof reply === "object" && reply !== null) {
-          // Non-array object response
-          setMessages((prev) => [
-            ...prev,
-            {
-              wallet: "Chat",
-              content: reply,
-              isJson: true,
-            },
-          ]);
+      if (Array.isArray(rawData) && rawData.length > 1) {
+        try {
+          data = JSON.parse(rawData[1]);
+        } catch (err) {
+          console.error("Failed to parse socket data:", err);
+          return;
         }
+      } else if (typeof rawData === "string") {
+        try {
+          data = JSON.parse(rawData);
+        } catch (err) {
+          console.error("Failed to parse socket data:", err);
+          return;
+        }
+      } else {
+        data = rawData;
       }
 
-      if (typeof reply === "string") {
-        setFinalReply(reply);
+      const replies = data?.data?.replies;
+      if (!Array.isArray(replies)) {
+        console.error("Invalid replies format");
+        return;
+      }
+
+      const checkConfirmation = data;
+      setCheckConfirmation(checkConfirmation);
+      console.log("Received replies:", checkConfirmation);
+
+      // const { is_confirmed1, is_confirmed2 } = checkConfirmation.data || {};
+      // const shouldShowModal =
+      //   is_confirmed1 === false || is_confirmed2 === false;
+      // const shouldCloseModal = (is_confirmed1 === true || is_confirmed2 === true) || (is_confirmed1 === false || is_confirmed2 === false);
+
+      // if (shouldCloseModal) {
+      //   console.log(shouldCloseModal,'check 1 check' ,showConfirmation)
+      //   setShowConfirmation(false);
+      //   setAllIntentsData(null);
+      //   setCurrentIntentIndex(0);
+      //   setProcessedIntents([]);
+      //   hasHandledIntents.current = { intent0: false, intent1: false };
+      //   return;
+      // }
+
+      const transactionReplies = replies.filter(
+        (item) => item.response_type === "transaction"
+      );
+
+      const nonTransactionReplies = replies.filter(
+        (item) => item.response_type !== "transaction"
+      );
+
+      nonTransactionReplies.forEach((replyItem, index) => {
+        const { reply, response_type } = replyItem;
+        handleResponseByType(
+          response_type,
+          reply,
+          replyItem,
+          checkConfirmation
+        );
+      });
+
+      if (transactionReplies.length > 0) {
+        if (
+          transactionReplies.length === 1 &&
+          !hasHandledIntents.current.intent0
+        ) {
+          setPendingAction({
+            ...transactionReplies[0].reply,
+            intentIndex: 0,
+            response_type: "transaction",
+          });
+          // console.log(shouldCloseModal, "check 2 check", showConfirmation);
+          console.log("second check", showConfirmation);
+          setShowConfirmation(true);
+          hasHandledIntents.current.intent0 = true;
+        } else {
+          setAllIntentsData(checkConfirmation);
+          setCurrentIntentIndex(0);
+          setProcessedIntents([]);
+          setPendingAction({
+            ...transactionReplies[0].reply,
+            intentIndex: 0,
+            response_type: "transaction",
+          });
+          // console.log(shouldCloseModal, "check 3 check", showConfirmation);
+          console.log("third check", showConfirmation);
+          setShowConfirmation(false); //update 1
+          hasHandledIntents.current.intent0 = false;
+        }
       }
     });
 
@@ -966,62 +1122,87 @@ const NavigationTabsWithChat = () => {
     };
   }, []);
 
-  // Handle sequential intent processing
- useEffect(() => {
-  if (
-    allIntentsData &&
-    allIntentsData.data?.reply &&
-    allIntentsData.data.reply.length > 0
-  ) {
-    const { is_confirmed1, is_confirmed2, reply } = allIntentsData.data;
+  // Handle sequential intent processing (for multiple transactions only)
+  useEffect(() => {
+    // if (
+    //   !allIntentsData ||
+    //   !Array.isArray(allIntentsData.data?.replies) ||
+    //   allIntentsData.data.replies.length === 0
+    // ) {
+    //   return;
+    // }
+    // const replies = allIntentsData?.data?.replies;
 
-    // CASE: Only one intent
-    if (reply.length === 1 && !hasHandledIntents.current.intent0) {
-      setPendingAction({ ...reply[0], intentIndex: 0 });
-      setShowConfirmation(true);
-      hasHandledIntents.current.intent0 = true;
-    }
-    // CASE: First of two intents
-    else if (
-      reply.length === 2 &&
-      currentIntentIndex === 0 &&
-      !hasHandledIntents.current.intent0
-    ) {
-      setPendingAction({ ...reply[0], intentIndex: 0 });
-      setShowConfirmation(true);
-      hasHandledIntents.current.intent0 = true;
-    }
-    // CASE: Second of two intents
-    else if (
-      reply.length === 2 &&
-      currentIntentIndex === 1 &&
-      !hasHandledIntents.current.intent1 &&
-      processedIntents.length === 1
-    ) {
-      setPendingAction({ ...reply[1], intentIndex: 1 });
-      setShowConfirmation(true);
-      hasHandledIntents.current.intent1 = true;
+    const replies = allIntentsData?.data?.replies;
+    if (!Array.isArray(allIntentsData?.data?.replies) || replies.length === 0) {
+      return;
     }
 
-    // CASE: Final reply, after processing all intents
-    else if (
-      processedIntents.length === reply.length &&
-      finalReply
-    ) {
+    const transactionReplies = replies.filter(
+      (item) => item.response_type === "transaction"
+    );
+
+    // Early return if we've processed all transactions
+    if (processedIntents.length === transactionReplies.length) {
+      //update 2
+      console.log("All transactions completed");
+      console.log("check 5 check", showConfirmation);
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          wallet: "Chat",
+          content: "All transactions processed successfully!",
+          isJson: false,
+          status: "success",
+        },
+      ]);
       setShowConfirmation(false);
-      setFullResponse(finalReply);
-      setIsTyping(true);
-      setFinalReply(null);
       setAllIntentsData(null);
       setCurrentIntentIndex(0);
       setProcessedIntents([]);
       hasHandledIntents.current = { intent0: false, intent1: false };
+      return;
     }
-  }
-}, [allIntentsData, currentIntentIndex, processedIntents, finalReply]);
 
+    const currentHandledKey = `intent${currentIntentIndex}`;
 
+    // Only proceed if we haven't handled this intent yet and modal isn't showing
+    if (
+      !hasHandledIntents.current[currentHandledKey] &&
+      !showConfirmation &&
+      currentIntentIndex < transactionReplies.length
+    ) {
+      console.log(`Opening modal for transaction intent ${currentIntentIndex}`);
 
+      const currentReply = transactionReplies[currentIntentIndex];
+      setPendingAction({
+        ...currentReply.reply,
+        intentIndex: currentIntentIndex,
+        response_type: "transaction",
+      });
+
+      // console.log(currentIntentIndex )
+      // if(currentIntentIndex === 1){
+      //   setShowConfirmation(false);
+      //   hasHandledIntents.current = { intent0: false, intent1: false };
+      //   console.log("ganduuuuuuuuuuuuuuu", currentIntentIndex);
+      //   console.log("pokaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", showConfirmation);
+
+      //   return
+      // }
+
+      if (allIntentsData?.data?.replies[0]) {
+        // setShowConfirmation(false);
+        setShowConfirmation(true);
+        return;
+      }
+      setShowConfirmation(false);
+
+      // hasHandledIntents.current[currentHandledKey] = true;
+    }
+  }, [allIntentsData, currentIntentIndex, processedIntents]); //update 3
+  //  [allIntentsData, currentIntentIndex, processedIntents]);
   const handleConfirmation = (confirmed) => {
     setShowConfirmation(false);
 
@@ -1031,21 +1212,21 @@ const NavigationTabsWithChat = () => {
         data: {
           user_input: lastUserMessage,
           address: address || import.meta.env.VITE_WALLET_ADDRESS,
-          solana_address: userAddresses?.solana || "dont have user adress",
-          ethereum_address: userAddresses?.ethereum || "dont have user adress",
-          polygon_address: userAddresses?.polygon || "dont have user adress",
+          solana_address: userAddresses?.solana || "dont have user address",
+          ethereum_address: userAddresses?.ethereum || "dont have user address",
+          polygon_address: userAddresses?.polygon || "dont have user address",
           chat_history: messages,
           bearer_token: myToken,
           is_confirmed1:
             pendingAction.intentIndex === 0
               ? confirmed
-              : checkConfirmation?.is_confirmed1,
+              : checkConfirmation?.data?.is_confirmed1,
           is_confirmed2:
             pendingAction.intentIndex === 1
               ? confirmed
-              : checkConfirmation?.is_confirmed2,
+              : checkConfirmation?.data?.is_confirmed2,
           user_id: userId,
-          transaction_data: pendingAction.transaction,
+          transaction_data: pendingAction,
           requires_processing: true,
         },
       };
@@ -1058,7 +1239,7 @@ const NavigationTabsWithChat = () => {
         ...prev,
         {
           wallet: "Chat",
-          content: `Intent ${pendingAction.intentIndex + 1} ${
+          content: `Transaction ${pendingAction.intentIndex + 1} ${
             confirmed ? "confirmed" : "denied"
           }`,
           isJson: false,
@@ -1066,25 +1247,32 @@ const NavigationTabsWithChat = () => {
         },
       ]);
 
-      // Add the single intent data to messages (only the current intent)
-      if (allIntentsData.data && allIntentsData.data.reply) {
-        const currentIntent = allIntentsData.data.reply[pendingAction.intentIndex];
-        setMessages((prev) => [
-          ...prev,
-          {
-            wallet: "Chat",
-            content: currentIntent,
-            isJson: true,
+      // Add the transaction data to messages for display
+      setMessages((prev) => [
+        ...prev,
+        {
+          wallet: "Chat",
+          content: {
+            action: pendingAction.action,
+            quantity: pendingAction.quantity,
+            token: pendingAction.token,
+            chain: pendingAction.chain,
+            price_per_each_coin: pendingAction.price_per_each_coin,
+            source_wallet_address: pendingAction.source_wallet_address,
+            receiver_wallet_address: pendingAction.receiver_wallet_address,
           },
-        ]);
-      }
+          isJson: true,
+          responseType: "transaction",
+        },
+      ]);
 
-      // Update processed intents and move to next
-      setProcessedIntents((prev) => [...prev, pendingAction.intentIndex]);
-      setCurrentIntentIndex((prev) => prev + 1);
+      // Update processed intents and move to next if multiple transactions
+      if (allIntentsData) {
+        setProcessedIntents((prev) => [...prev, pendingAction.intentIndex]);
+        setCurrentIntentIndex((prev) => prev + 1);
+      }
     }
   };
-
   const sendMessage = (text = message) => {
     if (text.trim() && socket) {
       const chatHistory = messages.reduce((acc, msg, i) => {
@@ -1125,6 +1313,7 @@ const NavigationTabsWithChat = () => {
       setCurrentIntentIndex(0);
       setProcessedIntents([]);
       setAllIntentsData(null);
+      setShowConfirmation(false);
     }
   };
 
@@ -1208,6 +1397,7 @@ const NavigationTabsWithChat = () => {
       animation: cursor-blink 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
     }
   `;
+  console.log(showConfirmation, "showConfirmation test check ");
 
   return (
     <>
@@ -1321,7 +1511,7 @@ const NavigationTabsWithChat = () => {
                           <h4 className="font-bold mb-2">
                             {msg.content.action
                               ? `Action: ${msg.content.action}`
-                              : "Transaction Details"}
+                              : null}
                           </h4>
                           <div className="pl-4">
                             {Object.entries(msg.content)
