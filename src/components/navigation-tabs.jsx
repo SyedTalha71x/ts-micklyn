@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import Icon from "../../public/Icon.svg";
-import { chatBaseUrl } from "@/hooks/fireApi";
+import { chatBaseUrl, FireApi } from "@/hooks/fireApi";
 import { Mic } from "lucide-react";
 import { jwtDecode } from "jwt-decode";
 import { Typewriter } from "@/lib/Typewriter";
 import ConfirmationModal from "./ConfirmationModal";
+import toast from "react-hot-toast";
+import { useHistory } from "@/Context/HistoryContext";
 
 const NavigationTabsWithChat = () => {
   // State variables
@@ -40,15 +42,16 @@ const NavigationTabsWithChat = () => {
     polygon: "",
   });
 
+  const { userInfo } = useHistory();
   // Voice recording animation states
-  const [audioLevels, setAudioLevels] = useState([]);
+  // const [audioLevels, setAudioLevels] = useState([]);
   const animationFrameRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
   const microphoneRef = useRef(null);
-  const [recordingTime, setRecordingTime] = useState(0);
-  const [showRecordingModal, setShowRecordingModal] = useState(false);
+  // const [recordingTime, setRecordingTime] = useState(0);
+  // const [showRecordingModal, setShowRecordingModal] = useState(false);
 
   useEffect(() => {
     // Get addresses from localStorage
@@ -337,7 +340,6 @@ const NavigationTabsWithChat = () => {
       });
 
       if (transactionReplies.length > 0) {
-        console.log(transactionReplies, "transactionReplies");
         if (
           transactionReplies.length === 1 &&
           !hasHandledIntents.current.intent0
@@ -347,7 +349,6 @@ const NavigationTabsWithChat = () => {
             intentIndex: 0,
             response_type: "transaction",
           });
-          console.log("second check", showConfirmation);
           setShowConfirmation(true);
           hasHandledIntents.current.intent0 = true;
         } else {
@@ -359,7 +360,6 @@ const NavigationTabsWithChat = () => {
             intentIndex: 0,
             response_type: "transaction",
           });
-          console.log("third check", showConfirmation);
           setShowConfirmation(false); //update 1
           hasHandledIntents.current.intent0 = false;
         }
@@ -386,7 +386,6 @@ const NavigationTabsWithChat = () => {
     if (processedIntents.length === transactionReplies.length) {
       //update 2
       console.log("All transactions completed");
-      console.log("check 5 check", showConfirmation);
 
       setMessages((prev) => [
         ...prev,
@@ -432,79 +431,6 @@ const NavigationTabsWithChat = () => {
       setShowConfirmation(false);
     }
   }, [allIntentsData, currentIntentIndex, processedIntents]);
-  // const handleConfirmation = (confirmed) => {
-  //   setShowConfirmation(false);
-
-  //   if (pendingAction && socket) {
-  //     const messageData = {
-  //       event: "chat_message",
-  //       data: {
-  //         user_input: lastUserMessage,
-  //         address: address || import.meta.env.VITE_WALLET_ADDRESS,
-  //         solana_address: userAddresses?.solana || "dont have user address",
-  //         ethereum_address: userAddresses?.ethereum || "dont have user address",
-  //         polygon_address: userAddresses?.polygon || "dont have user address",
-  //         chat_history: messages,
-  //         bearer_token: myToken,
-  //         is_confirmed1:
-  //           pendingAction.intentIndex === 0
-  //             ? confirmed
-  //             : checkConfirmation?.data?.is_confirmed1,
-  //         is_confirmed2:
-  //           pendingAction.intentIndex === 1
-  //             ? confirmed
-  //             : checkConfirmation?.data?.is_confirmed2,
-  //         user_id: userId,
-  //         transaction_data: pendingAction,
-  //         requires_processing: pendingAction.intentIndex === 1 ? false : true,
-  //       },
-  //     };
-
-  //     if(pendingAction.intentIndex === 1) {
-  //     socket.emit("chat_message", messageData);
-  //     setLoading(true);
-  //     return;
-  //     }
-
-  //     // Show confirmation message
-  //     setMessages((prev) => [
-  //       ...prev,
-  //       {
-  //         wallet: "Chat",
-  //         content: `Transaction ${pendingAction.intentIndex + 1} ${
-  //           confirmed ? "confirmed" : "denied"
-  //         }`,
-  //         isJson: false,
-  //         status: confirmed ? "success" : "error",
-  //       },
-  //     ]);
-
-  //     // Add the transaction data to messages for display
-  //     setMessages((prev) => [
-  //       ...prev,
-  //       {
-  //         wallet: "Chat",
-  //         content: {
-  //           action: pendingAction.action,
-  //           quantity: pendingAction.quantity,
-  //           token: pendingAction.token,
-  //           chain: pendingAction.chain,
-  //           price_per_each_coin: pendingAction.price_per_each_coin,
-  //           source_wallet_address: pendingAction.source_wallet_address,
-  //           receiver_wallet_address: pendingAction.receiver_wallet_address,
-  //         },
-  //         isJson: true,
-  //         responseType: "transaction",
-  //       },
-  //     ]);
-
-  //     // Update processed intents and move to next if multiple transactions
-  //     if (allIntentsData) {
-  //       setProcessedIntents((prev) => [...prev, pendingAction.intentIndex]);
-  //       setCurrentIntentIndex((prev) => prev + 1);
-  //     }
-  //   }
-  // };
 
   const handleConfirmation = (confirmed) => {
     setShowConfirmation(false);
@@ -535,36 +461,38 @@ const NavigationTabsWithChat = () => {
         (item) => item.response_type === "transaction"
       ) || [];
 
-      if (!allIntentsData) {
-    // Single intent - send confirmation immediately
-    const messageData = {
-      event: "chat_message",
-      data: {
-        user_input: lastUserMessage,
-        address: address || import.meta.env.VITE_WALLET_ADDRESS,
-        solana_address: userAddresses?.solana || "dont have user address",
-        ethereum_address: userAddresses?.ethereum || "dont have user address",
-        polygon_address: userAddresses?.polygon || "dont have user address",
-        chat_history: messages,
-        bearer_token: myToken,
-        is_confirmed1: pendingAction.intentIndex === 0 ? confirmed : false,
-        is_confirmed2: pendingAction.intentIndex === 1 ? confirmed : false,
-        user_id: userId,
-        // transaction_data: pendingAction,
-        requires_processing: false,
-        requires_confirmation: false,
-        previous_queries: [
-          {
-            reply: pendingAction
-          }
-        ]
-      },
-    };
+    if (!allIntentsData) {
+      // Single intent - send confirmation immediately
+      const messageData = {
+        event: "chat_message",
+        data: {
+          user_input: lastUserMessage,
+          address: address || import.meta.env.VITE_WALLET_ADDRESS,
+          solana_address: userAddresses?.solana || "dont have user address",
+          ethereum_address: userAddresses?.ethereum || "dont have user address",
+          polygon_address: userAddresses?.polygon || "dont have user address",
+          chat_history: messages,
+          bearer_token: myToken,
+          is_confirmed1: pendingAction.intentIndex === 0 ? confirmed : false,
+          is_confirmed2: pendingAction.intentIndex === 1 ? confirmed : false,
+          user_id: userId,
+          requires_processing: false,
+          requires_confirmation: false,
+          email_address: email,
+          userId: userId,
+          session_id: userInfo?.sessionId,
+          previous_queries: [
+            {
+              reply: pendingAction,
+            },
+          ],
+        },
+      };
 
-    socket.emit("chat_message", messageData);
-    setLoading(true);
-    return;
-  }
+      socket.emit("chat_message", messageData);
+      setLoading(true);
+      return;
+    }
 
     if (updatedProcessedIntents.length === transactionReplies.length) {
       // All intents processed - now send FINAL socket message
@@ -581,10 +509,9 @@ const NavigationTabsWithChat = () => {
           is_confirmed1: updatedProcessedIntents[0]?.confirmed || false,
           is_confirmed2: updatedProcessedIntents[1]?.confirmed || false,
           user_id: userId,
-          previous_queries: [
-            transactionReplies[0],
-            transactionReplies[1],
-        ],
+          session_id: userInfo?.sessionId,
+          email_address: email,
+          previous_queries: [transactionReplies[0], transactionReplies[1]],
           requires_processing: false,
           requires_confirmation: false,
         },
@@ -627,8 +554,9 @@ const NavigationTabsWithChat = () => {
           is_confirmed2: false,
           user_id: userId,
           email_address: email,
+          session_id: userInfo?.sessionId,
           requires_processing: true,
-          requires_confirmation: true
+          requires_confirmation: true,
         },
       };
 
@@ -727,61 +655,153 @@ const NavigationTabsWithChat = () => {
       animation: cursor-blink 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
     }
   `;
-  console.log(showConfirmation, "showConfirmation test check ");
-  console.log(pendingAction, typeof pendingAction, "pendingAction test check ");
+    const resetChat = () => {
+    setMessages([]);
+    setMessage("");
+    setLastUserMessage("");
+    setIsTyping(false);
+    setCurrentIntentIndex(0);
+    setProcessedIntents([]);
+    setAllIntentsData(null);
+    hasHandledIntents.current = { intent0: false, intent1: false };
+  };
+
+ // Updated GetHistoryChat function
+const GetHistoryChat = async () => {
+  try {
+    if (!userId || !userInfo?.sessionId) {
+      console.log("Missing userId or sessionId");
+      resetChat();
+      return;
+    }
+
+    const chatRes = await FireApi(
+      `/chat-sessions/${userId}/${userInfo.sessionId}`,
+      "GET"
+    );
+    console.log("Chat history response:", chatRes);
+
+    // Check if this is the session list or actual messages
+    if (Array.isArray(chatRes.data)) {
+      // This is the session list, not messages
+      console.log("Received session list instead of messages");
+      resetChat();
+      return;
+    }
+
+    if (chatRes.data?.messages?.length > 0) {
+      const formattedMessages = processApiResponse(chatRes);
+      setMessages(formattedMessages);
+    } else {
+      resetChat();
+    }
+  } catch (error) {
+    console.error("Error fetching chat history:", error);
+    resetChat();
+    toast.error(error.message);
+  }
+};
+
+// Updated processApiResponse function
+const processApiResponse = (apiResponse) => {
+  const formattedMessages = [];
+  
+  // Check if we have messages array in response
+  if (!apiResponse.data?.messages) {
+    console.error("No messages found in API response");
+    return formattedMessages;
+  }
+
+  apiResponse.data.messages.forEach((msg) => {
+    try {
+      // Add user message
+      formattedMessages.push({
+        wallet: "You",
+        content: msg.user_input?.trim() || "No user input",
+        timestamp: msg.timestamp,
+      });
+
+      // Parse the response
+      let responseData;
+      try {
+        responseData = typeof msg.response === "string" 
+          ? JSON.parse(msg.response) 
+          : msg.response;
+      } catch (parseError) {
+        console.error("Error parsing response:", parseError);
+        responseData = {
+          message: "Could not parse response",
+          status: false
+        };
+      }
+
+      // Handle bot replies
+      if (responseData?.data?.replies) {
+        responseData.data.replies.forEach((replyItem) => {
+          let content;
+          
+          if (typeof replyItem.reply === "string") {
+            content = replyItem.reply.trim();
+          } else if (typeof replyItem.reply === "object") {
+            content = JSON.stringify(replyItem.reply, null, 2);
+          } else {
+            content = String(replyItem.reply);
+          }
+
+          formattedMessages.push({
+            wallet: "Chat",
+            content: content,
+            timestamp: msg.timestamp,
+            responseType: replyItem.response_type || "simple",
+            isJson: typeof replyItem.reply === "object"
+          });
+        });
+      } else {
+        formattedMessages.push({
+          wallet: "Chat",
+          content: responseData.message || "No response available",
+          timestamp: msg.timestamp,
+          responseType: "simple"
+        });
+      }
+    } catch (error) {
+      console.error("Error processing message:", error);
+      formattedMessages.push({
+        wallet: "Chat",
+        content: "Error displaying message",
+        timestamp: msg.timestamp,
+        responseType: "error"
+      });
+    }
+  });
+
+  return formattedMessages;
+};
+
+// Updated useEffect for chat history
+useEffect(() => {
+  const token = localStorage.getItem("user-visited-dashboard");
+  if (token) {
+    try {
+      const decoded = jwtDecode(token);
+      if (!userId || userId !== decoded.id) {
+        setUserId(decoded.id);
+      }
+    } catch (error) {
+      console.error("Error decoding token:", error);
+    }
+  }
+
+  if (userId && userInfo?.sessionId) {
+    GetHistoryChat();
+  } else {
+    resetChat();
+  }
+}, [userInfo?.sessionId, userId]);
+
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: customStyles }} />
-
-      {/* {showConfirmation && (
-        <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 max-w-md w-full border border-gray-200 dark:border-gray-700 shadow-xl">
-            <h3 className="text-lg text-center font-bold">
-              Confirm Transaction {pendingAction?.intentIndex + 1}
-            </h3>
-            <p className="mb-4 text-center text-gray-600 dark:text-gray-300">
-              Are you sure you want to proceed?
-            </p>
-            <div className="space-y-3 mb-6">
-              {pendingAction &&
-                Object.entries(pendingAction)
-                  .filter(
-                    ([key]) =>
-                      ![
-                        "intentIndex",
-                        "isFirstIntent",
-                        "isSecondIntent",
-                      ].includes(key)
-                  )
-                  .map(([key, value]) => (
-                    <div key={key} className="flex justify-between">
-                      <span className="text-gray-600 dark:text-gray-300">
-                        {key}:
-                      </span>
-                      <span className="font-medium truncate max-w-[180px]">
-                        {value !== null ? value : "N/A"}
-                      </span>
-                    </div>
-                  ))}
-            </div>
-
-            <div className="flex justify-end gap-3">
-              <button
-                onClick={() => handleConfirmation(false)}
-                className="px-4 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 dark:border-gray-600 cursor-pointer dark:text-gray-300 dark:hover:bg-gray-700"
-              >
-                Denied
-              </button>
-              <button
-                onClick={() => handleConfirmation(true)}
-                className="px-4 py-2 rounded-md cursor-pointer bg-black text-white hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600"
-              >
-                Confirm
-              </button>
-            </div>
-          </div>
-        </div>
-      )} */}
 
       {showConfirmation && (
         <ConfirmationModal
@@ -793,12 +813,12 @@ const NavigationTabsWithChat = () => {
       )}
 
       {!messages.some((msg) => msg.wallet === "You") && (
-        <h2 className="text-2xl font-bold mb-4 dark:text-white max-w-5xl mx-auto text-center">
+        <h2 className="text-2xl font-bold mb-4 dark:text-white text-center ">
           What can I help with?
         </h2>
       )}
 
-      <div className="max-w-5xl mx-auto p-4 text-center">
+      <div className="p-4 text-center">
         {messages.find((msg) => msg.wallet === "System") && (
           <div className="text-center mb-4">
             <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -809,7 +829,7 @@ const NavigationTabsWithChat = () => {
 
         <div
           ref={messageContainerRef}
-          className="w-full lg:h-[24rem] h-[16rem] overflow-y-auto rounded-md p-2 scroll-auto"
+          className="w-full mt-4 lg:h-[24rem] h-[16rem] overflow-y-auto rounded-md p-2 scroll-auto"
         >
           {messages.map((msg, index) => {
             const isLast = index === messages.length - 1;
@@ -869,7 +889,7 @@ const NavigationTabsWithChat = () => {
                                       :
                                     </strong>{" "}
                                     {/* <Typewriter text={value} className="relative" /> */}
-                                        {value}
+                                    {value}
                                   </div>
                                 );
                               })}
@@ -924,117 +944,66 @@ const NavigationTabsWithChat = () => {
           )}
         </div>
 
-        <div className="mt-4 flex flex-col items-center gap-2 bg-white dark:bg-[#101010] rounded-xl border border-[#A0AEC0] dark:border-gray-700 p-2 pt-3 shadow-sm w-full h-[6rem]">
-          <div className="w-full flex items-center gap-2">
-            <input
-              className="flex-1 bg-transparent border-none outline-none text-sm px-2 dark:text-gray-200 dark:placeholder-gray-400"
-              placeholder="Write message here..."
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  sendMessage();
-                }
-              }}
-              disabled={isTyping}
-            />
+        <div className="sticky bottom-0 mt-[5rem] bg-white dark:bg-[#101010] border-t border-gray-200 dark:border-gray-700 p-4">
+    <div className="max-w-4xl mx-auto flex items-center gap-2">
+      <input
+        className="flex-1 bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-2 text-sm dark:text-gray-200 dark:placeholder-gray-400"
+        placeholder="Write message here..."
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            sendMessage();
+          }
+        }}
+        disabled={isTyping}
+      />
 
-            <button
-              className={`h-8 w-8 rounded-full bg-black text-white flex items-center justify-center cursor-pointer hover:bg-gray-700 dark:bg-[#101010] dark:hover:bg-gray-600 ${
-                isTyping ? "opacity-50 cursor-not-allowed" : ""
-              }`}
-              onClick={sendMessage}
-              disabled={isTyping}
-            >
-              <img src={Icon} alt="Send" className="h-4 w-4" />
-            </button>
+      <button
+        className={`h-10 w-10 rounded-full bg-blue-500 text-white flex items-center justify-center cursor-pointer hover:bg-blue-600 ${
+          isTyping ? "opacity-50 cursor-not-allowed" : ""
+        }`}
+        onClick={sendMessage}
+        disabled={isTyping}
+      >
+        <img src={Icon} alt="Send" className="h-5 w-5" />
+      </button>
 
-            <button
-              className={`h-8 w-8 rounded-full ${
-                recording ? "bg-red-600 animate-pulse" : "bg-black"
-              } text-white flex items-center justify-center cursor-pointer hover:bg-gray-700 dark:bg-[#101010] dark:hover:bg-gray-600 ${
-                isTyping ? "opacity-50 cursor-not-allowed" : ""
-              }`}
-              onClick={recording ? stopRecording : startRecording}
-              disabled={isTyping}
-            >
-              {recording ? (
-                <div className="flex gap-0.5">
-                  <span
-                    className="w-1 h-2 bg-white animate-pulse"
-                    style={{ animationDelay: "0ms" }}
-                  ></span>
-                  <span
-                    className="w-1 h-3 bg-white animate-pulse"
-                    style={{ animationDelay: "150ms" }}
-                  ></span>
-                  <span
-                    className="w-1 h-4 bg-white animate-pulse"
-                    style={{ animationDelay: "300ms" }}
-                  ></span>
-                </div>
-              ) : (
-                <Mic size={16} />
-              )}
-            </button>
-
-            {/* {showRecordingModal && (
-              <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-sm w-full">
-                  <div className="flex flex-col items-center">
-                    <div className="relative mb-4">
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div
-                          className={`w-24 h-24 rounded-full ${
-                            recording
-                              ? "bg-red-500 animate-pulse"
-                              : "bg-gray-300"
-                          }`}
-                        ></div>
-                      </div>
-                      <div className="relative flex items-center justify-center w-32 h-32">
-                        {audioLevels.map((level, i) => (
-                          <div
-                            key={i}
-                            className="w-2 bg-red-500 mx-0.5 rounded-full"
-                            style={{
-                              height: `${Math.min(100, level)}%`,
-                              transition: "height 0.1s ease-out",
-                            }}
-                          />
-                        ))}
-                      </div>
-                    </div>
-
-                    <p className="text-lg font-medium mb-2 dark:text-white">
-                      {recording ? "Listening..." : "Processing..."}
-                    </p>
-
-                    <p className="text-2xl font-bold mb-4 dark:text-white">
-                      {formatTime(recordingTime)}
-                    </p>
-
-                    <button
-                      onClick={stopRecording}
-                      className="px-6 py-2 rounded-full bg-red-500 text-white flex items-center gap-2"
-                    >
-                      <MicOff size={18} />
-                      Stop Recording
-                    </button>
-
-                    <p className="text-sm text-gray-500 mt-4 dark:text-gray-400">
-                      {recording ? "Speak now..." : "Processing your voice..."}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )} */}
+      <button
+        className={`h-10 w-10 rounded-full ${
+          recording ? "bg-red-600 animate-pulse" : "bg-gray-200 dark:bg-gray-700"
+        } text-white flex items-center justify-center cursor-pointer ${
+          isTyping ? "opacity-50 cursor-not-allowed" : ""
+        }`}
+        onClick={recording ? stopRecording : startRecording}
+        disabled={isTyping}
+      >
+        {recording ? (
+          <div className="flex gap-0.5">
+            <span
+              className="w-1 h-2 bg-white animate-pulse"
+              style={{ animationDelay: "0ms" }}
+            ></span>
+            <span
+              className="w-1 h-3 bg-white animate-pulse"
+              style={{ animationDelay: "150ms" }}
+            ></span>
+            <span
+              className="w-1 h-4 bg-white animate-pulse"
+              style={{ animationDelay: "300ms" }}
+            ></span>
           </div>
-        </div>
-      </div>
-    </>
-  );
+        ) : (
+          <Mic size={18} className="text-gray-800 dark:text-gray-200" />
+        )}
+      </button>
+    </div>
+  </div>
+</div>
+    
+  </>
+);
 };
 
 export default NavigationTabsWithChat;

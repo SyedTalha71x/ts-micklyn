@@ -11,47 +11,47 @@ export default function Chat() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
-    <div className="min-h-screen bg-background dark:bg-black flex flex-col">
-      {/* Mobile Header - Only visible on mobile */}
+    <div className="min-h-screen bg-background dark:bg-black flex flex-col md:flex-row">
+      {/* Mobile Header */}
       <div className="md:hidden">
         <MobileHeader onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
       </div>
 
-      <div className="flex flex-1 flex-col md:flex-row">
-        <div
-          className={`
-          fixed inset-y-0 left-0 z-50 w-72 max-w-xs bg-background shadow-lg transform transition-transform duration-500 ease-in-out p-4
-          ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
-          md:hidden
-        `}
-        >
-          <div className="h-full overflow-y-auto pt-7">
-            <CryptoTable />
-          </div>
-        </div>
-
-        {sidebarOpen && (
-          <div className="fixed inset-0 bg-black/30 z-40 md:hidden" onClick={() => setSidebarOpen(false)} />
-        )}
-
-        {/* Original desktop layout - CryptoTable in column */}
-        {/* <div className="hidden p-4 md:block md:w-1/4 lg:w-1/5">
-          <CryptoTable />
-        </div> */}
-
-        <div className="flex-1 md:flex hidden flex-col">
-          <div className="p-4">
-            <TotalBalance />
-          </div>
+      {/* Sidebar */}
+      <div className="hidden md:flex md:w-[20%] md:flex-shrink-0 bg-gray-100 shadow-xl">
+        <div className="h-full w-full  p-4">
+          <TotalBalance />
         </div>
       </div>
 
-      <div className="fixed bottom-0 lg:w-[100%] md:w-[70%] md:right-5 md:mt-4 w-full ml-auto left-0 lg:-right-32">
-        <div className="flex-1">
+      {/* Mobile Sidebar */}
+      <div
+        className={`
+          fixed inset-y-0 left-0 z-50 w-72 bg-background shadow-lg transform transition-transform duration-300 ease-in-out
+          ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+          md:hidden
+        `}
+      >
+        <div className="h-full overflow-y-auto pt-7">
+          <TotalBalance />
+        </div>
+      </div>
+
+      {/* Overlay on mobile */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/30 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* Main Chat Area */}
+      <div className="flex-1 flex flex-col relative p-4">
+        {/* Bottom Navigation */}
+        <div className="fixed md:w-[80%]  p-2">
           <NavigationTabs />
         </div>
       </div>
     </div>
   )
 }
-
