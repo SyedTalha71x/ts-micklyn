@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import Icon from "../../public/Icon.svg";
-import { chatBaseUrl, FireApi } from "@/hooks/fireApi";
+import { chatBaseUrl, chatHistoryUrl, FireApi } from "@/hooks/fireApi";
 import { Mic } from "lucide-react";
 import { jwtDecode } from "jwt-decode";
 import { Typewriter } from "@/lib/Typewriter";
@@ -677,7 +677,9 @@ const GetHistoryChat = async () => {
 
     const chatRes = await FireApi(
       `/chat-sessions/${userId}/${userInfo.sessionId}`,
-      "GET"
+      "GET",
+      null,
+      chatHistoryUrl
     );
     console.log("Chat history response:", chatRes);
 
@@ -829,7 +831,7 @@ useEffect(() => {
 
         <div
           ref={messageContainerRef}
-          className="w-full mt-4 lg:h-[24rem] h-[16rem] overflow-y-auto rounded-md p-2 scroll-auto"
+          className="w-full mt-2 md:mt-8 lg:h-[28rem] h-[22rem] overflow-y-auto rounded-md p-2 scroll-auto"
         >
           {messages.map((msg, index) => {
             const isLast = index === messages.length - 1;

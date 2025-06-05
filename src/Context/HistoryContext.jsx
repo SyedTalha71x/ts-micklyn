@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { FireApi } from "@/hooks/fireApi";
+import { chatHistoryUrl, FireApi } from "@/hooks/fireApi";
 import { jwtDecode } from "jwt-decode";
 
 // Create context
@@ -36,7 +36,7 @@ export const HistoryProvider = ({ children }) => {
   const handleGetHistory = async () => {
     try {
       setApiData(prev => ({ ...prev, loading: true }));
-      const res = await FireApi(`/chat-sessions/${userInfo?.userId}`, "GET");
+      const res = await FireApi(`/chat-sessions/${userInfo?.userId}`, "GET", null, chatHistoryUrl);
       setApiData({
         data: res.data,
         loading: false,

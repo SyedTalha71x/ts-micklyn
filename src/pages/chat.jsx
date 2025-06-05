@@ -27,7 +27,7 @@ export default function Chat() {
       {/* Mobile Sidebar */}
       <div
         className={`
-          fixed inset-y-0 left-0 z-50 w-72 bg-background shadow-lg transform transition-transform duration-300 ease-in-out
+          fixed inset-y-0 left-0 z-50 w-72 p-4 bg-background shadow-lg transform transition-transform duration-300 ease-in-out
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
           md:hidden
         `}
@@ -46,9 +46,9 @@ export default function Chat() {
       )}
 
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col relative p-4">
+      <div className="flex-1 flex flex-col relative h-full">
         {/* Bottom Navigation */}
-        <div className="fixed md:w-[80%]  p-2">
+        <div className="fixed -ml-[2%] md:ml-0 mx-auto md:w-[80%]  p-2">
           <NavigationTabs />
         </div>
       </div>

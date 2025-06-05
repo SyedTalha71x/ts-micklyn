@@ -4,7 +4,7 @@ import { useHistory } from "@/Context/HistoryContext";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { MdDeleteOutline } from "react-icons/md";
 import toast from "react-hot-toast";
-import { FireApi } from "@/hooks/fireApi";
+import { chatHistoryUrl, FireApi } from "@/hooks/fireApi";
 import { jwtDecode } from "jwt-decode";
 
 const ChatHistoryTab = () => {
@@ -48,7 +48,9 @@ const ChatHistoryTab = () => {
 
       await FireApi(
         `/chat-sessions/${userId}/${data?.session_id}`,
-        "DELETE"
+        "DELETE",
+        null,
+        chatHistoryUrl
       );
       handleGetHistory();
       toast.success("Chat deleted successfully");

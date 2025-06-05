@@ -1,7 +1,7 @@
 import { Eye, EyeOff, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
-import { FireApi } from "@/hooks/fireApi";
+import { chatHistoryUrl, FireApi } from "@/hooks/fireApi";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import ChatHistoryTab from "./ChatHistoryTab";
 import toast from "react-hot-toast";
@@ -165,7 +165,7 @@ export default function TotalBalance() {
       const res = FireApi("/chat-sessions", "POST", {
         user_id: userId,
         email_address: userEmail,
-      });
+      }, chatHistoryUrl);
       console.log(res);
       toast.success("Chat session created successfully");
       setUserInfo({
@@ -342,9 +342,9 @@ export default function TotalBalance() {
 
       <button
         onClick={() => navigate("/settings/manage-wallet")}
-        className="absolute top-4 right-4 bg-black p-2 z-10 cursor-pointer rounded-full text-white"
+        className="absolute top-4 right-4 bg-black p-1.5 z-10 cursor-pointer rounded-full text-white"
       >
-        <Settings />
+        <Settings size={19}/>
       </button>
 
       <ChatHistoryTab />

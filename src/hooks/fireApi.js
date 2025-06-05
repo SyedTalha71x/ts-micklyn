@@ -1,8 +1,10 @@
 // server ip 
-// export const baseUrl = "http://64.23.166.88:8016";
+export const baseUrl = "http://64.23.166.88:8016";
 
+// this api for the chat history & collection 
+export const chatHistoryUrl = "http://64.23.166.88:2024";
 // local ip of daniyal backend
-export const baseUrl = "http://64.23.166.88:2024";
+// export const baseUrl = "http://64.23.166.88:2024";
 
 // local ip of waqar backend
 // export const chatBaseUrl = "http://192.168.18.115:5019";
@@ -11,7 +13,7 @@ export const baseUrl = "http://64.23.166.88:2024";
 export const chatBaseUrl = "http://64.23.166.88:2024";
 
 
-export const FireApi = async (url, method, data = null) => {
+export const FireApi = async (url, method, data = null, chatHistoryUrl) => {
   const token = localStorage.getItem("user-visited-dashboard");
 
   const headers = {
@@ -26,7 +28,7 @@ export const FireApi = async (url, method, data = null) => {
   };
 
   try {
-    const response = await fetch(baseUrl + url, options);
+    const response = await fetch(chatHistoryUrl ? chatHistoryUrl + url :baseUrl + url, options);
     console.log(response, "response");
 
     if (
