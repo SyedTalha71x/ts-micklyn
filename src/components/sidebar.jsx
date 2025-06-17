@@ -4,8 +4,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 const Sidebar = ({ activeItem, setActiveItem, openModal, isMobile }) => {
   const navigate = useNavigate();
   const handleLogout = () => {
-    localStorage.removeItem("wallet-address");
-    localStorage.removeItem("user-visited-dashboard");
+    localStorage.clear();
     navigate("/login");
   };
 

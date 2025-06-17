@@ -1,5 +1,5 @@
 import Sidebar from "@/components/sidebar";
-import { ChevronLeft } from "lucide-react";
+import { ArrowLeft, ChevronLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import MobileSidebar from "@/components/ui/mobile-sidebar";
@@ -72,9 +72,16 @@ const SettingsLayout = () => {
               <div className="w-6"></div>
             </>
           ) : (
-            <h1 className="text-xl p-4 dark:text-white manrope-font w-full md:text-left text-center">
-              Account Setting
-            </h1>
+            <div className="flex items-center">
+              <ArrowLeft
+                size={24}
+                className="cursor-pointer bg-black dark:bg-white dark:text-black rounded text-white p-1"
+                onClick={() => navigate('/chat')}
+              />
+              <h1 className="text-xl p-4 dark:text-white manrope-font w-full md:text-left text-center">
+                Account Setting
+              </h1>
+            </div>
           )}
         </div>
         {/* Content area */}

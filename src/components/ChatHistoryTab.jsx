@@ -84,7 +84,7 @@ const ChatHistoryTab = () => {
                 key={index}
                 className="mr-2 text-black text-sm bg-white shadow-xs p-2 rounded-md flex justify-between items-center mb-2"
               >
-                <p className="cursor-pointer truncate max-w-[180px]">
+                <p className="cursor-pointer text-[13px] truncate max-w-[180px]">
                   {item?.first_user_input || "New Chat"}
                 </p>
                 <MdDeleteOutline 

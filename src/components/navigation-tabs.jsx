@@ -8,6 +8,7 @@ import { Typewriter } from "@/lib/Typewriter";
 import ConfirmationModal from "./ConfirmationModal";
 import toast from "react-hot-toast";
 import { useHistory } from "@/Context/HistoryContext";
+import Catoshi from "./Catoshi";
 
 const NavigationTabsWithChat = () => {
   // State variables
@@ -43,15 +44,11 @@ const NavigationTabsWithChat = () => {
   });
 
   const { userInfo } = useHistory();
-  // Voice recording animation states
-  // const [audioLevels, setAudioLevels] = useState([]);
   const animationFrameRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
   const microphoneRef = useRef(null);
-  // const [recordingTime, setRecordingTime] = useState(0);
-  // const [showRecordingModal, setShowRecordingModal] = useState(false);
 
   useEffect(() => {
     // Get addresses from localStorage
@@ -248,6 +245,19 @@ const NavigationTabsWithChat = () => {
         ]);
         break;
 
+      case "chatoshi":
+        setMessages((prev) => [
+          ...prev,
+          {
+            wallet: "Chat",
+            content: reply,
+            isJson: true,
+            responseType: "chatoshi",
+            chatoshiData: reply,
+          },
+        ]);
+        break;
+
       default:
         // Handle unknown response types
         console.log(`Unknown response type: ${responseType}`);
@@ -262,8 +272,6 @@ const NavigationTabsWithChat = () => {
         ]);
     }
   };
-
-  const [transactionIntents, setTransactionIntents] = useState([]);
 
   useEffect(() => {
     const newSocket = io(chatBaseUrl, {
@@ -309,6 +317,16 @@ const NavigationTabsWithChat = () => {
         }
       } else {
         data = rawData;
+      }
+
+      if (data?.response_type === "chatoshi") {
+        handleResponseByType(
+          "chatoshi",
+          data.data.replies,
+          data,
+          checkConfirmation
+        );
+        return;
       }
 
       const replies = data?.data?.replies;
@@ -655,7 +673,7 @@ const NavigationTabsWithChat = () => {
       animation: cursor-blink 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
     }
   `;
-    const resetChat = () => {
+  const resetChat = () => {
     setMessages([]);
     setMessage("");
     setLastUserMessage("");
@@ -666,140 +684,147 @@ const NavigationTabsWithChat = () => {
     hasHandledIntents.current = { intent0: false, intent1: false };
   };
 
- // Updated GetHistoryChat function
-const GetHistoryChat = async () => {
-  try {
-    if (!userId || !userInfo?.sessionId) {
-      console.log("Missing userId or sessionId");
+  // Updated GetHistoryChat function
+  const GetHistoryChat = async () => {
+    try {
+      if (!userId || !userInfo?.sessionId) {
+        console.log("Missing userId or sessionId");
+        resetChat();
+        return;
+      }
+
+      const chatRes = await FireApi(
+        `/chat-sessions/${userId}/${userInfo.sessionId}`,
+        "GET",
+        null,
+        chatHistoryUrl
+      );
+      console.log("Chat history response:", chatRes);
+
+      // Check if this is the session list or actual messages
+      if (Array.isArray(chatRes.data)) {
+        // This is the session list, not messages
+        console.log("Received session list instead of messages");
+        resetChat();
+        return;
+      }
+
+      if (chatRes.data?.messages?.length > 0) {
+        const formattedMessages = processApiResponse(chatRes);
+        setMessages(formattedMessages);
+      } else {
+        resetChat();
+      }
+    } catch (error) {
+      console.error("Error fetching chat history:", error);
       resetChat();
-      return;
+      toast.error(error.message);
+    }
+  };
+
+  // Updated processApiResponse function
+  const processApiResponse = (apiResponse) => {
+    const formattedMessages = [];
+
+    // Check if we have messages array in response
+    if (!apiResponse.data?.messages) {
+      console.error("No messages found in API response");
+      return formattedMessages;
     }
 
-    const chatRes = await FireApi(
-      `/chat-sessions/${userId}/${userInfo.sessionId}`,
-      "GET",
-      null,
-      chatHistoryUrl
-    );
-    console.log("Chat history response:", chatRes);
+    apiResponse.data.messages.forEach((msg) => {
+      try {
+        // Add user message
+        formattedMessages.push({
+          wallet: "You",
+          content: msg.user_input?.trim() || "No user input",
+          timestamp: msg.timestamp,
+        });
 
-    // Check if this is the session list or actual messages
-    if (Array.isArray(chatRes.data)) {
-      // This is the session list, not messages
-      console.log("Received session list instead of messages");
-      resetChat();
-      return;
+        // Parse the response
+        let responseData;
+        try {
+          responseData =
+            typeof msg.response === "string"
+              ? JSON.parse(msg.response)
+              : msg.response;
+        } catch (parseError) {
+          console.error("Error parsing response:", parseError);
+          responseData = {
+            message: "Could not parse response",
+            status: false,
+          };
+        }
+
+        // Handle bot replies
+        if (responseData?.data?.replies) {
+          responseData.data.replies.forEach((replyItem) => {
+            let content;
+
+            if (typeof replyItem.reply === "string") {
+              content = replyItem.reply.trim();
+            } else if (typeof replyItem.reply === "object") {
+              content = JSON.stringify(replyItem.reply, null, 2);
+            } else {
+              content = String(replyItem.reply);
+            }
+
+            formattedMessages.push({
+              wallet: "Chat",
+              content: content,
+              timestamp: msg.timestamp,
+              responseType: replyItem.response_type || "simple",
+              isJson: typeof replyItem.reply === "object",
+            });
+          });
+        } else {
+          formattedMessages.push({
+            wallet: "Chat",
+            content: responseData.message || "No response available",
+            timestamp: msg.timestamp,
+            responseType: "simple",
+          });
+        }
+      } catch (error) {
+        console.error("Error processing message:", error);
+        formattedMessages.push({
+          wallet: "Chat",
+          content: "Error displaying message",
+          timestamp: msg.timestamp,
+          responseType: "error",
+        });
+      }
+    });
+
+    return formattedMessages;
+  };
+
+  // Updated useEffect for chat history
+  useEffect(() => {
+    const token = localStorage.getItem("user-visited-dashboard");
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        if (!userId || userId !== decoded.id) {
+          setUserId(decoded.id);
+        }
+      } catch (error) {
+        console.error("Error decoding token:", error);
+      }
     }
 
-    if (chatRes.data?.messages?.length > 0) {
-      const formattedMessages = processApiResponse(chatRes);
-      setMessages(formattedMessages);
+    if (userId && userInfo?.sessionId) {
+      GetHistoryChat();
     } else {
       resetChat();
     }
-  } catch (error) {
-    console.error("Error fetching chat history:", error);
-    resetChat();
-    toast.error(error.message);
-  }
-};
+  }, [userInfo?.sessionId, userId]);
 
-// Updated processApiResponse function
-const processApiResponse = (apiResponse) => {
-  const formattedMessages = [];
-  
-  // Check if we have messages array in response
-  if (!apiResponse.data?.messages) {
-    console.error("No messages found in API response");
-    return formattedMessages;
-  }
-
-  apiResponse.data.messages.forEach((msg) => {
-    try {
-      // Add user message
-      formattedMessages.push({
-        wallet: "You",
-        content: msg.user_input?.trim() || "No user input",
-        timestamp: msg.timestamp,
-      });
-
-      // Parse the response
-      let responseData;
-      try {
-        responseData = typeof msg.response === "string" 
-          ? JSON.parse(msg.response) 
-          : msg.response;
-      } catch (parseError) {
-        console.error("Error parsing response:", parseError);
-        responseData = {
-          message: "Could not parse response",
-          status: false
-        };
-      }
-
-      // Handle bot replies
-      if (responseData?.data?.replies) {
-        responseData.data.replies.forEach((replyItem) => {
-          let content;
-          
-          if (typeof replyItem.reply === "string") {
-            content = replyItem.reply.trim();
-          } else if (typeof replyItem.reply === "object") {
-            content = JSON.stringify(replyItem.reply, null, 2);
-          } else {
-            content = String(replyItem.reply);
-          }
-
-          formattedMessages.push({
-            wallet: "Chat",
-            content: content,
-            timestamp: msg.timestamp,
-            responseType: replyItem.response_type || "simple",
-            isJson: typeof replyItem.reply === "object"
-          });
-        });
-      } else {
-        formattedMessages.push({
-          wallet: "Chat",
-          content: responseData.message || "No response available",
-          timestamp: msg.timestamp,
-          responseType: "simple"
-        });
-      }
-    } catch (error) {
-      console.error("Error processing message:", error);
-      formattedMessages.push({
-        wallet: "Chat",
-        content: "Error displaying message",
-        timestamp: msg.timestamp,
-        responseType: "error"
-      });
-    }
-  });
-
-  return formattedMessages;
-};
-
-// Updated useEffect for chat history
-useEffect(() => {
-  const token = localStorage.getItem("user-visited-dashboard");
-  if (token) {
-    try {
-      const decoded = jwtDecode(token);
-      if (!userId || userId !== decoded.id) {
-        setUserId(decoded.id);
-      }
-    } catch (error) {
-      console.error("Error decoding token:", error);
-    }
-  }
-
-  if (userId && userInfo?.sessionId) {
-    GetHistoryChat();
-  } else {
-    resetChat();
-  }
-}, [userInfo?.sessionId, userId]);
+  const regixData = [
+    {
+      data: "Solana is currently trading at $156.59, showing a positive movement from its recent lows. Here's a detailed overview based on the available data:\n\n1. **Current Price Movement**: The current price of Solana is $156.59, which is within the recent range observed over the past few weeks. It has moved up from a low of $150.99 today, indicating some bullish momentum.\n\n2. **28-Day Trends**: Over the past four weeks, Solana has shown some volatility:\n   - The recent high was $168.36, and the low was $140.21.\n   - The average market cap has been around $81.68 billion, with an average close of $155.30 in the last week.\n\n3. **6-Month Historical Context**: \n   - Solana reached its highest price of $295.83 in January 2025 and its lowest of $95.26 in April 2025.\n   - The current price represents a significant recovery from the lowest point in April, showing an increase of approximately 64.4% from the lowest price.\n\n4. **Market Sentiment**: There is no specific news about Solana in the latest summarized news, which suggests a neutral sentiment. However, the overall market seems to be experiencing mixed signals with some bullish trends in certain coins and bearish trends in others.\n\n5. **Comparison with Historical Highs/Lows**: The current price is significantly lower than the highest price observed in January, indicating there is room for growth if market conditions turn favorable.\n\nOverall, Solana appears to be in a stable position with potential for upward movement if market conditions improve. However, without explicit news or strong market signals directly related to Solana, it's essential to stay updated with any new developments that could impact its price. If you have any specific questions about investment decisions, feel free to ask!",
+    },
+  ];
 
   return (
     <>
@@ -815,9 +840,10 @@ useEffect(() => {
       )}
 
       {!messages.some((msg) => msg.wallet === "You") && (
-        <h2 className="text-2xl font-bold mb-4 dark:text-white text-center ">
+        <h2 className="text-2xl font-bold mb-2 dark:text-white text-center ">
           What can I help with?
         </h2>
+        // <Typewriter text={regixData[0]?.data} />
       )}
 
       <div className="p-4 text-center">
@@ -861,7 +887,9 @@ useEffect(() => {
                 <div
                   className={`px-3 py-2 rounded-lg text-sm max-w-auto text-left whitespace-pre-wrap ${getMessageColor()}`}
                 >
-                  {msg.wallet === "Chat" && isLast && isTyping ? (
+                  {msg.wallet === "Chat" && msg.responseType === "chatoshi" ? (
+                    <Catoshi data={msg.chatoshiData} />
+                  ) : msg.wallet === "Chat" && isLast && isTyping ? (
                     <Typewriter text={fullResponse} className="relative" />
                   ) : msg.isJson ? (
                     <div className="mt-1">
@@ -947,65 +975,66 @@ useEffect(() => {
         </div>
 
         <div className="sticky bottom-0 mt-[5rem] bg-white dark:bg-[#101010] border-t border-gray-200 dark:border-gray-700 p-4">
-    <div className="max-w-4xl mx-auto flex items-center gap-2">
-      <input
-        className="flex-1 bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-2 text-sm dark:text-gray-200 dark:placeholder-gray-400"
-        placeholder="Write message here..."
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            sendMessage();
-          }
-        }}
-        disabled={isTyping}
-      />
+          <div className="max-w-4xl mx-auto flex items-center gap-2">
+            <input
+              className="flex-1 bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-2 text-sm dark:text-gray-200 dark:placeholder-gray-400"
+              placeholder="Write message here..."
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  sendMessage();
+                }
+              }}
+              disabled={isTyping}
+            />
 
-      <button
-        className={`h-10 w-10 rounded-full bg-blue-500 text-white flex items-center justify-center cursor-pointer hover:bg-blue-600 ${
-          isTyping ? "opacity-50 cursor-not-allowed" : ""
-        }`}
-        onClick={sendMessage}
-        disabled={isTyping}
-      >
-        <img src={Icon} alt="Send" className="h-5 w-5" />
-      </button>
+            <button
+              className={`h-10 w-10 rounded-full bg-blue-500 text-white flex items-center justify-center cursor-pointer hover:bg-blue-600 ${
+                isTyping ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+              onClick={sendMessage}
+              disabled={isTyping}
+            >
+              <img src={Icon} alt="Send" className="h-5 w-5" />
+            </button>
 
-      <button
-        className={`h-10 w-10 rounded-full ${
-          recording ? "bg-red-600 animate-pulse" : "bg-gray-200 dark:bg-gray-700"
-        } text-white flex items-center justify-center cursor-pointer ${
-          isTyping ? "opacity-50 cursor-not-allowed" : ""
-        }`}
-        onClick={recording ? stopRecording : startRecording}
-        disabled={isTyping}
-      >
-        {recording ? (
-          <div className="flex gap-0.5">
-            <span
-              className="w-1 h-2 bg-white animate-pulse"
-              style={{ animationDelay: "0ms" }}
-            ></span>
-            <span
-              className="w-1 h-3 bg-white animate-pulse"
-              style={{ animationDelay: "150ms" }}
-            ></span>
-            <span
-              className="w-1 h-4 bg-white animate-pulse"
-              style={{ animationDelay: "300ms" }}
-            ></span>
+            <button
+              className={`h-10 w-10 rounded-full ${
+                recording
+                  ? "bg-red-600 animate-pulse"
+                  : "bg-gray-200 dark:bg-gray-700"
+              } text-white flex items-center justify-center cursor-pointer ${
+                isTyping ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+              onClick={recording ? stopRecording : startRecording}
+              disabled={isTyping}
+            >
+              {recording ? (
+                <div className="flex gap-0.5">
+                  <span
+                    className="w-1 h-2 bg-white animate-pulse"
+                    style={{ animationDelay: "0ms" }}
+                  ></span>
+                  <span
+                    className="w-1 h-3 bg-white animate-pulse"
+                    style={{ animationDelay: "150ms" }}
+                  ></span>
+                  <span
+                    className="w-1 h-4 bg-white animate-pulse"
+                    style={{ animationDelay: "300ms" }}
+                  ></span>
+                </div>
+              ) : (
+                <Mic size={18} className="text-gray-800 dark:text-gray-200" />
+              )}
+            </button>
           </div>
-        ) : (
-          <Mic size={18} className="text-gray-800 dark:text-gray-200" />
-        )}
-      </button>
-    </div>
-  </div>
-</div>
-    
-  </>
-);
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default NavigationTabsWithChat;
