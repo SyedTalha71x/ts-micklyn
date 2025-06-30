@@ -47,4 +47,3 @@ export const FireApi = async (url, method, data = null, chatHistoryUrl) => {
     throw error;
   }
 };
-

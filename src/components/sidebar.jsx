@@ -9,14 +9,14 @@ const Sidebar = ({ activeItem, setActiveItem, openModal, isMobile }) => {
   };
 
   const menuItems = [
-    { name: "Manage Wallet", path: "/settings/manage-wallet" },
+    // { name: "Manage Wallet", path: "/settings/manage-wallet" },
     { name: "Wallet Connections", path: "/settings/wallet-connections" },
     { name: "Token", path: "/settings/about-token" },
     { name: "Transfer Token", path: "/settings/transfer-token" },
     { name: "Security & Privacy", path: "/settings/security-privacy" },
-    { name: "System Status", path: "/settings/system-status" },
+    // { name: "System Status", path: "/settings/system-status" },
     { name: "Preferences", path: "/settings/preferences" },
-    { name: "Price Alert", path: "/settings/price-alert" },
+    // { name: "Price Alert", path: "/settings/price-alert" },
     { name: "Notification", path: "/settings/notification" },
     { name: "Logout", onClick: handleLogout },
   ];

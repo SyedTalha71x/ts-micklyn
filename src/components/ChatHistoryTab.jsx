@@ -9,7 +9,7 @@ import { jwtDecode } from "jwt-decode";
 
 const ChatHistoryTab = () => {
   const [openDropdown, setOpenDropdown] = React.useState(true);
-  const { apiData, setUserInfo, handleGetHistory } = useHistory();
+  const { apiData, userInfo, setUserInfo, handleGetHistory } = useHistory();
 
   // Get userId from token
   const getUserId = () => {
@@ -30,10 +30,10 @@ const ChatHistoryTab = () => {
       toast.error("User not authenticated");
       return;
     }
-    
+    localStorage.setItem('chat_session', data?.session_id)
     setUserInfo({
       sessionId: data?.session_id,
-      userId: userId // Make sure userId is set in userInfo
+      userId: userId
     });
     handleGetHistory();
   };
@@ -52,8 +52,8 @@ const ChatHistoryTab = () => {
         null,
         chatHistoryUrl
       );
-      handleGetHistory();
       toast.success("Chat deleted successfully");
+      handleGetHistory(userInfo?.userId || userId);
     } catch (error) {
       toast.error(error.message);
     }

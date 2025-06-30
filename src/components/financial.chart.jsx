@@ -265,7 +265,7 @@ const mockData = {
 };
 
 const handleSettingsRedirect = () => {
-  window.location.href = "/settings/manage-wallet";
+  window.location.href = "/settings";
 };
 
 export default function FinancialChart() {

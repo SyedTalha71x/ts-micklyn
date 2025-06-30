@@ -160,18 +160,19 @@ export default function TotalBalance() {
     }
   }, []);
 
-  const handleCreateSession = () => {
+  const handleCreateSession = async () => {
     try {
-      const res = FireApi("/chat-sessions", "POST", {
+      const res = await FireApi("/chat-sessions", "POST", {
         user_id: userId,
         email_address: userEmail,
       }, chatHistoryUrl);
-      console.log(res);
       toast.success("Chat session created successfully");
+      localStorage.setItem("chat_session", res?.data?.session_id);
+      console.log(res ,'askldmasd');
       setUserInfo({
         sessionId: res?.data?.session_id,
       });
-      handleGetHistory();
+      handleGetHistory(userId);
     } catch (error) {
       console.log(error);
       toast.error(error.message);
@@ -341,7 +342,7 @@ export default function TotalBalance() {
       )}
 
       <button
-        onClick={() => navigate("/settings/manage-wallet")}
+        onClick={() => navigate("/settings/wallet-connections")}
         className="absolute top-4 right-4 bg-black p-1.5 z-10 cursor-pointer rounded-full text-white"
       >
         <Settings size={19}/>

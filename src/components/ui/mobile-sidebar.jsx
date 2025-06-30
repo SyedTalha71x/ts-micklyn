@@ -11,15 +11,15 @@ const MobileSidebar = ({ activeItem, setActiveItem, onItemClick }) => {
   };
 
     const menuItems = [
-      { name: "Manage Wallet", path: "/settings/manage-wallet" },
+      // { name: "Manage Wallet", path: "/settings/manage-wallet" },
       { name: "Wallet connections", path: "/settings/wallet-connections" },
       { name: "Address Book", path: "/settings/address-book" },
       { name: "Activity", path: "/settings/activity" },
       { name: "Security & Privacy", path: "/settings/security-privacy" },
-      { name: "System Status", path: "/settings/system-status" },
+      // { name: "System Status", path: "/settings/system-status" },
       { name: "Preferences", path: "/settings/preferences" },
       { name: "Notification", path: "/settings/notification" },
-      { name: "Price Alert", path: "/settings/price-alert" },
+      // { name: "Price Alert", path: "/settings/price-alert" },
       { name: "Logout", onClick: handleLogout },
     ];
 

@@ -6,7 +6,7 @@ import MobileSidebar from "@/components/ui/mobile-sidebar";
 
 const SettingsLayout = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const [activeItem, setActiveItem] = useState("/settings/manage-wallet");
+  const [activeItem, setActiveItem] = useState("/settings");
   const [showContent, setShowContent] = useState(!isMobile);
   const location = useLocation();
   const navigate = useNavigate();
@@ -72,15 +72,23 @@ const SettingsLayout = () => {
               <div className="w-6"></div>
             </>
           ) : (
-            <div className="flex items-center">
-              <ArrowLeft
-                size={24}
-                className="cursor-pointer bg-black dark:bg-white dark:text-black rounded text-white p-1"
-                onClick={() => navigate('/chat')}
-              />
-              <h1 className="text-xl p-4 dark:text-white manrope-font w-full md:text-left text-center">
-                Account Setting
-              </h1>
+            <div className="flex justify-between items-center w-full px-4 py-2">
+              {/* Left Side: Arrow + Heading */}
+              <div className="flex items-center space-x-2">
+                <ArrowLeft
+                  size={24}
+                  className="cursor-pointer bg-black dark:bg-white dark:text-black rounded text-white p-1"
+                  onClick={() => navigate(-1)}
+                />
+                <h3 className="text-xl dark:text-white manrope-font">
+                  Account Setting
+                </h3>
+              </div>
+
+              {/* Right Side: Button */}
+              <button onClick={() => navigate('/chat')} className="hover:cursor-pointer text-sm md:text-base px-4 py-2 bg-black text-white dark:bg-white dark:text-black rounded-lg">
+                Back to Chat
+              </button>
             </div>
           )}
         </div>

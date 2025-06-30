@@ -16,6 +16,8 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { FireApi } from "@/hooks/fireApi";
 import { Loader } from "lucide-react";
+import { useHistory } from "@/Context/HistoryContext";
+import { jwtDecode } from "jwt-decode";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -25,6 +27,7 @@ export default function Login() {
 
   const navigate = useNavigate();
   const isFormEmpty = !password || !email;
+const { setUserInfo, handleGetHistory } = useHistory(); 
 
   // Check if the screen size is mobile
   useEffect(() => {
@@ -40,46 +43,55 @@ export default function Login() {
     };
   }, []);
 
-  const HandleUserLogin = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    try {
-      const response = await FireApi("/login", "POST", {
-        email,
-        password,
-      });
-      console.log(response, "response");
-      localStorage.setItem("user-visited-dashboard", response?.data?.token);
 
-      response?.data?.wallets?.forEach((wallet) => {
-        switch (wallet.chain.toUpperCase()) {
-          case "SOLANA":
-            localStorage.setItem("solana-address", wallet.address);
-            break;
-          case "ETH":
-            localStorage.setItem("eth-address", wallet.address);
-            break;
-          case "POLYGON":
-            localStorage.setItem("polygon-address", wallet.address);
-            break;
-          case "BSC":
-            localStorage.setItem("bsc-address", wallet.address);
-            break;
-          default:
-            console.warn(`Unknown chain: ${wallet.chain}`);
-        }
-      });
+const HandleUserLogin = async (e) => {
+  e.preventDefault();
+  setIsLoading(true);
+  try {
+    const response = await FireApi("/login", "POST", { email, password });
 
-      
-      toast.success(response.message || "User Login Successful");
-      navigate("/chat");
-    } catch (error) {
-      console.log(error, "error");
-      toast.error(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    const token = response?.data?.token;
+    const decodedToken = jwtDecode(token);
+
+    localStorage.setItem("user-visited-dashboard", token);
+
+    response?.data?.wallets?.forEach((wallet) => {
+      switch (wallet.chain.toUpperCase()) {
+        case "SOLANA":
+          localStorage.setItem("solana-address", wallet.address);
+          break;
+        case "ETH":
+          localStorage.setItem("eth-address", wallet.address);
+          break;
+        case "POLYGON":
+          localStorage.setItem("polygon-address", wallet.address);
+          break;
+        case "BSC":
+          localStorage.setItem("bsc-address", wallet.address);
+          break;
+        default:
+          console.warn(`Unknown chain: ${wallet.chain}`);
+      }
+    });
+
+    setUserInfo({
+      userId: decodedToken.id,
+      email: decodedToken.email,
+      sessionId: "",
+    });
+
+    handleGetHistory(decodedToken.id);
+
+    toast.success(response.message || "User Login Successful");
+    navigate("/chat");
+
+  } catch (error) {
+    console.log("Login error:", error);
+    toast.error(error.message);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const HandleRegisterNavigate = () => {
     navigate("/create-account");

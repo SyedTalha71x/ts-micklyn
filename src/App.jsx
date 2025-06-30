@@ -34,10 +34,10 @@ function App() {
               <Route path="/create-account" element={<CreateAccount />} />
               <Route path="/login" element={<Login />} />
               <Route path="verify-otp" element={<VerifyOtp />} />
+              <Route path="/" element={<Home />} />
             </Route>
 
             <Route element={<AuthRoute />}>
-              <Route path="/" element={<Home />} />
               <Route path="chat" element={<Chat />} />
               <Route path="graph-chat" element={<GraphChat />} />
 

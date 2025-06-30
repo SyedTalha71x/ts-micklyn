@@ -820,12 +820,6 @@ const NavigationTabsWithChat = () => {
     }
   }, [userInfo?.sessionId, userId]);
 
-  const regixData = [
-    {
-      data: "Solana is currently trading at $156.59, showing a positive movement from its recent lows. Here's a detailed overview based on the available data:\n\n1. **Current Price Movement**: The current price of Solana is $156.59, which is within the recent range observed over the past few weeks. It has moved up from a low of $150.99 today, indicating some bullish momentum.\n\n2. **28-Day Trends**: Over the past four weeks, Solana has shown some volatility:\n   - The recent high was $168.36, and the low was $140.21.\n   - The average market cap has been around $81.68 billion, with an average close of $155.30 in the last week.\n\n3. **6-Month Historical Context**: \n   - Solana reached its highest price of $295.83 in January 2025 and its lowest of $95.26 in April 2025.\n   - The current price represents a significant recovery from the lowest point in April, showing an increase of approximately 64.4% from the lowest price.\n\n4. **Market Sentiment**: There is no specific news about Solana in the latest summarized news, which suggests a neutral sentiment. However, the overall market seems to be experiencing mixed signals with some bullish trends in certain coins and bearish trends in others.\n\n5. **Comparison with Historical Highs/Lows**: The current price is significantly lower than the highest price observed in January, indicating there is room for growth if market conditions turn favorable.\n\nOverall, Solana appears to be in a stable position with potential for upward movement if market conditions improve. However, without explicit news or strong market signals directly related to Solana, it's essential to stay updated with any new developments that could impact its price. If you have any specific questions about investment decisions, feel free to ask!",
-    },
-  ];
-
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: customStyles }} />
