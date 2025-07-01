@@ -105,6 +105,30 @@ const NavigationTabsWithChat = () => {
     setProcessedIntents([]);
     setAllIntentsData(null);
   }, [setUserId]);
+  const toCamelCase = (str) => {
+    return str.replace(/([-_][a-z])/g, (group) =>
+      group.toUpperCase().replace("-", "").replace("_", "")
+    );
+  };
+
+  const convertKeysToCamelCase = (obj) => {
+    if (!obj || typeof obj !== "object") return obj;
+
+    if (Array.isArray(obj)) {
+      return obj.map((item) => convertKeysToCamelCase(item));
+    }
+
+    const newObj = {};
+    Object.keys(obj).forEach((key) => {
+      const value = obj[key];
+      // Skip empty string values
+      if (value !== "") {
+        const newKey = toCamelCase(key);
+        newObj[newKey] = convertKeysToCamelCase(value);
+      }
+    });
+    return newObj;
+  };
 
   const handleResponseByType = (
     responseType,
@@ -127,8 +151,21 @@ const NavigationTabsWithChat = () => {
         break;
 
       case "transaction":
-        // Transaction responses will be handled separately - don't add to messages here
-        console.log("Transaction response detected, will handle in flow");
+        // Convert transaction data keys to camelCase
+        if (Array.isArray(reply)) {
+          reply = reply.map((item) => {
+            if (typeof item === "object" && item !== null) {
+              return Object.fromEntries(
+                Object.entries(item).map(([key, val]) => [
+                  key.replace(/_([a-z])/g, (g) => g[1].toUpperCase()),
+                  val,
+                ])
+              );
+            }
+            return item;
+          });
+        }
+
         setMessages((prev) => [
           ...prev,
           {
@@ -142,7 +179,7 @@ const NavigationTabsWithChat = () => {
 
       case "all_wallet_addresses":
         // Handle wallet addresses display
-        const addresses = reply.all_wallet_addresses || reply;
+        const addresses = reply?.all_wallet_addresses || reply;
         let formattedAddresses;
 
         if (Array.isArray(addresses)) {
@@ -151,8 +188,16 @@ const NavigationTabsWithChat = () => {
             .map(
               (addr, index) =>
                 `🔹 Wallet ${index + 1}\n` +
-                `Chain: ${addr.chain}\n` +
-                `Address: ${addr.address}\n`
+                        `Chain: ${addr.blockchain.toUpperCase()}\n` +
+                        `Address: ${addr.address}\n` +
+                        (addr?.usdt ? `USDT: ${addr?.usdt}\n` : "") +
+                        (addr?.usdc ? `USDC: ${addr?.usdc}\n` : "") +
+                        (addr?.usdcPrice
+                          ? `USDC Price: ${addr.usdcPrice}\n`
+                          : "") +
+                        (addr?.usdtPrice
+                          ? `USDT Price: ${addr.usdtPrice}\n`
+                          : "")
             )
             .join("\n");
         } else {
@@ -180,6 +225,18 @@ const NavigationTabsWithChat = () => {
             content: reply,
             isJson: true,
             responseType: "get_token_balance",
+          },
+        ]);
+        break;
+
+      case "all_copy_trades":
+        setMessages((prev) => [
+          ...prev,
+          {
+            wallet: "Chat",
+            content: reply?.all_copy_trades[0],
+            isJson: true,
+            responseType: "all_copy_trades",
           },
         ]);
         break;
@@ -453,14 +510,12 @@ const NavigationTabsWithChat = () => {
   const handleConfirmation = (confirmed) => {
     setShowConfirmation(false);
 
-    // Store the confirmation status for this intent
     const updatedProcessedIntents = [
       ...processedIntents,
       { index: pendingAction.intentIndex, confirmed },
     ];
     setProcessedIntents(updatedProcessedIntents);
 
-    // Show confirmation message in chat
     setMessages((prev) => [
       ...prev,
       {
@@ -473,7 +528,6 @@ const NavigationTabsWithChat = () => {
       },
     ]);
 
-    // Check if all intents are processed
     const transactionReplies =
       allIntentsData?.data?.replies?.filter(
         (item) => item.response_type === "transaction"
@@ -547,6 +601,7 @@ const NavigationTabsWithChat = () => {
       setCurrentIntentIndex((prev) => prev + 1);
     }
   };
+
   const sendMessage = (text = message) => {
     if (text.trim() && socket) {
       const chatHistory = messages.reduce((acc, msg, i) => {
@@ -722,9 +777,30 @@ const NavigationTabsWithChat = () => {
     }
   };
 
-  // Updated processApiResponse function
   const processApiResponse = (apiResponse) => {
     const formattedMessages = [];
+
+    // Helper function to convert snake_case to camelCase
+    const toCamelCase = (str) => {
+      return str.replace(/([-_][a-z])/g, (group) =>
+        group.toUpperCase().replace("-", "").replace("_", "")
+      );
+    };
+
+    // Helper function to convert object keys to camelCase
+    const convertKeysToCamelCase = (obj) => {
+      if (!obj || typeof obj !== "object") return obj;
+
+      const newObj = {};
+      Object.keys(obj).forEach((key) => {
+        if (obj.keys === null || obj.keys === "") {
+          return null;
+        }
+        const newKey = toCamelCase(key);
+        newObj[newKey] = convertKeysToCamelCase(obj[key]);
+      });
+      return newObj;
+    };
 
     // Check if we have messages array in response
     if (!apiResponse.data?.messages) {
@@ -759,25 +835,129 @@ const NavigationTabsWithChat = () => {
         // Handle bot replies
         if (responseData?.data?.replies) {
           responseData.data.replies.forEach((replyItem) => {
-            let content;
+            const responseType = replyItem.response_type || "simple";
+            let replyContent = replyItem.reply;
 
-            if (typeof replyItem.reply === "string") {
-              content = replyItem.reply.trim();
-            } else if (typeof replyItem.reply === "object") {
-              content = JSON.stringify(replyItem.reply, null, 2);
-            } else {
-              content = String(replyItem.reply);
+            // Convert transaction data keys to camelCase
+            if (
+              responseType === "transaction" &&
+              typeof replyContent === "object"
+            ) {
+              replyContent = convertKeysToCamelCase(replyContent);
+            }
+
+            let content;
+            let isJson = false;
+            let additionalProps = {};
+
+            // Handle different response types
+            switch (responseType) {
+              case "simple":
+                content =
+                  typeof replyContent === "string"
+                    ? replyContent.trim()
+                    : JSON.stringify(replyContent, null, 2);
+                break;
+
+              case "transaction":
+                content = replyContent;
+                isJson = true;
+                additionalProps = {
+                  responseType: "transaction",
+                  transactionData: replyContent,
+                };
+                break;
+
+              case "all_wallet_addresses":
+                const addresses =
+                  replyContent.all_wallet_addresses || replyContent;
+                let formattedAddresses;
+
+                if (Array.isArray(addresses)) {
+                  formattedAddresses = addresses
+                    .map(
+                      (addr, index) =>
+                        `🔹 Wallet ${index + 1}\n` +
+                        `Chain: ${addr.blockchain.toUpperCase()}\n` +
+                        `Address: ${addr.address}\n` +
+                        (addr?.usdt ? `USDT: ${addr?.usdt}\n` : "") +
+                        (addr?.usdc ? `USDC: ${addr?.usdc}\n` : "") +
+                        (addr?.usdcPrice
+                          ? `USDC Price: ${addr.usdcPrice}\n`
+                          : "") +
+                        (addr?.usdtPrice
+                          ? `USDT Price: ${addr.usdtPrice}\n`
+                          : "")
+                    )
+                    .join("\n");
+                } else {
+                  formattedAddresses = JSON.stringify(addresses, null, 2);
+                }
+
+                content = formattedAddresses;
+                additionalProps = {
+                  responseType: "all_wallet_addresses",
+                  isMarkdown: true,
+                };
+                break;
+
+              case "get_token_balance":
+              case "get_token_info":
+              case "get_user_balance":
+                content = replyContent;
+                isJson = true;
+                additionalProps = { responseType };
+                break;
+
+              case "all_copy_trades":
+              content = replyContent?.all_copy_trades?.[0] || replyContent;
+              isJson = true;
+              additionalProps = {
+                responseType: "all_copy_trades",
+                copyTradesData: content
+              };
+              break;
+
+              case "chatoshi":
+                content = replyContent;
+                isJson = true;
+                additionalProps = {
+                  responseType: "chatoshi",
+                  chatoshiData: replyContent,
+                };
+                break;
+
+              case "error":
+                content =
+                  typeof replyContent === "string"
+                    ? replyContent.trim()
+                    : JSON.stringify(replyContent, null, 2);
+                additionalProps = {
+                  responseType: "error",
+                  status: "error",
+                };
+                break;
+
+              default:
+                content =
+                  typeof replyContent === "string"
+                    ? replyContent.trim()
+                    : JSON.stringify(replyContent, null, 2);
+                additionalProps = {
+                  responseType: responseType || "unknown",
+                };
             }
 
             formattedMessages.push({
               wallet: "Chat",
               content: content,
               timestamp: msg.timestamp,
-              responseType: replyItem.response_type || "simple",
-              isJson: typeof replyItem.reply === "object",
+              isJson: isJson || typeof replyContent === "object",
+              ...additionalProps,
             });
           });
         } else {
+          // Fallback for responses without replies array
           formattedMessages.push({
             wallet: "Chat",
             content: responseData.message || "No response available",
@@ -827,7 +1007,7 @@ const NavigationTabsWithChat = () => {
       {showConfirmation && (
         <ConfirmationModal
           confirmationIndexNumber={pendingAction?.intentIndex + 1}
-          intent={pendingAction}
+          intent={convertKeysToCamelCase(pendingAction)}
           socket={socket}
           handleConfirmation={handleConfirmation}
         />
@@ -887,47 +1067,89 @@ const NavigationTabsWithChat = () => {
                     <Typewriter text={fullResponse} className="relative" />
                   ) : msg.isJson ? (
                     <div className="mt-1">
-                      {/* Display single intent data */}
                       {typeof msg.content === "object" &&
                       msg.content !== null ? (
                         <div>
                           <h4 className="font-bold mb-2">
                             {msg.content.action
-                              ? `Action: ${msg.content.action}`
+                              ? `Action: ${convertKeysToCamelCase(
+                                  msg.content.action
+                                )}`
                               : null}
                           </h4>
                           <div className="pl-4">
                             {Object.entries(msg.content)
-                              .filter(
-                                ([key]) =>
-                                  !["success", "message", "status"].includes(
-                                    key
-                                  )
-                              )
+                              .filter(([key, value]) => {
+                                // Skip if value is empty, null, or undefined
+                                if (
+                                  value === "" ||
+                                  value === null ||
+                                  value === undefined
+                                ) {
+                                  return false;
+                                }
+                                // Skip specific system keys
+                                if (
+                                  ["success", "message", "status"].includes(key)
+                                ) {
+                                  return false;
+                                }
+                                // Skip empty objects or arrays
+                                if (
+                                  typeof value === "object" &&
+                                  Object.keys(value).length === 0
+                                ) {
+                                  return false;
+                                }
+                                return true;
+                              })
                               .map(([key, value]) => {
+                                // Convert key to camelCase
+                                const formattedKey = key.replace(
+                                  /_([a-z])/g,
+                                  (g) => g[1].toUpperCase()
+                                );
+
+                                // Format the display value
+                                let displayValue;
+                                if (
+                                  typeof value === "object" &&
+                                  value !== null
+                                ) {
+                                  if (
+                                    Array.isArray(value) &&
+                                    value.length === 0
+                                  ) {
+                                    return null; // Skip empty arrays
+                                  }
+                                  displayValue = JSON.stringify(
+                                    convertKeysToCamelCase(value),
+                                    null,
+                                    2
+                                  );
+                                } else {
+                                  displayValue = convertKeysToCamelCase(value);
+                                }
+
                                 return (
                                   <div key={key} className="mb-1">
                                     <strong>
-                                      {key.charAt(0).toUpperCase() +
-                                        key.slice(1)}
+                                      {formattedKey.charAt(0).toUpperCase() +
+                                        formattedKey.slice(1)}
                                       :
                                     </strong>{" "}
-                                    {/* <Typewriter text={value} className="relative" /> */}
-                                    {value}
+                                    {displayValue}
                                   </div>
                                 );
                               })}
                           </div>
                         </div>
                       ) : (
-                        // <>{msg.content}</>
-                        <>
-                          <Typewriter text={msg.content} className="relative" />
-                        </>
+                        <Typewriter text={msg.content} className="relative" />
                       )}
                     </div>
                   ) : typeof msg.content === "object" ? (
-                    JSON.stringify(msg.content, null, 2)
+                    JSON.stringify(convertKeysToCamelCase(msg.content), null, 2)
                   ) : (
                     <Typewriter text={msg.content} className="relative" />
                     // msg.content

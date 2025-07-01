@@ -42,10 +42,10 @@ const WalletConnections = () => {
       const response = await FireApi(`/create-wallet/${formData.chain}`, "POST");
 
       setCreatedWallet(response);
-      localStorage.setItem("wallet-address", JSON.stringify(response.address));
+      localStorage.setItem(`${formData?.chain.toLowerCase()}-address`, response?.address);
       setFormData((prev) => ({
         ...prev,
-        user_id: "",
+        // user_id: "",
         chain: "",
       }));
       toast.success("Wallet created successfully!");
@@ -79,6 +79,7 @@ const WalletConnections = () => {
               className="w-full px-3 py-2 border border-gray-300 dark:bg-[#232428] dark:border-gray-700' rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500  dark:text-white"
               required
               min="1"
+              disabled={true}
             />
           </div>
 
