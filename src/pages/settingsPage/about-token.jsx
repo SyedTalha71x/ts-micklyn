@@ -21,8 +21,17 @@ const AboutToken = () => {
     balance: "",
     ethBalance: "",
     symbol: "",
+    usdt:"",
+    usdc:"",
     loading: false,
   });
+
+  const [address, setAddress] = useState({
+    ethAddress: "",
+    bscAddress: "",
+    solanaAddress: "",
+    polygonAddress: ""
+  })
 
   const tabs = [{ label: "Token Info" }, { label: "Token Balance" }];
 
@@ -48,17 +57,25 @@ const AboutToken = () => {
   };
 
   // Get the appropriate wallet address based on selected network
-  const getWalletAddress = () => {
+   const getWalletAddress = () => {
+    let address = "";
     switch (selectedNetwork) {
       case "ethereum":
-        return import.meta.env.VITE_ETHEREUM_WALLET_ADDRESS;
+        address = localStorage.getItem('eth-address') || "";
+        setAddress(prev => ({ ...prev, ethAddress: address }));
+        break;
       case "polygon":
-        return import.meta.env.VITE_POLYGON_WALLET_ADDRESS;
+        address = localStorage.getItem('polygon-address') || "";
+        setAddress(prev => ({ ...prev, polygonAddress: address }));
+        break;
       case "solana":
-        return import.meta.env.VITE_SOLANA_WALLET_ADDRESS;
+        address = localStorage.getItem('solana-address') || "";
+        setAddress(prev => ({ ...prev, solanaAddress: address }));
+        break;
       default:
-        return import.meta.env.VITE_WALLET_ADDRESS; // fallback
+        address = localStorage.getItem('eth-address') || ""; 
     }
+    return address;
   };
 
   const TokenInfo = async () => {
@@ -103,11 +120,12 @@ const AboutToken = () => {
         balance: tokenRes.Balance ?? "N/A",
         ethBalance: tokenRes.balance ?? "N/A",
         symbol: tokenRes.symbol || selectedToken,
+        usdt: tokenRes.USDT || 0,
+        usdc: tokenRes.USDC || 0,
         loading: false,
       });
     } catch (error) {
       console.log(error);
-      // toast.error(error.message);
       setTokenBalance((prev) => ({ ...prev, loading: false }));
     }
   };
@@ -205,8 +223,9 @@ const AboutToken = () => {
                   Balance: {formatValue(tokenBalance.balance)}
                 </li>{" "}
                 <li>
-                  Token Balance: {formatValue(tokenBalance.ethBalance)}{" "}
-                  { selectedToken}
+                  Token Balance: {selectedToken=== 'USDC' ? tokenBalance?.usdc : 
+                  selectedToken === 'USDT' ? tokenBalance?.usdt :
+                  tokenBalance.balance}
                 </li>
                 <li>Symbol: {selectedToken}</li>
               </ul>

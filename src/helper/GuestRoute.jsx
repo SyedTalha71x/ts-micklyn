@@ -6,7 +6,7 @@ const GuestRoute = () => {
   const isAuthenticated = localStorage.getItem("user-visited-dashboard");
 
   if (isAuthenticated) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/chat" replace />;
   }
 
   return (

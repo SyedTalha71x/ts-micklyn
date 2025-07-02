@@ -74,13 +74,13 @@ const SettingsLayout = () => {
           ) : (
             <div className="flex justify-between items-center w-full px-4 py-2">
               {/* Left Side: Arrow + Heading */}
-              <div className="flex items-center space-x-2">
-                <ArrowLeft
+              <div className="flex items-center">
+                {/* <ArrowLeft
                   size={24}
                   className="cursor-pointer bg-black dark:bg-white dark:text-black rounded text-white p-1"
                   onClick={() => navigate(-1)}
-                />
-                <h3 className="text-xl dark:text-white manrope-font">
+                /> */}
+                <h3 className="text-xl dark:text-white font-bold manrope-font">
                   Account Setting
                 </h3>
               </div>

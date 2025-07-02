@@ -30,7 +30,7 @@ const TransferToken = () => {
   const getWalletAddresses = async () => {
     try {
       const res = await FireApi("/wallets");
-      setWalletDetails(res?.wallets);
+      setWalletDetails(res?.data);
       return res;
     } catch (error) {
       console.log(error, "error");
@@ -42,6 +42,7 @@ const TransferToken = () => {
     getWalletAddresses();
   }, []);
 
+  console.log(formData?.address ,'fffffffff')
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -97,7 +98,7 @@ const TransferToken = () => {
             {/* <option value="USDC">USDC</option> */}
             {walletDetails?.map((wallet) => (
               <option key={wallet._id} value={wallet.address} className="text-sm cursor-pointer overflow-auto">
-                {wallet.address}
+                {wallet?.blockchain}: {wallet.address}
               </option>
             ))}
           </select>

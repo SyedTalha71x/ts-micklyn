@@ -63,7 +63,7 @@ const WalletConnections = () => {
 
       <div className="bg-white dark:bg-[#101010] rounded-lg shadow p-6">
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
+          {/* <div>
             <label
               htmlFor="user_id"
               className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
@@ -81,7 +81,7 @@ const WalletConnections = () => {
               min="1"
               disabled={true}
             />
-          </div>
+          </div> */}
 
           <div>
             <label

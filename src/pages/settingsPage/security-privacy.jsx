@@ -19,7 +19,7 @@ const SecurityPrivacy = () => {
         <Card className="p-4 flex flex-row justify-between items-center cursor-pointer  transition-colors">
           <span className="dark:text-white">Change Password</span>
           <div className="flex items-center">
-            <span className="text-gray-800 mr-2 dark:text-white">USD</span>
+            {/* <span className="text-gray-800 mr-2 dark:text-white">USD</span> */}
             <ChevronRight className="h-5 w-5 text-muted-foreground" />
           </div>
         </Card>
