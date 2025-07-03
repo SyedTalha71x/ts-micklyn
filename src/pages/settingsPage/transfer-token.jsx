@@ -29,7 +29,7 @@ const TransferToken = () => {
 
   const getWalletAddresses = async () => {
     try {
-      const res = await FireApi("/wallets");
+      const res = await FireApi("/portfolio");
       setWalletDetails(res?.data);
       return res;
     } catch (error) {
@@ -42,7 +42,6 @@ const TransferToken = () => {
     getWalletAddresses();
   }, []);
 
-  console.log(formData?.address ,'fffffffff')
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();

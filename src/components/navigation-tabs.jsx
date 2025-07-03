@@ -50,6 +50,7 @@ const NavigationTabsWithChat = () => {
   const analyserRef = useRef(null);
   const microphoneRef = useRef(null);
 
+  
   useEffect(() => {
     // Get addresses from localStorage
     const solanaAddress = localStorage.getItem("solana-address") || "";
@@ -773,7 +774,6 @@ const NavigationTabsWithChat = () => {
     } catch (error) {
       console.error("Error fetching chat history:", error);
       resetChat();
-      toast.error(error.message);
     }
   };
 
