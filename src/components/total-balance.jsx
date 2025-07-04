@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
 import { chatHistoryUrl, FireApi } from "@/hooks/fireApi";
 import ChatHistoryTab from "./ChatHistoryTab";
-import toast from "react-hot-toast";
 import { jwtDecode } from "jwt-decode";
 import { useHistory } from "@/Context/HistoryContext";
 import { useNavigate } from "react-router-dom";
@@ -25,7 +24,6 @@ export const handleCreateSession = async ({
       },
       chatHistoryUrl
     );
-    toast.success("Chat session created successfully");
     localStorage.setItem("chat_session", res?.data?.session_id);
     setUserInfo({
       sessionId: res?.data?.session_id,
@@ -190,24 +188,28 @@ export default function TotalBalance() {
   };
 
   useEffect(() => {
-    if (userId && userEmail && !sessionCreated) {
+    const alreadyCreated = localStorage.getItem("session_created");
+    if (userId && userEmail && !alreadyCreated) {
       handleCreateSession({ userId, userEmail, setUserInfo, handleGetHistory });
+      localStorage.setItem("session_created", "true");
       setSessionCreated(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId, userEmail, sessionCreated]);
+  }, [userId, userEmail]);
+
   return (
     <div className="flex flex-col gap-4">
       {/* create new chat */}
       <button
-        onClick={() =>
+        onClick={() => {
+          localStorage.removeItem("session_created");
           handleCreateSession({
             userId,
             userEmail,
             setUserInfo,
             handleGetHistory,
-          })
-        }
+          });
+          localStorage.setItem("session_created", "true");
+        }}
         className="rounded-md cursor-pointer shadow-md gap-2 text-sm font-semibold text-white bg-primary text-center py-2 w-20"
       >
         New Chat
