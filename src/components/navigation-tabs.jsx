@@ -6,7 +6,6 @@ import { Mic } from "lucide-react";
 import { jwtDecode } from "jwt-decode";
 import { Typewriter } from "@/lib/Typewriter";
 import ConfirmationModal from "./ConfirmationModal";
-import toast from "react-hot-toast";
 import { useHistory } from "@/Context/HistoryContext";
 import Catoshi from "./Catoshi";
 
@@ -30,7 +29,6 @@ const NavigationTabsWithChat = () => {
   const [checkConfirmation, setCheckConfirmation] = useState(null);
   const messageContainerRef = useRef(null);
   const hasHandledIntents = useRef({ intent0: false, intent1: false });
-  const [finalReply, setFinalReply] = useState(null);
 
   // New state for better intent handling
   const [currentIntentIndex, setCurrentIntentIndex] = useState(0);
@@ -840,7 +838,7 @@ const NavigationTabsWithChat = () => {
 
             // Convert transaction data keys to camelCase
             if (
-              responseType === "transaction" &&
+              responseType === "transaction" || responseType === "transaction_complete" &&
               typeof replyContent === "object"
             ) {
               replyContent = convertKeysToCamelCase(replyContent);
@@ -867,6 +865,15 @@ const NavigationTabsWithChat = () => {
                   transactionData: replyContent,
                 };
                 break;
+
+                case "transaction_complete":
+                  content = replyContent;
+                  isJson = true;
+                  additionalProps = {
+                    responseType: "transaction_complete",
+                    transactionData: replyContent,
+                  };
+                  break;
 
               case "all_wallet_addresses":
                 const addresses =

@@ -143,3 +143,24 @@
   animation: pulse 1.5s infinite;
   color: red;
 }
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 5px !important;
+  border-radius: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #d8d6d6; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #c7c7c7; 
+}

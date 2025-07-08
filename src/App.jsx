@@ -1,28 +1,27 @@
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-
-import CreateAccount from "./pages/create-account";
-import VerifyOtp from "./pages/verify-otp";
-
-import SettingsLayout from "./layouts/settings-layout";
-import PreferencesPage from "./pages/settingsPage/preferences";
-import WalletConnections from "./pages/settingsPage/wallet-connections";
-import ManageWallet from "./pages/settingsPage/manage-wallet";
-import Activity from "./pages/settingsPage/activity";
-import SystemStatus from "./pages/settingsPage/system-status";
-import PriceAlert from "./pages/settingsPage/price-alert";
-import Notification from "./pages/settingsPage/notification";
-import SecurityPrivacy from "./pages/settingsPage/security-privacy";
-
+import { lazy } from "react";
 import MobileSidebar from "./components/ui/mobile-sidebar";
-import Home from "./pages/home";
-import Chat from "./pages/chat";
-import GraphChat from "./pages/graph-chat";
-import Login from "./pages/login";
 import GuestRoute from "./helper/GuestRoute";
 import AuthRoute from "./helper/AuthRoute";
-import AboutToken from "../src/pages/settingsPage/about-token";
-import TransferToken from "./pages/settingsPage/transfer-token";
+
+// Lazy-loaded components
+const CreateAccount = lazy(() => import("./pages/create-account"));
+const VerifyOtp = lazy(() => import("./pages/verify-otp"));
+const SettingsLayout = lazy(() => import("./layouts/settings-layout"));
+const PreferencesPage = lazy(() => import("./pages/settingsPage/preferences"));
+const WalletConnections = lazy(() => import("./pages/settingsPage/wallet-connections"));
+const ManageWallet = lazy(() => import("./pages/settingsPage/manage-wallet"));
+const SystemStatus = lazy(() => import("./pages/settingsPage/system-status"));
+const PriceAlert = lazy(() => import("./pages/settingsPage/price-alert"));
+const Notification = lazy(() => import("./pages/settingsPage/notification"));
+const SecurityPrivacy = lazy(() => import("./pages/settingsPage/security-privacy"));
+const Home = lazy(() => import("./pages/home"));
+const Chat = lazy(() => import("./pages/chat"));
+const GraphChat = lazy(() => import("./pages/graph-chat"));
+const Login = lazy(() => import("./pages/login"));
+const AboutToken = lazy(() => import("./pages/settingsPage/about-token"));
+const TransferToken = lazy(() => import("./pages/settingsPage/transfer-token"));
 
 function App() {
   return (

@@ -20,13 +20,13 @@ const style = {
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
-  width: 400,
+  // width: 400,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
   outline: 'none',
-  border: 'none',
+  // border: 'none',
   borderRadius: '8px',
 
 };
