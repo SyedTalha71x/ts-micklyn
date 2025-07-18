@@ -47,7 +47,7 @@ const ChatHistoryTab = () => {
       }
 
       await FireApi(
-        `/chat-sessions/${userId}/${data?.session_id}`,
+        `/delete-chat-sessions/${userId}/${data?.session_id}`,
         "DELETE",
         null,
         chatHistoryUrl

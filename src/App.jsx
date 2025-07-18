@@ -1,9 +1,17 @@
 import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { lazy } from "react";
 import MobileSidebar from "./components/ui/mobile-sidebar";
 import GuestRoute from "./helper/GuestRoute";
 import AuthRoute from "./helper/AuthRoute";
+import DashboardLayout from "./layouts/dashboardLayout";
+import Rewards from "./pages/adminDashboard/Rewards";
+import TaskManagement from "./pages/adminDashboard/TaskManagement";
+import Leaderboard from "./pages/adminDashboard/Leaderboard";
+import UserActivity from "./pages/adminDashboard/UserActivity";
+import DashboardHome from "./pages/adminDashboard/DashboardHome";
+import Notifications from "./pages/adminDashboard/Notifications";
+import ProfileManagement from "./pages/adminDashboard/ProfileManagement";
 
 // Lazy-loaded components
 const CreateAccount = lazy(() => import("./pages/create-account"));
@@ -56,6 +64,17 @@ function App() {
                 <Route path="system-status" element={<SystemStatus />} />
                 <Route path="price-alert" element={<PriceAlert />} />
                 <Route path="notification" element={<Notification />} />
+              </Route>
+
+              <Route path="admin" element={<DashboardLayout />}>
+                <Route index element={<Navigate to="dashboard" replace />} />
+                <Route path="dashboard" element={<DashboardHome/>}/>
+                <Route path="rewards" element={<Rewards/>}/>
+                <Route path="task-management" element={<TaskManagement/>}/>
+                <Route path="leaderboard" element={<Leaderboard/>}/>
+                <Route path="user-activity" element={<UserActivity/>}/>
+                <Route path="notifications" element={<Notifications/>}/>
+                <Route path="profile-management" element={<ProfileManagement/>}/>
               </Route>
             </Route>
           </Routes>

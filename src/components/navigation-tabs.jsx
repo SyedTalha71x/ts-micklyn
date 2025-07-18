@@ -748,7 +748,7 @@ const NavigationTabsWithChat = () => {
       }
 
       const chatRes = await FireApi(
-        `/chat-sessions/${userId}/${userInfo.sessionId}`,
+        `/get-chat-sessions/${userId}/${userInfo.sessionId}`,
         "GET",
         null,
         chatHistoryUrl
