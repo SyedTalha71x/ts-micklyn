@@ -44,6 +44,18 @@ function App() {
               <Route path="verify-otp" element={<VerifyOtp />} />
             </Route>
 
+
+              <Route path="admin" element={<DashboardLayout />}>
+                <Route index element={<Navigate to="dashboard" replace />} />
+                <Route path="dashboard" element={<DashboardHome/>}/>
+                <Route path="rewards" element={<Rewards/>}/>
+                <Route path="task-management" element={<TaskManagement/>}/>
+                <Route path="leaderboard" element={<Leaderboard/>}/>
+                <Route path="user-activity" element={<UserActivity/>}/>
+                <Route path="notifications" element={<Notifications/>}/>
+                <Route path="profile-management" element={<ProfileManagement/>}/>
+              </Route>
+              
             <Route element={<AuthRoute />}>
               <Route path="/" replace />
               <Route path="chat" element={<Chat />} />
@@ -66,16 +78,6 @@ function App() {
                 <Route path="notification" element={<Notification />} />
               </Route>
 
-              <Route path="admin" element={<DashboardLayout />}>
-                <Route index element={<Navigate to="dashboard" replace />} />
-                <Route path="dashboard" element={<DashboardHome/>}/>
-                <Route path="rewards" element={<Rewards/>}/>
-                <Route path="task-management" element={<TaskManagement/>}/>
-                <Route path="leaderboard" element={<Leaderboard/>}/>
-                <Route path="user-activity" element={<UserActivity/>}/>
-                <Route path="notifications" element={<Notifications/>}/>
-                <Route path="profile-management" element={<ProfileManagement/>}/>
-              </Route>
             </Route>
           </Routes>
         </BrowserRouter>

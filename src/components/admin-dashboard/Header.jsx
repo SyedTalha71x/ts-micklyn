@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { FiBell, FiSearch, FiUser, FiChevronDown } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
-
+  const navigate = useNavigate();
   const notifications = [
     { id: 1, text: 'New user registered', time: '2 mins ago', read: false },
     { id: 2, text: 'Task completed by user', time: '1 hour ago', read: true },
@@ -12,7 +13,10 @@ const Header = () => {
   ];
 
   const unreadCount = notifications.filter(n => !n.read).length;
-
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/login");
+  };
   return (
     <header className="bg-white shadow-sm z-10">
       <div className="flex items-center justify-between px-6 py-2">
@@ -78,7 +82,7 @@ const Header = () => {
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
                 <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
                 <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
-                <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</a>
+                <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={handleLogout}>Logout</a>
               </div>
             )}
           </div>

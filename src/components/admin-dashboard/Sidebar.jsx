@@ -19,6 +19,7 @@ const navItems = [
   { name: 'Leaderboard', icon: FiUsers, path: '/admin/leaderboard' },
   { name: 'User Activity', icon: FiActivity, path: '/admin/user-activity' },
   { name: 'Notifications', icon: FiBell, path: '/admin/notifications' },
+  {name: 'Dashboard', icon: FiHome, path: '/admin/dashboard'},
   { name: 'Settings', icon: FiSettings, path: '/admin/profile-management' },
 ];
 

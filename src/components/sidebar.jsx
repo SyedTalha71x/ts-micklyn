@@ -18,6 +18,8 @@ const Sidebar = ({ activeItem, setActiveItem, openModal, isMobile }) => {
     { name: "Preferences", path: "/settings/preferences" },
     // { name: "Price Alert", path: "/settings/price-alert" },
     { name: "Notification", path: "/settings/notification" },
+      {name: 'Dashboard', path: '/admin/dashboard'},
+  
     { name: "Logout", onClick: handleLogout },
   ];
 
