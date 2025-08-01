@@ -1,14 +1,14 @@
 // server ip 
 export const baseUrl = "http://64.23.166.88:8016";
-// export const baseUrl = "http://192.168.18.113:5019";
+// export const baseUrl = "https://2ce24f676cd6.ngrok-free.app";
 
 // this server api for the chat history & collection 
 export const chatHistoryUrl = "http://64.23.166.88:5019";
-// export const chatHistoryUrl = "http://192.168.18.113:5019";
+// export const chatHistoryUrl = "http://192.168.18.10:5019";
 
 // server ip of Python backend 
 export const chatBaseUrl = "http://64.23.166.88:5019";
-// export const chatBaseUrl = "http://192.168.18.113:5019";
+// export const chatBaseUrl = "http://192.168.18.10:5019";
 
 
 

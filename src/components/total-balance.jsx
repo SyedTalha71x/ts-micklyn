@@ -198,9 +198,9 @@ export default function TotalBalance() {
   }, [userId, userEmail]);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 dark:bg-black">
       {/* create new chat */}
-      <button
+      <button 
         onClick={() => {
           localStorage.removeItem("session_created");
           handleCreateSession({
@@ -211,13 +211,13 @@ export default function TotalBalance() {
           });
           localStorage.setItem("session_created", "true");
         }}
-        className="rounded-md cursor-pointer shadow-md gap-2 text-sm font-semibold text-white bg-primary text-center py-2 w-20"
+        className="rounded-md cursor-pointer shadow-md gap-2 dark:bg-[#101010] dark:border dark:shadow-sm text-sm font-semibold text-white bg-primary text-center py-2 w-20 dark:text-white "
       >
         New Chat
       </button>
 
       <div className="flex justify-between items-center">
-        <div className="flex items-center gap-4 justify-between cursor-pointer shadow-md bg-background px-4 py-2 w-full rounded-sm">
+        <div className="flex items-center gap-4 justify-between cursor-pointer shadow-md bg-background dark:border px-4 py-2 w-full rounded-sm">
           <h2
             onClick={() => setOpenDropdown(!openDropdown)}
             className="flex rounded-lg items-center gap-2 text-sm font-semibold dark:text-white"

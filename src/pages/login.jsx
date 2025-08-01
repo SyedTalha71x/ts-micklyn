@@ -27,7 +27,7 @@ export default function Login() {
 
   const navigate = useNavigate();
   const isFormEmpty = !password || !email;
-const { setUserInfo, handleGetHistory } = useHistory(); 
+  const { setUserInfo, handleGetHistory } = useHistory();
 
   // Check if the screen size is mobile
   useEffect(() => {
@@ -43,55 +43,59 @@ const { setUserInfo, handleGetHistory } = useHistory();
     };
   }, []);
 
+  const HandleUserLogin = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      const response = await FireApi("/login", "POST", { email, password });
 
-const HandleUserLogin = async (e) => {
-  e.preventDefault();
-  setIsLoading(true);
-  try {
-    const response = await FireApi("/login", "POST", { email, password });
+      const token = response?.data?.token;
+      const decodedToken = jwtDecode(token);
 
-    const token = response?.data?.token;
-    const decodedToken = jwtDecode(token);
+      localStorage.setItem("user-visited-dashboard", token);
+      localStorage.setItem("role", response?.data?.role);
 
-    localStorage.setItem("user-visited-dashboard", token);
+      response?.data?.wallets?.forEach((wallet) => {
+        switch (wallet.chain.toUpperCase()) {
+          case "SOLANA":
+            localStorage.setItem("solana-address", wallet.address);
+            break;
+          case "ETH":
+            localStorage.setItem("eth-address", wallet.address);
+            break;
+          case "POLYGON":
+            localStorage.setItem("polygon-address", wallet.address);
+            break;
+          case "BSC":
+            localStorage.setItem("bsc-address", wallet.address);
+            break;
+          default:
+            console.warn(`Unknown chain: ${wallet.chain}`);
+        }
+      });
 
-    response?.data?.wallets?.forEach((wallet) => {
-      switch (wallet.chain.toUpperCase()) {
-        case "SOLANA":
-          localStorage.setItem("solana-address", wallet.address);
-          break;
-        case "ETH":
-          localStorage.setItem("eth-address", wallet.address);
-          break;
-        case "POLYGON":
-          localStorage.setItem("polygon-address", wallet.address);
-          break;
-        case "BSC":
-          localStorage.setItem("bsc-address", wallet.address);
-          break;
-        default:
-          console.warn(`Unknown chain: ${wallet.chain}`);
+      setUserInfo({
+        userId: decodedToken.id,
+        email: decodedToken.email,
+        sessionId: "",
+      });
+
+      handleGetHistory(decodedToken.id);
+
+      toast.success(response.message || "User Login Successful");
+      const role = response?.data?.role;
+      if (role === "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/chat");
       }
-    });
-
-    setUserInfo({
-      userId: decodedToken.id,
-      email: decodedToken.email,
-      sessionId: "",
-    });
-
-    handleGetHistory(decodedToken.id);
-
-    toast.success(response.message || "User Login Successful");
-    navigate("/chat");
-
-  } catch (error) {
-    console.log("Login error:", error);
-    toast.error(error.message);
-  } finally {
-    setIsLoading(false);
-  }
-};
+    } catch (error) {
+      console.log("Login error:", error);
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const HandleRegisterNavigate = () => {
     navigate("/create-account");
@@ -139,7 +143,7 @@ const HandleUserLogin = async (e) => {
                 onChange={(e) => setPassword(e.target.value)}
                 className="text-sm border border-[#687588] dark:bg-[#080808]"
               />
-              
+
               <Button
                 variant="outline"
                 className={`w-full text-sm h-10 ${

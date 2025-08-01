@@ -5,7 +5,7 @@ import CryptoTable from "@/components/crypto-table"
 import MobileHeader from "@/components/mobile-header"
 import NavigationTabs from "@/components/navigation-tabs"
 import TotalBalance from "@/components/total-balance"
-import FinancialChart from "@/components/financial.chart"
+// import FinancialChart from "@/components/financial.chart"
 
 export default function Chat() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -18,7 +18,7 @@ export default function Chat() {
       </div>
 
       {/* Sidebar */}
-      <div className="hidden md:flex md:w-[20%] md:flex-shrink-0 bg-gray-100 shadow-xl">
+      <div className="hidden md:flex md:w-[20%] md:flex-shrink-0 bg-gray-100 dark:bg-black shadow-xl dark:border dark:border-r">
         <div className="h-full w-full  p-4">
           <TotalBalance />
         </div>

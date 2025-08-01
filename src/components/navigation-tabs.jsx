@@ -1052,7 +1052,7 @@ const NavigationTabsWithChat = () => {
             };
 
             const getMessageColor = () => {
-              if (msg.wallet === "You") return "bg-gray-200 text-black";
+              if (msg.wallet === "You") return "bg-gray-200 dark:bg-background dark:text-white dark:border dark:border-xs text-black";
               if (msg.status === "error") return messageColorClasses.error;
               if (msg.status === "success") return messageColorClasses.success;
               return messageColorClasses.default;
@@ -1197,10 +1197,10 @@ const NavigationTabsWithChat = () => {
           )}
         </div>
 
-        <div className="sticky bottom-0 mt-[5rem] bg-white dark:bg-[#101010] border-t border-gray-200 dark:border-gray-700 p-4">
+        <div className="sticky bottom-0 mt-[5rem] bg-white dark:bg-black border-t border-gray-200 dark:border-none dark:border p-4">
           <div className="max-w-4xl mx-auto flex items-center gap-2">
             <input
-              className="flex-1 bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-2 text-sm dark:text-gray-200 dark:placeholder-gray-400"
+              className="flex-1 bg-gray-100 dark:bg-black dark:border rounded-lg px-4 py-2 text-sm dark:text-gray-200 dark:placeholder-gray-400"
               placeholder="Write message here..."
               value={message}
               onChange={(e) => setMessage(e.target.value)}

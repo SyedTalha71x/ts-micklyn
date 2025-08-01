@@ -64,7 +64,7 @@ const ChatHistoryTab = () => {
     <div className="w-full">
       {/* Header */}
       <div
-        className="flex justify-between items-center bg-background px-4 py-3 shadow-md rounded-lg cursor-pointer text-sm font-semibold dark:text-white"
+        className="flex justify-between items-center bg-background dark:border px-4 py-3 shadow-md rounded-lg cursor-pointer text-sm font-semibold dark:text-white"
         onClick={() => setOpenDropdown(!openDropdown)}
       >
         <span>Chat History</span>
@@ -83,7 +83,7 @@ const ChatHistoryTab = () => {
               <div
                 onClick={() => handleGetSessionId(item)}
                 key={index}
-                className="mr-2 text-black text-sm bg-white shadow-xs p-2 rounded-md flex justify-between items-center mb-2"
+                className="mr-2 text-black text-sm bg-white shadow-xs p-2 rounded-md flex justify-between items-center mb-2 dark:text-white dark:bg-background dark:border dark:border-xs"
               >
                 <p className="cursor-pointer text-[13px] truncate max-w-[180px]">
                   {item?.chat_title || "New Chat"}
