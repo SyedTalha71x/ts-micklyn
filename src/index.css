@@ -4,6 +4,9 @@
 
 @custom-variant dark (&:is(.dark *));
 
+body{
+  overflow-y: visible;
+}
 
 :root {
   --background: oklch(1 0 0);
@@ -147,17 +150,18 @@
 ::-webkit-scrollbar {
   width: 8px;
   height: 5px !important;
-  border-radius: 10px;
+  border-radius: 20px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #f1f1f1; 
+  background: none; 
 }
  
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #d8d6d6; 
+  background: #706f6f; 
+  border-radius: 25px;
 }
 
 /* Handle on hover */

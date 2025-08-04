@@ -2,7 +2,69 @@ import React, { useState, useEffect } from "react";
 import Chart from "react-apexcharts";
 import { Typewriter } from "@/lib/Typewriter";
 
-const Catoshi = ({ data }) => {
+// Helper component to render parsed text (without animation)
+const StaticText = ({ text = "" }) => {
+  if (!text || typeof text !== "string") return null;
+
+  const parseTextSegments = (text) => {
+    const segments = [];
+    let currentIndex = 0;
+    
+    const boldRegex = /\*\*(.*?)\*\*/g;
+    let match;
+    
+    while ((match = boldRegex.exec(text)) !== null) {
+      if (match.index > currentIndex) {
+        const beforeText = text.slice(currentIndex, match.index);
+        beforeText.split('').forEach(char => {
+          segments.push({ char, isBold: false });
+        });
+      }
+      
+      // Add bold text
+      match[1].split('').forEach(char => {
+        segments.push({ char, isBold: true });
+      });
+      
+      currentIndex = match.index + match[0].length;
+    }
+    
+    if (currentIndex < text.length) {
+      const remainingText = text.slice(currentIndex);
+      remainingText.split('').forEach(char => {
+        segments.push({ char, isBold: false });
+      });
+    }
+    
+    return segments;
+  };
+
+  const segments = parseTextSegments(text);
+
+  return (
+    <div style={{ fontFamily: 'inherit', lineHeight: 1.6 }}>
+      {segments.map((segment, index) => {
+        if (segment.char === '\n') {
+          return <br key={`br-${index}`} />;
+        }
+        
+        return (
+          <span
+            key={`${segment.char}-${index}`}
+            style={{
+              fontWeight: segment.isBold ? 600 : 'normal',
+              fontSize: segment.isBold ? '1.1em' : '1em',
+            }}
+          >
+            {segment.char}
+          </span>
+        );
+      })}
+    </div>
+  );
+};
+
+const Catoshi = ({ data, isHistory = false }) => {
   const [step, setStep] = useState(0);
   const [loadingSteps, setLoadingSteps] = useState([]);
   const [timeRange, setTimeRange] = useState("all");
@@ -50,7 +112,6 @@ const Catoshi = ({ data }) => {
         });
         break;
       default:
-        // "all" - use all data
         break;
     }
 
@@ -89,6 +150,8 @@ const Catoshi = ({ data }) => {
 
   // Sequence controller
   useEffect(() => {
+    if (isHistory) return; // Skip animation logic in history view
+
     if (step === 0 && descriptionData) {
       setTimeout(() => setStep(1), 4000);
     } else if (step === 1 && currentData) {
@@ -105,82 +168,98 @@ const Catoshi = ({ data }) => {
       let totalLoadingTime = steps.length * 2000 + 3000;
       setTimeout(() => setStep(3), totalLoadingTime);
     }
-  }, [step, descriptionData, currentData, chartData]);
+  }, [step, descriptionData, currentData, chartData, isHistory]);
 
   return (
     <div className="space-y-4">
       {/* Step 0: Description */}
-      {descriptionData && step >= 0 && (
+      {descriptionData && (
         <div className="prose dark:prose-invert max-w-none p-4 rounded-lg">
-          <Typewriter text={descriptionData.data} />
+          {isHistory ? (
+            <StaticText text={descriptionData.data} />
+          ) : (
+            step >= 0 && <Typewriter text={descriptionData.data} />
+          )}
         </div>
       )}
 
       {/* Step 1: Current Data */}
-      {currentData && step >= 1 && (
-        <div className="bg-white dark:bg-gray-700 p-4 rounded-lg">
-          <h3 className="font-bold text-sm mb-3">
-            Current Market Data
-          </h3>
-          <div className="grid grid-cols-2 gap-6">
-            {Object.entries(currentData.data).map(([key, value]) => (
-              <div key={key} className="flex justify-between border-b">
-                <span className="font-bold ">
-                  <Typewriter text={`${key}:`} speed={30} />
-                </span>
-                <span>
-                  <Typewriter
-                    text={value.toString()}
-                    speed={30}
-                    delay={key.length * 50}
-                  />
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Step 2-3: Chart Loading & Chart Display */}
-      {chartData && step >= 2 && (
-        <div className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
-          {step < 3 ? (
-            <div className="space-y-2">
-              {loadingSteps.map((stepText, index) => (
-                <div key={index} className="flex items-center">
-                  <div
-                    className="w-4 h-4 rounded-full bg-blue-500 mr-2 animate-pulse"
-                    style={{ animationDelay: `${index * 0.2}s` }}
-                  />
-                  <Typewriter text={stepText} speed={20} delay={index * 1000} />
+      {currentData && (
+        (isHistory || step >= 1) && (
+          <div className="bg-white dark:bg-gray-700 p-4 rounded-lg">
+            <h3 className="font-bold text-sm mb-3">
+              {isHistory ? "Market Data" : "Current Market Data"}
+            </h3>
+            <div className="grid grid-cols-2 gap-6">
+              {Object.entries(currentData.data).map(([key, value]) => (
+                <div key={key} className="flex justify-between border-b">
+                  <span className="font-bold">
+                    {isHistory ? (
+                      <StaticText text={`${key}:`} />
+                    ) : (
+                      <Typewriter text={`${key}:`} speed={30} />
+                    )}
+                  </span>
+                  <span>
+                    {isHistory ? (
+                      <StaticText text={value.toString()} />
+                    ) : (
+                      <Typewriter
+                        text={value.toString()}
+                        speed={30}
+                        delay={key.length * 50}
+                      />
+                    )}
+                  </span>
                 </div>
               ))}
             </div>
-          ) : (
-            <>
-              <div className="flex justify-end mb-4">
-                <select
-                  value={timeRange}
-                  onChange={(e) => setTimeRange(e.target.value)}
-                  className="bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-1 text-sm"
-                >
-                  <option value="today">Today</option>
-                  <option value="7days">Last 7 Days</option>
-                  <option value="30days">Last 30 Days</option>
-                  <option value="all">All Time</option>
-                </select>
+          </div>
+        )
+      )}
+
+      {/* Step 2-3: Chart Loading & Chart Display */}
+      {chartData && (
+        (isHistory || step >= 2) && (
+          <div className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
+            {isHistory || step === 3 ? (
+              <>
+                <div className="flex justify-end mb-4">
+                  <select
+                    value={timeRange}
+                    onChange={(e) => setTimeRange(e.target.value)}
+                    className="bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-1 text-sm"
+                  >
+                    <option value="today">Today</option>
+                    <option value="7days">Last 7 Days</option>
+                    <option value="30days">Last 30 Days</option>
+                    <option value="all">All Time</option>
+                  </select>
+                </div>
+                {typeof window !== "undefined" && (
+                  <Chart
+                    options={chartOptions}
+                    series={chartSeries}
+                    type="candlestick"
+                    height={350}
+                  />
+                )}
+              </>
+            ) : (
+              <div className="space-y-2">
+                {loadingSteps.map((stepText, index) => (
+                  <div key={index} className="flex items-center">
+                    <div
+                      className="w-4 h-4 rounded-full bg-blue-500 mr-2 animate-pulse"
+                      style={{ animationDelay: `${index * 0.2}s` }}
+                    />
+                    <Typewriter text={stepText} speed={20} delay={index * 1000} />
+                  </div>
+                ))}
               </div>
-              {typeof window !== "undefined" && (
-                <Chart
-                  options={chartOptions}
-                  series={chartSeries}
-                  type="candlestick"
-                  height={350}
-                />
-              )}
-            </>
-          )}
-        </div>
+            )}
+          </div>
+        )
       )}
     </div>
   );

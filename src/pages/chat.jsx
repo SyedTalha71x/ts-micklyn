@@ -5,7 +5,6 @@ import CryptoTable from "@/components/crypto-table"
 import MobileHeader from "@/components/mobile-header"
 import NavigationTabs from "@/components/navigation-tabs"
 import TotalBalance from "@/components/total-balance"
-// import FinancialChart from "@/components/financial.chart"
 
 export default function Chat() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -19,8 +18,10 @@ export default function Chat() {
 
       {/* Sidebar */}
       <div className="hidden md:flex md:w-[20%] md:flex-shrink-0 bg-gray-100 dark:bg-black shadow-xl dark:border dark:border-r">
-        <div className="h-full w-full  p-4">
-          <TotalBalance />
+        <div className="h-full w-full flex flex-col">
+          <div className="p-4 overflow-y-auto flex-1">
+            <TotalBalance />
+          </div>
         </div>
       </div>
 
@@ -32,8 +33,10 @@ export default function Chat() {
           md:hidden
         `}
       >
-        <div className="h-full overflow-y-auto pt-7">
-          <TotalBalance />
+        <div className="h-full flex flex-col">
+          <div className="overflow-y-auto flex-1 pt-7">
+            <TotalBalance />
+          </div>
         </div>
       </div>
 
@@ -48,7 +51,7 @@ export default function Chat() {
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col relative h-full">
         {/* Bottom Navigation */}
-        <div className="fixed -ml-[2%] md:ml-0 mx-auto md:w-[80%]  p-2">
+        <div className="fixed -ml-[2%] md:ml-0 mx-auto md:w-[80%] p-2">
           <NavigationTabs />
         </div>
       </div>

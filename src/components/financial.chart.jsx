@@ -288,10 +288,10 @@ export default function FinancialChart() {
             <IoAnalytics size={20} />
           </div>
           <div>
-            <div onClick={handleSettingsRedirect}>
+            <div onClick={handleSettingsRedirect} className="relative">
               <button
                 size="sm"
-                className="rounded-lg cursor-pointer text-white bg-primary p-3 border dark:border-gray-600 dark:bg-[#101010] dark:hover:bg-gray-600"
+                className="sticky top-3 right-3 rounded-lg cursor-pointer text-white bg-primary p-3 border dark:border-gray-600 dark:bg-[#101010] dark:hover:bg-gray-600"
               >
                 <Settings size={20} className="dark:text-gray-200" />
               </button>
