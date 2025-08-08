@@ -169,7 +169,7 @@ export default function Login() {
       }
     } catch (error) {
       console.error("❌ Login error:", error);
-      toast.error(error.message);
+      toast.error(error.message || error.message.fcm_token);
       if (error.data?.active === 0) {
         navigate("/verify-otp", { state: { email, key: "login" } });
         return;
