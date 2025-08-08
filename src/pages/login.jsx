@@ -116,7 +116,7 @@ export default function Login() {
       const response = await FireApi("/login", "POST", {
         email,
         password,
-        fcm_token: fcmToken,
+        fcm_token: "ckQgMdBZEhHziy_4dUTPFh:APA91bFKV30ViDE2CwPAZmJUGkRWBlKEg-aYHRgwQoTvtwjIql_vWdzxzjh1ZNRYde6MsnLpZobDqYnH7Rnw3sy1kil-monuOvg8pmABm9D2EwozgnRps_E",
       });
 
       console.log("Login response:", response);
