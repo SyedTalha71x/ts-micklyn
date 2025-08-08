@@ -12,18 +12,28 @@ import UserActivity from "./pages/adminDashboard/UserActivity";
 import DashboardHome from "./pages/adminDashboard/DashboardHome";
 import Notifications from "./pages/adminDashboard/Notifications";
 import ProfileManagement from "./pages/adminDashboard/ProfileManagement";
+import ForgotPassword from "./pages/forgot-password";
+import ResetPassword from "./pages/reset-password";
+import ChangePassword from "./pages/change-password";
+import UserProfile from "./pages/settingsPage/user-profile";
+import WalletBackup from "./pages/settingsPage/wallet-backup";
+import ImportWallet from "./pages/settingsPage/import-wallet";
 
 // Lazy-loaded components
 const CreateAccount = lazy(() => import("./pages/create-account"));
 const VerifyOtp = lazy(() => import("./pages/verify-otp"));
 const SettingsLayout = lazy(() => import("./layouts/settings-layout"));
 const PreferencesPage = lazy(() => import("./pages/settingsPage/preferences"));
-const WalletConnections = lazy(() => import("./pages/settingsPage/wallet-connections"));
+const WalletConnections = lazy(() =>
+  import("./pages/settingsPage/wallet-connections")
+);
 const ManageWallet = lazy(() => import("./pages/settingsPage/manage-wallet"));
 const SystemStatus = lazy(() => import("./pages/settingsPage/system-status"));
 const PriceAlert = lazy(() => import("./pages/settingsPage/price-alert"));
 const Notification = lazy(() => import("./pages/settingsPage/notification"));
-const SecurityPrivacy = lazy(() => import("./pages/settingsPage/security-privacy"));
+const SecurityPrivacy = lazy(() =>
+  import("./pages/settingsPage/security-privacy")
+);
 const Home = lazy(() => import("./pages/home"));
 const Chat = lazy(() => import("./pages/chat"));
 const GraphChat = lazy(() => import("./pages/graph-chat"));
@@ -41,21 +51,25 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/create-account" element={<CreateAccount />} />
               <Route path="/login" element={<Login />} />
-              <Route path="verify-otp" element={<VerifyOtp />} />
+              <Route path="/verify-otp" element={<VerifyOtp />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password" element={<ResetPassword/>}/>
             </Route>
 
+            <Route path="admin" element={<DashboardLayout />}>
+              <Route index element={<Navigate to="dashboard" replace />} />
+              <Route path="dashboard" element={<DashboardHome />} />
+              <Route path="rewards" element={<Rewards />} />
+              <Route path="task-management" element={<TaskManagement />} />
+              <Route path="leaderboard" element={<Leaderboard />} />
+              <Route path="user-activity" element={<UserActivity />} />
+              <Route path="notifications" element={<Notifications />} />
+              <Route
+                path="profile-management"
+                element={<ProfileManagement />}
+              />
+            </Route>
 
-              <Route path="admin" element={<DashboardLayout />}>
-                <Route index element={<Navigate to="dashboard" replace />} />
-                <Route path="dashboard" element={<DashboardHome/>}/>
-                <Route path="rewards" element={<Rewards/>}/>
-                <Route path="task-management" element={<TaskManagement/>}/>
-                <Route path="leaderboard" element={<Leaderboard/>}/>
-                <Route path="user-activity" element={<UserActivity/>}/>
-                <Route path="notifications" element={<Notifications/>}/>
-                <Route path="profile-management" element={<ProfileManagement/>}/>
-              </Route>
-              
             <Route element={<AuthRoute />}>
               <Route path="/" replace />
               <Route path="chat" element={<Chat />} />
@@ -76,8 +90,11 @@ function App() {
                 <Route path="system-status" element={<SystemStatus />} />
                 <Route path="price-alert" element={<PriceAlert />} />
                 <Route path="notification" element={<Notification />} />
+                <Route path="change-password" element={<ChangePassword/>}/>
+                <Route path="user-profile" element={<UserProfile/>}/>
+                <Route path="wallet-backup" element={<WalletBackup/>}/>
+                <Route path="import-wallet" element={<ImportWallet />} />
               </Route>
-
             </Route>
           </Routes>
         </BrowserRouter>

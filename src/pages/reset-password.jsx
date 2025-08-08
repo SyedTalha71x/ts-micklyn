@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  Card,
   CardContent,
   CardHeader,
   CardFooter,
@@ -16,14 +15,13 @@ import { useNavigate } from "react-router-dom";
 import { FireApi } from "@/hooks/fireApi";
 import toast from "react-hot-toast";
 import { Loader } from "lucide-react";
-import GoogleBtn from "@/components/GoogleLogin";
 
-export default function CreateAccount() {
-  const [email, setEmail] = useState("");
+export default function ResetPassword() {
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [password, setPassword] = useState("");
   const [isMobile, setIsMobile] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [unauthorized, setUnathorized] = useState(false);
   const navigate = useNavigate();
   // Check if the screen size is mobile
   useEffect(() => {
@@ -39,6 +37,10 @@ export default function CreateAccount() {
     };
   }, []);
 
+  useEffect(() => {
+    setUnathorized(localStorage.getItem("unauthorized-token"));
+  }, [unauthorized]);
+
   const HandleLoginNavigate = () => {
     navigate("/login");
   };
@@ -47,13 +49,14 @@ export default function CreateAccount() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const response = await FireApi("/register", "POST", {
-        email,
+      const response = await FireApi("/reset-password", "POST", {
+        confirmPassword,
         password,
-      });
+      },
+    );
       console.log(response, "response");
       toast.success(response.message);
-      navigate("/verify-otp", { state: { email, key: "register" } });
+      navigate("/login");
     } catch (error) {
       console.log(error, "error");
       toast.error(error.message);
@@ -62,7 +65,7 @@ export default function CreateAccount() {
     }
   };
 
-  const isFormEmpty = !password || !email;
+  const isFormEmpty = !password || !confirmPassword;
 
   return (
     <div
@@ -86,18 +89,11 @@ export default function CreateAccount() {
                 alt="Dark Mode Image"
               />
             </div>
-            <h1 className="text-lg manrope-font-700">Create Account</h1>
+            <h1 className="text-lg manrope-font-700">Reset Password</h1>
           </div>
 
           <div className="space-y-4 mt-4">
             <form className="space-y-4" onSubmit={HandleSignup}>
-              <Input
-                type="email"
-                placeholder="Abc@gmail.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="text-sm border border-[#687588] dark:bg-[#080808]"
-              />
               <Input
                 type="password"
                 placeholder="password"
@@ -105,7 +101,13 @@ export default function CreateAccount() {
                 onChange={(e) => setPassword(e.target.value)}
                 className="text-sm border border-[#687588] dark:bg-[#080808]"
               />
-
+              <Input
+                type="password"
+                placeholder="Confirm password"
+                value={password}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="text-sm border border-[#687588] dark:bg-[#080808]"
+              />
               <Button
                 variant="outline"
                 className={`w-full text-sm h-10 ${
@@ -134,12 +136,18 @@ export default function CreateAccount() {
               Continue with Apple
             </Button>
 
-            <GoogleBtn />
+            <Button
+              variant="outline"
+              className="w-full text-sm h-10 border dark:bg-[#232428] border-[#687588] dark:border-none"
+            >
+              <img src={Google} alt="" className="dark:invert" />
+              Continue with Google
+            </Button>
           </div>
 
           <div className="flex manrope-font-500 justify-center py-4">
             <p className="text-md text-muted-foreground">
-              Already have an account{" "}
+              Dont want to reset?{" "}
               <span
                 onClick={() => HandleLoginNavigate()}
                 className="font-bold text-foreground hover:underline cursor-pointer"
@@ -165,23 +173,23 @@ export default function CreateAccount() {
                 alt="Dark Mode Image"
               />
             </div>
-            <h1 className="text-xl manrope-font-700">Create Account</h1>
+            <h1 className="text-xl manrope-font-700">Reset Password</h1>
           </CardHeader>
 
           <CardContent className="space-y-4">
             <form className="space-y-4" onSubmit={HandleSignup}>
               <Input
-                type="email"
-                placeholder="Abc@gmail.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="text-sm border border-[#687588] dark:bg-[#080808]"
-              />
-              <Input
                 type="password"
                 placeholder="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                className="text-sm border border-[#687588] dark:bg-[#080808]"
+              />
+              <Input
+                type="password"
+                placeholder="Confirm password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 className="text-sm border border-[#687588] dark:bg-[#080808]"
               />
 
@@ -204,21 +212,11 @@ export default function CreateAccount() {
               <span className="px-2 text-xs text-muted-foreground">or</span>
               <div className="flex-grow h-px bg-gray-300 dark:bg-gray-700"></div>
             </div>
-
-            <Button
-              variant="outline"
-              className="w-full dark:bg-[#232428]  dark:border-none manrope-font-700 border border-[#687588]"
-            >
-              <img src={Apple} alt="" className="dark:invert" />
-              Continue with Apple
-            </Button>
-
-            <GoogleBtn/>
           </CardContent>
 
           <CardFooter className="flex justify-center pb-6">
             <p className="text-sm text-muted-foreground manrope-font-500">
-              Already have an account.{" "}
+              Dont want to reset?{" "}
               <span
                 onClick={() => HandleLoginNavigate()}
                 className="font-bold text-foreground hover:underline cursor-pointer"

@@ -12,14 +12,13 @@ const Sidebar = ({ activeItem, setActiveItem, openModal, isMobile }) => {
     // { name: "Manage Wallet", path: "/settings/manage-wallet" },
     { name: "Wallet Connections", path: "/settings/wallet-connections" },
     { name: "Token", path: "/settings/about-token" },
+    { name: "Import Wallet", path: "/settings/import-wallet" },
     { name: "Transfer Token", path: "/settings/transfer-token" },
-    { name: "Security & Privacy", path: "/settings/security-privacy" },
-    // { name: "System Status", path: "/settings/system-status" },
+    { name: "Settings", path: "/settings/security-privacy" },
     { name: "Preferences", path: "/settings/preferences" },
     // { name: "Price Alert", path: "/settings/price-alert" },
     { name: "Notification", path: "/settings/notification" },
-      {name: 'Dashboard', path: '/admin/dashboard'},
-  
+      {name: 'Profile', path: '/settings/user-profile'},
     { name: "Logout", onClick: handleLogout },
   ];
 

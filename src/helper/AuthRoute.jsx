@@ -1,4 +1,5 @@
 import Loader from "@/components/Loader";
+import { ProfileProvider } from "@/Context/ProfileContext";
 import React, { Suspense } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 
@@ -21,7 +22,9 @@ const AuthRoute = () => {
 
   return (
     <Suspense fallback={<Loader />}>
-      <Outlet />
+      <ProfileProvider>
+        <Outlet />
+      </ProfileProvider>
     </Suspense>
   );
 };

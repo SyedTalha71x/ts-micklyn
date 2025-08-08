@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/card";
 import CreateAccountPicture from "../../public/Layer_1.svg";
 import CreateAccountPictureDark from "../../public/Layer_1_black.svg";
-import Google from "../../public/google.svg";
 import Apple from "../../public/apple.svg";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -18,16 +17,82 @@ import { FireApi } from "@/hooks/fireApi";
 import { Loader } from "lucide-react";
 import { useHistory } from "@/Context/HistoryContext";
 import { jwtDecode } from "jwt-decode";
+import GoogleBtn from "@/components/GoogleLogin";
+import {
+  initializeMessaging,
+  requestFcmToken,
+  app,
+} from "@/lib/Firebase";
+import { getMessaging, getToken } from "firebase/messaging";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isMobile, setIsMobile] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [fcmToken, setFcmToken] = useState(null);
+  const [messagingInitialized, setMessagingInitialized] = useState(false);
 
   const navigate = useNavigate();
   const isFormEmpty = !password || !email;
   const { setUserInfo, handleGetHistory } = useHistory();
+
+  useEffect(() => {
+    const initializeFirebase = async () => {
+      try {
+        const messagingInstance = getMessaging(app);
+        const permission = await Notification.requestPermission();
+        const vapidKey = import.meta.env.VITE_VAPID_KEY;
+
+        const token = await getToken(messagingInstance, {
+          vapidKey: vapidKey,
+        });
+        console.log(
+          "Starting Firebase initialization...",
+          // messagingInstance,
+          permission,
+          token
+        );
+        setFcmToken(token);
+
+        const result = await initializeMessaging();
+        console.log("Initialization result:", result);
+
+        if (result.success) {
+          setMessagingInitialized(true);
+
+          if (Notification.permission === "granted") {
+            console.log("Permission already granted, getting token...");
+            try {
+              const token = await requestFcmToken();
+              console.log("Received token:", token);
+              if (token) {
+                setFcmToken(token);
+                console.log("Token set on initialization:", token);
+              } else {
+                console.log(
+                  "Token is null despite permission being granted"
+                );
+              }
+            } catch (tokenError) {
+              console.error("Error getting token:", tokenError);
+            }
+          } else {
+            console.log(
+              "No permission yet, will request on login. Current permission:",
+              Notification.permission
+            );
+          }
+        } else {
+          console.error("Failed to initialize messaging:", result.error);
+        }
+      } catch (error) {
+        console.error("Error in Firebase initialization:", error);
+      }
+    };
+
+    initializeFirebase();
+  }, []);
 
   // Check if the screen size is mobile
   useEffect(() => {
@@ -42,17 +107,30 @@ export default function Login() {
       window.removeEventListener("resize", checkIsMobile);
     };
   }, []);
-
   const HandleUserLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+
     try {
-      const response = await FireApi("/login", "POST", { email, password });
+
+      const response = await FireApi("/login", "POST", {
+        email,
+        password,
+        fcm_token: fcmToken,
+      });
+
+      console.log("Login response:", response);
+      if(response.data.active === 0) {
+        toast.success(response.message || "Mail has been sent successfully to your email");
+        navigate("/verify-otp", { state: { email, key: "activate" } });
+        return;
+      };
 
       const token = response?.data?.token;
       const decodedToken = jwtDecode(token);
 
       localStorage.setItem("user-visited-dashboard", token);
+      localStorage.removeItem("unauthorized-token");
       localStorage.setItem("role", response?.data?.role);
 
       response?.data?.wallets?.forEach((wallet) => {
@@ -90,8 +168,12 @@ export default function Login() {
         navigate("/chat");
       }
     } catch (error) {
-      console.log("Login error:", error);
+      console.error("❌ Login error:", error);
       toast.error(error.message);
+      if (error.data?.active === 0) {
+        navigate("/verify-otp", { state: { email, key: "login" } });
+        return;
+      }
     } finally {
       setIsLoading(false);
     }
@@ -134,6 +216,7 @@ export default function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="text-sm border border-[#687588] dark:bg-[#080808]"
+                autoComplete="username"
               />
 
               <Input
@@ -142,7 +225,16 @@ export default function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="text-sm border border-[#687588] dark:bg-[#080808]"
+                autoComplete="current-password"
               />
+              <div className="flex justify-end text-sm font-semibold underline">
+                <p
+                  className="cursor-pointer"
+                  onClick={() => navigate("/forgot-password")}
+                >
+                  Forgot Password
+                </p>
+              </div>
 
               <Button
                 variant="outline"
@@ -172,13 +264,7 @@ export default function Login() {
               Continue with Apple
             </Button>
 
-            <Button
-              variant="outline"
-              className="w-full text-sm h-10 border dark:bg-[#232428] border-[#687588] dark:border-none"
-            >
-              <img src={Google} alt="" className="dark:invert" />
-              Continue with Google
-            </Button>
+            <GoogleBtn />
           </div>
 
           <div className="flex manrope-font-500 justify-center py-4">
@@ -220,6 +306,7 @@ export default function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="text-sm border border-[#687588] dark:bg-[#080808]"
+                autoComplete="username"
               />
               <Input
                 type="password"
@@ -227,7 +314,16 @@ export default function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="text-sm border border-[#687588] dark:bg-[#080808]"
+                autoComplete="current-password"
               />
+              <div className="flex justify-end text-sm font-semibold underline">
+                <p
+                  className="cursor-pointer"
+                  onClick={() => navigate("/forgot-password")}
+                >
+                  Forgot Password
+                </p>
+              </div>
 
               <Button
                 variant="outline"
@@ -257,13 +353,7 @@ export default function Login() {
               Continue with Apple
             </Button>
 
-            <Button
-              variant="outline"
-              className="w-full dark:bg-[#232428]  dark:border-none manrope-font-700 border border-[#687588]"
-            >
-              <img src={Google} alt="" className="dark:invert" />
-              Continue with Google
-            </Button>
+            <GoogleBtn />
           </CardContent>
 
           <CardFooter className="flex justify-center pb-6">

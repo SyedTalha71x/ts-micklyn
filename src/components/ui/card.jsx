@@ -19,16 +19,19 @@ function Card({
 
 function Card3({
   className,
+  bgColor = "dark:bg-[#101010] bg-card", // Default values
   ...props
 }) {
   return (
     <div
       data-slot="card"
       className={cn(
-        "bg-card text-card-foreground dark:border-[#505050] dark:bg-[#101010] manrope-font border border-[#DDDDDD]  flex flex-col gap-6 rounded-xl shadow-md py-6",
-        className
+        "text-card-foreground manrope-font border border-[#DDDDDD] dark:border-[#505050] flex flex-col gap-6 rounded-xl shadow-md py-6",
+        bgColor, // Apply the bgColor prop
+        className // Allow className to override
       )}
-      {...props} />
+      {...props}
+    />
   );
 }
 

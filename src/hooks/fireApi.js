@@ -1,23 +1,22 @@
 // server ip 
 export const baseUrl = "http://64.23.166.88:8016";
-// export const baseUrl = "https://2ce24f676cd6.ngrok-free.app";
+// export const baseUrl = "https://cd931e6b936d.ngrok-free.app";
 
 // this server api for the chat history & collection 
 export const chatHistoryUrl = "http://64.23.166.88:5019";
-// export const chatHistoryUrl = "http://192.168.18.10:5019";
+// export const chatHistoryUrl = "http://192.168.18.14:5019";
 
 // server ip of Python backend 
 export const chatBaseUrl = "http://64.23.166.88:5019";
-// export const chatBaseUrl = "http://192.168.18.10:5019";
+// export const chatBaseUrl = "http://192.168.18.14:5019";
 
-
-
-export const FireApi = async (url, method, data = null, chatHistoryUrl) => {
+ export const FireApi = async (url, method, data = null, chatHistoryUrl) => {
   const token = localStorage.getItem("user-visited-dashboard");
+  const unauthorizedToken = localStorage.getItem("unauthorized-token");
 
   const headers = {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`,
+    Authorization: `Bearer ${unauthorizedToken ? unauthorizedToken : token}`,
   };
 
   const options = {
@@ -44,4 +43,10 @@ export const FireApi = async (url, method, data = null, chatHistoryUrl) => {
     console.log(error);
     throw error;
   }
+};
+
+export const handleLogout = () => {
+  localStorage.removeItem("user-visited-dashboard");
+  localStorage.removeItem("unauthorized-token");
+  window.location.href = "/login";
 };

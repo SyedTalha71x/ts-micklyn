@@ -1,4 +1,5 @@
 import Loader from "@/components/Loader";
+import { GoogleOAuthProvider } from "@react-oauth/google/dist";
 import React, { Suspense } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
