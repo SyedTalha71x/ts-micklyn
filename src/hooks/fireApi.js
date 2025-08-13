@@ -1,21 +1,22 @@
-// server ip 
-export const baseUrl = "http://64.23.166.88:8016";
-// export const baseUrl = "https://cd931e6b936d.ngrok-free.app";
+// server ip
+// export const baseUrl = "http://64.23.166.88:8016";
+export const baseUrl = "https://c7b5289438b1.ngrok-free.app";
 
-// this server api for the chat history & collection 
+// this server api for the chat history & collection
 export const chatHistoryUrl = "http://64.23.166.88:5019";
 // export const chatHistoryUrl = "http://192.168.18.14:5019";
 
-// server ip of Python backend 
+// server ip of Python backend
 export const chatBaseUrl = "http://64.23.166.88:5019";
 // export const chatBaseUrl = "http://192.168.18.14:5019";
 
- export const FireApi = async (url, method, data = null, chatHistoryUrl) => {
+export const FireApi = async (url, method, data = null, chatHistoryUrl) => {
   const token = localStorage.getItem("user-visited-dashboard");
   const unauthorizedToken = localStorage.getItem("unauthorized-token");
 
   const headers = {
     "Content-Type": "application/json",
+    "ngrok-skip-browser-warning": "true",
     Authorization: `Bearer ${unauthorizedToken ? unauthorizedToken : token}`,
   };
 
@@ -26,7 +27,10 @@ export const chatBaseUrl = "http://64.23.166.88:5019";
   };
 
   try {
-    const response = await fetch(chatHistoryUrl ? chatHistoryUrl + url :baseUrl + url, options);
+    const response = await fetch(
+      chatHistoryUrl ? chatHistoryUrl + url : baseUrl + url,
+      options
+    );
     console.log(response, "response");
 
     if (

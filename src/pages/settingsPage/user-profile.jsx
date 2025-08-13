@@ -16,6 +16,7 @@ export default function UserProfile() {
     name: "",
     phone: "",
     address: "",
+    transactionPassword: "",
   });
 
   // Initialize form data when profile is available
@@ -26,6 +27,7 @@ export default function UserProfile() {
         name: profile.user.name || "",
         phone: profile.user.phone || "",
         address: profile.user.address || "",
+        transactionPassword: profile.user.transaction_password || "",
       });
     }
   }, [profile]);

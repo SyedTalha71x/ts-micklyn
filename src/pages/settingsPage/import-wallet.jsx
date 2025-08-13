@@ -12,22 +12,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
 
 const ImportWallet = () => {
   const [formData, setFormData] = useState({
-    chain: "ETH",
-    type: "privateKey",
-    privateKey: "",
-    phrase: "",
+    chain: ["ETH"],
+    key: "", // Combined field for both private key and phrase
   });
   const [loading, setLoading] = useState(false);
 
-  // Supported chains
+  // Supported chains - make sure these match exactly what your backend expects
   const CHAIN_OPTIONS = [
     { value: "ETH", label: "Ethereum" },
-    { value: "SOL", label: "Solana" },
-    { value: "MATIC", label: "Polygon" },
     { value: "BSC", label: "Binance Smart Chain" },
+    { value: "POLYGON", label: "Polygon" },
+    { value: "SOLANA", label: "Solana" },
   ];
 
   // Handle form changes
@@ -36,35 +35,49 @@ const ImportWallet = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  // Handle chain selection (multi-select)
+  const handleChainChange = (value) => {
+    const currentChains = [...formData.chain];
+    if (currentChains.includes(value)) {
+      // Remove if already selected
+      const index = currentChains.indexOf(value);
+      currentChains.splice(index, 1);
+    } else {
+      // Add if not selected
+      currentChains.push(value);
+    }
+    setFormData({ ...formData, chain: currentChains });
+  };
+
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      // Prepare the request data based on selected type
+      // Prepare the request data - removed type field
       const requestData = {
-        type: formData.type,
-        [formData.type]:
-          formData.type === "privateKey"
-            ? formData.privateKey
-            : formData.phrase,
+        privateKey: formData.key, // Always use privateKey field regardless of input type
+        chain: formData.chain.length === 1 ? formData.chain[0] : formData.chain
       };
 
       const response = await FireApi(
-        `/import-wallet/${formData.chain}`,
+        `/import-wallets`,
         "POST",
         requestData
       );
 
       toast.success(response.message || "Wallet imported successfully!");
-      localStorage.setItem("eth-address", response.address);
+      // Store addresses if returned (modify according to your API response)
+      if (response.addresses) {
+        Object.entries(response.addresses).forEach(([chain, address]) => {
+          localStorage.setItem(`${chain.toLowerCase()}-address`, address);
+        });
+      }
 
       setFormData({
-        chain: "ETH",
-        type: "privateKey",
-        privateKey: "",
-        phrase: "",
+        chain: ["ETH"],
+        key: "",
       });
     } catch (error) {
       console.error("Error importing wallet:", error);
@@ -83,17 +96,14 @@ const ImportWallet = () => {
 
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Chain Selection */}
+            {/* Chain Selection - Multi-select */}
             <div className="space-y-2">
               <label className="block text-sm font-medium">Blockchain</label>
               <Select
-                value={formData.chain}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, chain: value })
-                }
+                onValueChange={handleChainChange}
               >
                 <SelectTrigger className="w-full dark:bg-none dark:text-white dark:border-gray-500">
-                  <SelectValue placeholder="Select chain" />
+                  <SelectValue placeholder="Select chains" />
                 </SelectTrigger>
                 <SelectContent className="dark:bg-[#2A2B2E]">
                   {CHAIN_OPTIONS.map((chain) => (
@@ -103,64 +113,34 @@ const ImportWallet = () => {
                   ))}
                 </SelectContent>
               </Select>
+              <div className="flex flex-wrap gap-2">
+                {formData.chain.map((chain) => (
+                  <Badge key={chain} variant="outline" className="dark:bg-[#232428]">
+                    {CHAIN_OPTIONS.find(c => c.value === chain)?.label || chain}
+                  </Badge>
+                ))}
+              </div>
             </div>
 
-            {/* Import Type Selection */}
+            {/* Input Field */}
             <div className="space-y-2">
-              <label className="block text-sm font-medium">Import Type</label>
-              <Select
-                value={formData.type}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, type: value })
-                }
-              >
-                <SelectTrigger className=" w-full dark:bg-none dark:text-white dark:border-gray-500">
-                  <SelectValue placeholder="Select import type" />
-                </SelectTrigger>
-                <SelectContent className="dark:bg-[#2A2B2E]">
-                  <SelectItem value="privateKey">Private Key</SelectItem>
-                  <SelectItem value="phrase">Recovery Phrase</SelectItem>
-                </SelectContent>
-              </Select>
+              <label className="block text-sm font-medium">
+                Private Key
+              </label>
+              <Input
+                as="textarea"
+                rows={3}
+                name="key"
+                value={formData.key}
+                onChange={handleChange}
+                placeholder="Enter your private key"
+                required
+                className="dark:bg-[#080808]"
+              />
+              <p className="text-xs text-muted-foreground">
+                Enter either your private key or 12/24 word recovery phrase
+              </p>
             </div>
-
-            {/* Conditional Input Field */}
-            {formData.type === "privateKey" ? (
-              <div className="space-y-2">
-                <label className="block text-sm font-medium">Private Key</label>
-                <Input
-                  type="text"
-                  name="privateKey"
-                  value={formData.privateKey}
-                  onChange={handleChange}
-                  placeholder="Enter your private key"
-                  required
-                  className="dark:bg-none dark:text-white dark:border-gray-500"
-                />
-                <p className="text-xs text-muted-foreground">
-                  Never share your private key with anyone
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-2">
-                <label className="block text-sm font-medium">
-                  Recovery Phrase
-                </label>
-                <Input
-                  as="textarea"
-                  rows={3}
-                  name="phrase"
-                  value={formData.phrase}
-                  onChange={handleChange}
-                  placeholder="Enter your 12 or 24 word recovery phrase"
-                  required
-                  className="dark:bg-[#080808]"
-                />
-                <p className="text-xs text-muted-foreground">
-                  Typically 12 or 24 words separated by spaces
-                </p>
-              </div>
-            )}
 
             <Button
               type="submit"

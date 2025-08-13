@@ -16,7 +16,7 @@ const Sidebar = ({ activeItem, setActiveItem, openModal, isMobile }) => {
     { name: "Transfer Token", path: "/settings/transfer-token" },
     { name: "Settings", path: "/settings/security-privacy" },
     { name: "Preferences", path: "/settings/preferences" },
-    // { name: "Price Alert", path: "/settings/price-alert" },
+    { name: "Portfolio", path: "/settings/portfolio" },
     { name: "Notification", path: "/settings/notification" },
       {name: 'Profile', path: '/settings/user-profile'},
     { name: "Logout", onClick: handleLogout },

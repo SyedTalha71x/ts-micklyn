@@ -53,7 +53,7 @@ const SecurityPrivacy = () => {
       handleUserProfile();
       setActionCompleted(true);
       setActionType("deactivate");
-      
+
       // Logout user after 3 seconds
       setTimeout(() => {
         handleLogout();
@@ -75,7 +75,7 @@ const SecurityPrivacy = () => {
       handleUserProfile();
       setActionCompleted(true);
       setActionType("delete");
-      
+
       // Logout user after 3 seconds
       setTimeout(() => {
         handleLogout();
@@ -89,16 +89,15 @@ const SecurityPrivacy = () => {
     }
   };
 
-
-  const ConfirmationModal = ({ 
-    isOpen, 
-    onClose, 
-    title, 
-    description, 
-    confirmText, 
-    onConfirm, 
+  const ConfirmationModal = ({
+    isOpen,
+    onClose,
+    title,
+    description,
+    confirmText,
+    onConfirm,
     isLoading,
-    isDeactivate = false 
+    isDeactivate = false,
   }) => {
     if (!isOpen) return null;
 
@@ -106,21 +105,23 @@ const SecurityPrivacy = () => {
       <div className="fixed inset-0 bg-black bg-opacity-100 flex items-center justify-center z-50 p-4">
         <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
           <h3 className="text-lg font-semibold dark:text-white">{title}</h3>
-          
+
           <div className="mt-4 space-y-3">
             <p className="text-gray-600 dark:text-gray-300">{description}</p>
-            
+
             {isDeactivate && (
               <div className="flex items-start gap-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-md">
                 <LogOut className="h-4 w-4 text-yellow-600 dark:text-yellow-400 mt-0.5 flex-shrink-0" />
                 <p className="text-sm text-yellow-700 dark:text-yellow-300">
-                  After deactivation, you will be automatically logged out. Contact support at{' '}
-                  <span className="font-medium">support@abc.com</span> to reactivate your account.
+                  After deactivation, you will be automatically logged out.
+                  Contact support at{" "}
+                  <span className="font-medium">support@abc.com</span> to
+                  reactivate your account.
                 </p>
               </div>
             )}
           </div>
-          
+
           <div className="flex justify-end gap-3 mt-6">
             <Button
               variant="outline"
@@ -146,7 +147,6 @@ const SecurityPrivacy = () => {
     );
   };
 
-
   return (
     <div className="w-full space-y-2 manrope-font text-sm">
       <h2 className="text-lg manrope-font dark:text-white">Safe guard</h2>
@@ -169,7 +169,9 @@ const SecurityPrivacy = () => {
       </div>
 
       <div className="space-y-2 mt-6">
-        <h3 className="text-base manrope-font dark:text-white">Authentication</h3>
+        <h3 className="text-base manrope-font dark:text-white">
+          Authentication
+        </h3>
         <Card className="p-4 flex flex-row justify-between items-center cursor-pointer transition-colors">
           <span className="dark:text-white">Multifactor Authentication</span>
           <div className="flex items-center">
@@ -179,6 +181,15 @@ const SecurityPrivacy = () => {
                 handleMultifactorAuthentication(checked)
               }
             />
+          </div>
+        </Card>
+      </div>
+
+      <div className="space-y-2 mt-4" onClick={() => navigate("/settings/transaction-password")}>
+        <Card className="p-4 flex flex-row justify-between items-center cursor-pointer transition-colors">
+          <span className="dark:text-white">Transaction Password</span>
+          <div className="flex items-center">
+            <ChevronRight className="h-5 w-5 text-muted-foreground" />
           </div>
         </Card>
       </div>
@@ -195,7 +206,9 @@ const SecurityPrivacy = () => {
         className="space-y-2 mt-6"
         onClick={() => navigate("/settings/wallet-backup")}
       >
-        <h3 className="text-base manrope-font dark:text-white">Wallet Backups</h3>
+        <h3 className="text-base manrope-font dark:text-white">
+          Wallet Backups
+        </h3>
         <Card className="p-4 flex flex-row justify-between items-center cursor-pointer transition-colors">
           <span className="text-primary dark:text-white">
             1 Wallet needs backup
@@ -234,20 +247,26 @@ const SecurityPrivacy = () => {
             <Mail className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
             <div>
               <p className="font-medium dark:text-white">
-                {actionType === "deactivate" 
-                  ? "Account Deactivation Successful" 
+                {actionType === "deactivate"
+                  ? "Account Deactivation Successful"
                   : "Account Deletion Request Received"}
               </p>
               <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
                 {actionType === "deactivate" ? (
                   <>
-                    You will be logged out automatically. To reactivate your account, please contact{' '}
-                    <span className="text-blue-500 dark:text-blue-400">support@abc.com</span>
+                    You will be logged out automatically. To reactivate your
+                    account, please contact{" "}
+                    <span className="text-blue-500 dark:text-blue-400">
+                      support@abc.com
+                    </span>
                   </>
                 ) : (
                   <>
-                    Our team will process your request shortly. For any queries, contact{' '}
-                    <span className="text-blue-500 dark:text-blue-400">support@abc.com</span>
+                    Our team will process your request shortly. For any queries,
+                    contact{" "}
+                    <span className="text-blue-500 dark:text-blue-400">
+                      support@abc.com
+                    </span>
                   </>
                 )}
               </p>
@@ -257,7 +276,7 @@ const SecurityPrivacy = () => {
       )}
 
       {/* Deactivate Confirmation Modal */}
-       <ConfirmationModal
+      <ConfirmationModal
         isOpen={showDeactivateModal}
         onClose={() => setShowDeactivateModal(false)}
         title="Deactivate Account"
@@ -269,7 +288,7 @@ const SecurityPrivacy = () => {
       />
 
       {/* Delete Confirmation Modal */}
-       <ConfirmationModal
+      <ConfirmationModal
         isOpen={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
         title="Delete Account Permanently"
