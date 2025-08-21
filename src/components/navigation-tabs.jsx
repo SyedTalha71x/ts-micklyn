@@ -16,11 +16,11 @@ const CryptoDisplay = ({ data, metric }) => {
   const getTitle = () => {
     switch (metric) {
       case "volume":
-        return "Here is the top 10 crypto by volume (24-Hours Basis)";
+        return "Here is the top crypto by volume (24-Hours Basis)";
       case "gainers":
-        return "Here Is the Top 10 Crypto Gainers (24-Hours Basis)";
+        return "Here Is the top Crypto Gainers (24-Hours Basis)";
       case "market_cap":
-        return "Here is the top 10 trending cryptocurrency";
+        return "Here is the top trending cryptocurrency";
       default:
         return "Top Cryptocurrencies";
     }
