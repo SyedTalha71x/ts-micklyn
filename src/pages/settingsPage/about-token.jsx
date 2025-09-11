@@ -45,37 +45,46 @@ const AboutToken = () => {
     { value: "bsc", label: "Binance Smart Chain" },
   ];
 
-  // Function to fetch available tokens from API
-  const fetchAvailableTokens = async () => {
-    try {
-      setLoadingTokens(true);
-      const response = await FireApi(
-        `/get-imported-tokens?chain=${selectedNetwork.toUpperCase()}`,
-        "GET"
-      );
+  const chainMap = {
+  ethereum: "ETH",
+  polygon: "POLYGON",
+  solana: "SOLANA",
+  bsc: "BSC",
+};
+
+
+ const fetchAvailableTokens = async () => {
+  try {
+    setLoadingTokens(true);
+
+    const chainCode = chainMap[selectedNetwork] || selectedNetwork.toUpperCase();
+
+    const response = await FireApi(
+      `/get-imported-tokens?chain=${chainCode}`,
+      "GET"
+    );
+    
+    if (response.success && response.importedTokens) {
+      const tokenOptions = response.importedTokens.map(token => ({
+        value: token.symbol,
+        label: token.symbol,
+        contractAddress: token.contract_address
+      }));
       
-      if (response.success && response.importedTokens) {
-        const tokenOptions = response.importedTokens.map(token => ({
-          value: token.symbol,
-          label: token.symbol,
-          contractAddress: token.contract_address
-        }));
-        
-        setAvailableTokens(tokenOptions);
-        
-        // Set the first token as default if none is selected
-        if (tokenOptions.length > 0 && !selectedToken) {
-          setSelectedToken(tokenOptions[0].value);
-        }
+      setAvailableTokens(tokenOptions);
+      
+      if (tokenOptions.length > 0 && !selectedToken) {
+        setSelectedToken(tokenOptions[0].value);
       }
-    } catch (error) {
-      console.error("Error fetching tokens:", error);
-      // toast.error("Failed to load tokens");
-      setAvailableTokens([]);
-    } finally {
-      setLoadingTokens(false);
     }
-  };
+  } catch (error) {
+    console.error("Error fetching tokens:", error);
+    setAvailableTokens([]);
+  } finally {
+    setLoadingTokens(false);
+  }
+};
+
 
   // Get the appropriate wallet address based on selected network
   const getWalletAddress = () => {
