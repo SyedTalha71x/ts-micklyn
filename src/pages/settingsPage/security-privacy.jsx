@@ -185,7 +185,10 @@ const SecurityPrivacy = () => {
         </Card>
       </div>
 
-      <div className="space-y-2 mt-4" onClick={() => navigate("/settings/transaction-password")}>
+      <div
+        className="space-y-2 mt-4"
+        onClick={() => navigate("/settings/transaction-password")}
+      >
         <Card className="p-4 flex flex-row justify-between items-center cursor-pointer transition-colors">
           <span className="dark:text-white">Transaction Password</span>
           <div className="flex items-center">
@@ -202,16 +205,25 @@ const SecurityPrivacy = () => {
         </Card>
       </div>
 
-      <div
-        className="space-y-2 mt-6"
-        onClick={() => navigate("/settings/wallet-backup")}
-      >
+      <div className="space-y-2 mt-6">
         <h3 className="text-base manrope-font dark:text-white">
           Wallet Backups
         </h3>
-        <Card className="p-4 flex flex-row justify-between items-center cursor-pointer transition-colors">
+        <Card
+          onClick={() => navigate("/settings/wallet-backup")}
+          className="p-4 flex flex-row justify-between items-center cursor-pointer transition-colors"
+        >
           <span className="text-primary dark:text-white">
             1 Wallet needs backup
+          </span>
+          <ChevronRight className="h-5 w-5 text-muted-foreground" />
+        </Card>
+         <Card
+          onClick={() => navigate("/settings/backup-all-wallet")}
+          className="p-4 flex flex-row justify-between items-center cursor-pointer transition-colors"
+        >
+          <span className="text-primary dark:text-white">
+            Backup all Wallets
           </span>
           <ChevronRight className="h-5 w-5 text-muted-foreground" />
         </Card>
