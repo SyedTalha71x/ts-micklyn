@@ -13,12 +13,13 @@ const Sidebar = ({ activeItem, setActiveItem, openModal, isMobile }) => {
     { name: "Wallet Connections", path: "/settings/wallet-connections" },
     { name: "Token", path: "/settings/about-token" },
     { name: "Import Wallet", path: "/settings/import-wallet" },
+    { name: "Import Tokens", path: "/settings/import-tokens" },
     { name: "Transfer Token", path: "/settings/transfer-token" },
     { name: "Settings", path: "/settings/security-privacy" },
     { name: "Preferences", path: "/settings/preferences" },
     { name: "Portfolio", path: "/settings/portfolio" },
     { name: "Notification", path: "/settings/notification" },
-      {name: 'Profile', path: '/settings/user-profile'},
+    { name: "Profile", path: "/settings/user-profile" },
     { name: "Logout", onClick: handleLogout },
   ];
 
@@ -30,20 +31,23 @@ const Sidebar = ({ activeItem, setActiveItem, openModal, isMobile }) => {
       openModal(item.path);
     }
   };
-  
 
   return (
     <div className="w-full p-4">
       <div className="space-y-3">
         {menuItems.map((item) => (
-              <div
-              key={item.name} // Use `name` as the key instead of `path` (Logout has no path)
-              onClick={() => handleItemClick(item)}
-              className={`block py-2 px-3 rounded-md dark:text-gray-400 text-sm manrope-font cursor-pointer 
-                ${activeItem === item.path ? "bg-primary text-primary-foreground dark:bg-[#2A2B2E] dark:text-white" : "hover:bg-accent"}`}
-            >
-              {item.name}
-            </div>
+          <div
+            key={item.name} // Use `name` as the key instead of `path` (Logout has no path)
+            onClick={() => handleItemClick(item)}
+            className={`block py-2 px-3 rounded-md dark:text-gray-400 text-sm manrope-font cursor-pointer 
+                ${
+                  activeItem === item.path
+                    ? "bg-primary text-primary-foreground dark:bg-[#2A2B2E] dark:text-white"
+                    : "hover:bg-accent"
+                }`}
+          >
+            {item.name}
+          </div>
         ))}
       </div>
     </div>

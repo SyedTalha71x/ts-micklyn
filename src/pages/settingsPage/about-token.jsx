@@ -6,7 +6,7 @@ import { Loader } from "lucide-react";
 const AboutToken = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [selectedNetwork, setSelectedNetwork] = useState("ethereum");
-  const [selectedToken, setSelectedToken] = useState("USDC");
+  const [selectedToken, setSelectedToken] = useState("");
   const [tokenInfo, setTokenInfo] = useState({
     symbol: "",
     holders: "",
@@ -21,8 +21,8 @@ const AboutToken = () => {
     balance: "",
     ethBalance: "",
     symbol: "",
-    usdt:"",
-    usdc:"",
+    usdt: "",
+    usdc: "",
     loading: false,
   });
 
@@ -31,7 +31,10 @@ const AboutToken = () => {
     bscAddress: "",
     solanaAddress: "",
     polygonAddress: ""
-  })
+  });
+
+  const [availableTokens, setAvailableTokens] = useState([]);
+  const [loadingTokens, setLoadingTokens] = useState(false);
 
   const tabs = [{ label: "Token Info" }, { label: "Token Balance" }];
 
@@ -39,25 +42,43 @@ const AboutToken = () => {
     { value: "ethereum", label: "Ethereum" },
     { value: "polygon", label: "Polygon" },
     { value: "solana", label: "Solana" },
+    { value: "bsc", label: "Binance Smart Chain" },
   ];
 
-  const tokens = {
-    ethereum: [
-      { value: "USDC", label: "USDC" },
-      { value: "USDT", label: "USDT" },
-    ],
-    polygon: [
-      { value: "USDC", label: "USDC" },
-      { value: "USDT", label: "USDT" },
-    ],
-    solana: [
-      { value: "USDC", label: "USDC" },
-      { value: "USDT", label: "USDT" },
-    ],
+  // Function to fetch available tokens from API
+  const fetchAvailableTokens = async () => {
+    try {
+      setLoadingTokens(true);
+      const response = await FireApi(
+        `/get-imported-tokens?chain=${selectedNetwork.toUpperCase()}`,
+        "GET"
+      );
+      
+      if (response.success && response.importedTokens) {
+        const tokenOptions = response.importedTokens.map(token => ({
+          value: token.symbol,
+          label: token.symbol,
+          contractAddress: token.contract_address
+        }));
+        
+        setAvailableTokens(tokenOptions);
+        
+        // Set the first token as default if none is selected
+        if (tokenOptions.length > 0 && !selectedToken) {
+          setSelectedToken(tokenOptions[0].value);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching tokens:", error);
+      // toast.error("Failed to load tokens");
+      setAvailableTokens([]);
+    } finally {
+      setLoadingTokens(false);
+    }
   };
 
   // Get the appropriate wallet address based on selected network
-   const getWalletAddress = () => {
+  const getWalletAddress = () => {
     let address = "";
     switch (selectedNetwork) {
       case "ethereum":
@@ -72,8 +93,12 @@ const AboutToken = () => {
         address = localStorage.getItem('solana-address') || "";
         setAddress(prev => ({ ...prev, solanaAddress: address }));
         break;
+      case "bsc":
+        address = localStorage.getItem('bsc-address') || "";
+        setAddress(prev => ({ ...prev, bscAddress: address }));
+        break;
       default:
-        address = localStorage.getItem('eth-address') || ""; 
+        address = localStorage.getItem('eth-address') || "";
     }
     return address;
   };
@@ -81,8 +106,13 @@ const AboutToken = () => {
   const TokenInfo = async () => {
     try {
       setTokenInfo((prev) => ({ ...prev, loading: true }));
+      
+      // Find the contract address for the selected token
+      const tokenObj = availableTokens.find(t => t.value === selectedToken);
+      const contractAddress = tokenObj ? tokenObj.contractAddress : "";
+      
       const tokenRes = await FireApi(
-        `/${selectedNetwork}/get-token-info?token=${selectedToken}`,
+        `/${selectedNetwork}/get-token-info?token=${selectedToken}&contractAddress=${contractAddress}`,
         "GET"
       );
 
@@ -111,8 +141,12 @@ const AboutToken = () => {
         throw new Error(`Wallet address not configured for ${selectedNetwork}`);
       }
 
+      // Find the contract address for the selected token
+      const tokenObj = availableTokens.find(t => t.value === selectedToken);
+      const contractAddress = tokenObj ? tokenObj.contractAddress : "";
+
       const tokenRes = await FireApi(
-        `/${selectedNetwork}/get-token-balance?address=${walletAddress}&token=${selectedToken}`,
+        `/${selectedNetwork}/get-token-balance?address=${walletAddress}&token=${selectedToken}&contractAddress=${contractAddress}`,
         "GET"
       );
 
@@ -131,9 +165,15 @@ const AboutToken = () => {
   };
 
   useEffect(() => {
-    TokenInfo();
-    TokenBalance();
-  }, [selectedToken, selectedNetwork]);
+    fetchAvailableTokens();
+  }, [selectedNetwork]);
+
+  useEffect(() => {
+    if (selectedToken && availableTokens.length > 0) {
+      TokenInfo();
+      TokenBalance();
+    }
+  }, [selectedToken, selectedNetwork, availableTokens]);
 
   // Format numbers for display
   const formatValue = (value) => {
@@ -174,17 +214,29 @@ const AboutToken = () => {
             ))}
           </select>
 
-          <select
-            value={selectedToken}
-            onChange={(e) => setSelectedToken(e.target.value)}
-            className="px-4 py-2 rounded-md bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white font-semibold"
-          >
-            {tokens[selectedNetwork].map((token) => (
-              <option key={token.value} value={token.value}>
-                {token.label}
-              </option>
-            ))}
-          </select>
+          {loadingTokens ? (
+            <div className="px-4 py-2 rounded-md bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white font-semibold">
+              <Loader className="animate-spin inline mr-2" size={16} />
+              Loading tokens...
+            </div>
+          ) : (
+            <select
+              value={selectedToken}
+              onChange={(e) => setSelectedToken(e.target.value)}
+              className="px-4 py-2 rounded-md bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white font-semibold"
+              disabled={availableTokens.length === 0}
+            >
+              {availableTokens.length === 0 ? (
+                <option value="">No tokens available</option>
+              ) : (
+                availableTokens.map((token) => (
+                  <option key={token.value} value={token.value}>
+                    {token.label}
+                  </option>
+                ))
+              )}
+            </select>
+          )}
         </div>
 
         {tokenInfo.loading || tokenBalance.loading ? (
@@ -223,7 +275,7 @@ const AboutToken = () => {
                   Balance: {formatValue(tokenBalance.balance)}
                 </li>{" "}
                 <li>
-                  Token Balance: {selectedToken=== 'USDC' ? tokenBalance?.usdc : 
+                  Token Balance: {selectedToken === 'USDC' ? tokenBalance?.usdc : 
                   selectedToken === 'USDT' ? tokenBalance?.usdt :
                   tokenBalance.balance}
                 </li>

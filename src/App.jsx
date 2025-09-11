@@ -23,6 +23,7 @@ import Portfolio from "./pages/settingsPage/portfolio";
 import Transactions from "./pages/settingsPage/transactions";
 import CopyTrades from "./pages/settingsPage/copy-trades";
 import LimitOrders from "./pages/settingsPage/limit-orders";
+import ImportTokens from "./pages/settingsPage/import-tokens";
 
 // Lazy-loaded components
 const CreateAccount = lazy(() => import("./pages/create-account"));
@@ -99,6 +100,7 @@ function App() {
                 <Route path="user-profile" element={<UserProfile/>}/>
                 <Route path="wallet-backup" element={<WalletBackup/>}/>
                 <Route path="import-wallet" element={<ImportWallet />} />
+                <Route path="import-tokens" element={<ImportTokens/>}/>
                 <Route path="transaction-password" element={<TransactionPassword />} />
                 <Route path="portfolio" element={<Portfolio />} />
                 <Route path="transactions" element={<Transactions />} />

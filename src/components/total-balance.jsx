@@ -44,6 +44,7 @@ export default function TotalBalance() {
     ETH: { usdt: 0, usdc: 0, loading: true, address: "" },
     POL: { usdt: 0, usdc: 0, loading: true, address: "" },
     SOL: { usdt: 0, usdc: 0, loading: true, address: "" },
+    BSC: { usdt:0, usdc:0, loading:true, address:""},
   });
 
   const [addresses, setAddresses] = useState({
@@ -160,10 +161,36 @@ export default function TotalBalance() {
     }
   };
 
+  const GetBscBalance = async () => {
+    try {
+      setBalances((prev) => ({ ...prev, BSC: { ...prev.BSC, loading: true } }));
+      const response = await FireApi(
+        `/bsc/get-user-balance?address=${addresses.BSC}`,
+        "GET"
+      );
+      setBalances((prev) => ({
+        ...prev,
+        BSC: {
+          usdt: response?.data?.usdt ? parseFloat(response.data.usdt) : 0,
+          usdc: response?.data?.usdc ? parseFloat(response.data.usdc) : 0,
+          address: response?.data?.address || "",
+          loading: false,
+        },
+      }));
+    } catch (error) {
+      console.log(error);
+      setBalances((prev) => ({
+        ...prev,
+        BSC: { ...prev.BSC, loading: false },
+      }));
+    }
+  };
+
   useEffect(() => {
     if (addresses.ETH) GetEthBalance();
     if (addresses.POL) GetPolygonBalance();
     if (addresses.SOL) GetSolanaBalance();
+    if (addresses.BSC) GetBscBalance();
   }, [addresses]);
 
   const formatBalance = (value) => {
@@ -186,6 +213,7 @@ export default function TotalBalance() {
     ETH: "Ethereum",
     POL: "Polygon",
     SOL: "Solana",
+    BSC: "BSC"
   };
 
   useEffect(() => {
@@ -392,6 +420,71 @@ export default function TotalBalance() {
                 </div>
               </div>
               {balances.SOL.loading ? (
+                <div className="animate-pulse h-4 w-4 rounded-full bg-gray-300 dark:bg-gray-600"></div>
+              ) : (
+                <div className="flex items-center gap-1">
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                    {formatAddress(balances.SOL.address)}
+                  </span>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(balances.SOL.address);
+                      toast.success(
+                        blockchainNames.SOL + "Address copied to clipboard!"
+                      );
+                    }}
+                    className="cursor-pointer text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                    title="Copy address"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              )}
+            </div>
+            <div className="mt-4 space-y-2">
+              <p className="text-sm text-gray-400 dark:text-gray-400">
+                USDT:{" "}
+                {balances.SOL.loading
+                  ? "Loading..."
+                  : formatBalance(balances.SOL.usdt)}
+              </p>
+              <p className="text-sm text-gray-400 dark:text-gray-400">
+                USDC:{" "}
+                {balances.SOL.loading
+                  ? "Loading..."
+                  : formatBalance(balances.SOL.usdc)}
+              </p>
+            </div>
+          </div>
+
+             {/* bsc card  */}
+          <div className="border border-[#A0AEC0] dark:border-gray-600 p-4 rounded-xl mb-2 dark:bg-[#101010]">
+            <div className="flex justify-between items-start">
+              <div>
+                <h3 className="text-sm font-medium dark:text-white">
+                  {blockchainNames.BSC}
+                </h3>
+                <div className="flex items-center gap-1 mt-1">
+                  <div className="w-2 h-2 rounded-full bg-[#627EEA]"></div>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                    BSC Network
+                  </span>
+                </div>
+              </div>
+              {balances.BSC.loading ? (
                 <div className="animate-pulse h-4 w-4 rounded-full bg-gray-300 dark:bg-gray-600"></div>
               ) : (
                 <div className="flex items-center gap-1">
