@@ -124,7 +124,7 @@ const ImportTokens = () => {
                 onChange={handleChange}
                 placeholder="Enter token contract address"
                 required
-                className="dark:bg-[#080808]"
+                className="dark:bg-none dark:outline-none dark:border-gray-500"
               />
               <p className="text-xs text-muted-foreground">
                 Enter the token contract address to import
@@ -133,7 +133,7 @@ const ImportTokens = () => {
 
             <Button
               type="submit"
-              className="w-full dark:bg-[#232428] cursor-pointer dark:text-white"
+            className="w-full py-2 px-4 cursor-pointer bg-[#2A2B2E] dark:text-[#2A2B2E] dark:bg-gray-200 text-white font-semibold rounded-md disabled:opacity-50"
               disabled={loading}
             >
               {loading ? (

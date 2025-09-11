@@ -135,7 +135,7 @@ const ImportWallet = () => {
                 onChange={handleChange}
                 placeholder="Enter your private key"
                 required
-                className="dark:bg-[#080808]"
+                className="dark:bg-none dark:outline-none dark:border-gray-500"
               />
               <p className="text-xs text-muted-foreground">
                 Enter either your private key or 12/24 word recovery phrase
@@ -144,7 +144,7 @@ const ImportWallet = () => {
 
             <Button
               type="submit"
-              className="w-full dark:bg-[#232428] cursor-pointer dark:text-white"
+            className="w-full py-2 px-4 cursor-pointer bg-[#2A2B2E] dark:text-[#2A2B2E] dark:bg-gray-200 text-white font-semibold rounded-md disabled:opacity-50"
               disabled={loading}
             >
               {loading ? (
