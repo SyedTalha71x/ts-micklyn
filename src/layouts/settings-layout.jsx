@@ -86,7 +86,7 @@ const SettingsLayout = () => {
               </div>
 
               {/* Right Side: Button */}
-              <button onClick={() => navigate('/chat')} className="hover:cursor-pointer hover:bg-black/70  text-sm md:text-base px-4 py-2 bg-black text-white dark:bg-[#202229] dark:text-white rounded-lg">
+              <button onClick={() => navigate('/chat')} className="hidden md:flex hover:cursor-pointer hover:bg-black/70  text-sm md:text-base px-4 py-2 bg-black text-white dark:bg-[#202229] dark:text-white rounded-lg">
                 Back to Chat
               </button>
             </div>
