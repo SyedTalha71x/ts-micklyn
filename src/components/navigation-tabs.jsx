@@ -1297,10 +1297,12 @@ const NavigationTabsWithChat = () => {
         {/* Message Input Bar */}
         <div className="sticky bottom-0 mt-6 bg-transparent px-2">
           <div className="flex items-center w-full rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-black px-3 py-2 shadow-sm">
+            {/* Attachment Button */}
             <button className="flex-shrink-0 mr-2 text-gray-700 dark:text-gray-300">
               <img src={Icon} alt="Attachment" className="h-5 w-5" />
             </button>
 
+            {/* Input Field */}
             <input
               className="flex-1 bg-transparent focus:outline-none text-sm text-gray-800 dark:text-gray-200 placeholder-gray-400"
               placeholder="Write message here..."
@@ -1312,11 +1314,12 @@ const NavigationTabsWithChat = () => {
                   sendMessage();
                 }
               }}
-              disabled={isTyping}
+              disabled={isTyping || loading}
             />
 
+            {/* Mic Button (hidden on small screens) */}
             <button
-              className={`h-10 w-10 rounded-full flex items-center justify-center shadow-md ${
+              className={`h-10 w-10 rounded-full items-center justify-center shadow-md mr-2 flex ${
                 recording ? "bg-red-600 animate-pulse" : "bg-black"
               } text-white`}
               onClick={recording ? stopRecording : startRecording}
@@ -1331,6 +1334,15 @@ const NavigationTabsWithChat = () => {
               ) : (
                 <Mic size={18} className="text-white" />
               )}
+            </button>
+
+            {/* Send Button (visible only on mobile) */}
+            <button
+              className=" h-10 w-10 cursor-pointer rounded-full flex items-center justify-center bg-black text-white shadow-md"
+              onClick={() => sendMessage()}
+              disabled={isTyping}
+            >
+              ➤
             </button>
           </div>
         </div>

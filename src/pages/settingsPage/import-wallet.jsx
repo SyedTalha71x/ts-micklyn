@@ -102,7 +102,7 @@ const ImportWallet = () => {
               <Select
                 onValueChange={handleChainChange}
               >
-                <SelectTrigger className="w-full dark:bg-none dark:text-white dark:border-gray-500">
+                <SelectTrigger className="text-xs md:text-sm  w-full dark:bg-none dark:text-white dark:border-gray-500">
                   <SelectValue placeholder="Select chains" />
                 </SelectTrigger>
                 <SelectContent className="dark:bg-[#2A2B2E]">
@@ -135,9 +135,9 @@ const ImportWallet = () => {
                 onChange={handleChange}
                 placeholder="Enter your private key"
                 required
-                className="dark:bg-none dark:outline-none dark:border-gray-500"
+                className="text-xs md:text-sm dark:bg-none dark:outline-none dark:border-gray-500"
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs md:text-sm  text-muted-foreground">
                 Enter either your private key or 12/24 word recovery phrase
               </p>
             </div>

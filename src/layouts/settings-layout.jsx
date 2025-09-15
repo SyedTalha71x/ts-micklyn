@@ -42,8 +42,6 @@ const SettingsLayout = () => {
   const handleBack = () => {
     if (isMobile) {
       setShowContent(false);
-      // Don't navigate to a new route, just toggle the view
-      // This keeps us on the same route but shows the menu instead
     }
   };
 
@@ -72,8 +70,13 @@ const SettingsLayout = () => {
               <div className="w-6"></div>
             </>
           ) : (
-            <div className="flex justify-between items-center w-full px-4 py-2">
+            <div className="flex gap-6 items-center w-full px-4 py-2">
               {/* Left Side: Arrow + Heading */}
+                <ChevronLeft
+                  size={24}
+                  className="cursor-pointer"
+                  onClick={() => navigate("/chat")}
+                />
               <div className="flex items-center">
                 {/* <ArrowLeft
                   size={24}
@@ -85,8 +88,12 @@ const SettingsLayout = () => {
                 </h3>
               </div>
 
+
               {/* Right Side: Button */}
-              <button onClick={() => navigate('/chat')} className="hidden md:flex hover:cursor-pointer hover:bg-black/70  text-sm md:text-base px-4 py-2 bg-black text-white dark:bg-[#202229] dark:text-white rounded-lg">
+              <button
+                onClick={() => navigate("/chat")}
+                className="hidden  hover:cursor-pointer hover:bg-black/70  text-sm md:text-base px-4 py-2 bg-black text-white dark:bg-[#202229] dark:text-white rounded-lg"
+              >
                 Back to Chat
               </button>
             </div>

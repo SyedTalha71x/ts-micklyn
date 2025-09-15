@@ -100,7 +100,7 @@ const TransferToken = () => {
             name="address"
             value={formData.address}
             onChange={handleAddressChange}
-            className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md cursor-pointer"
+            className="text-xs md:text-sm mt-1 px-4 py-2 w-full border border-gray-300 rounded-md cursor-pointer"
             required
           >
             {walletDetails.length === 0 ? (
@@ -128,7 +128,7 @@ const TransferToken = () => {
             name="receiverAddress"
             value={formData.receiverAddress}
             onChange={handleChange}
-            className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md"
+            className="text-xs md:text-sm mt-1 px-4 py-2 w-full border border-gray-300 rounded-md"
             placeholder="Enter receiver address"
             required
           />
@@ -143,7 +143,7 @@ const TransferToken = () => {
             name="amount"
             value={formData.amount}
             onChange={handleChange}
-            className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md"
+            className="text-xs md:text-sm mt-1 px-4 py-2 w-full border border-gray-300 rounded-md"
             placeholder="Enter amount"
             min="0"
             step="0.00000001"
@@ -159,7 +159,7 @@ const TransferToken = () => {
             name="token"
             value={formData.token}
             onChange={handleChange}
-            className="mt-1 px-4 py-2 w-full border border-gray-300 rounded-md"
+            className="text-xs md:text-sm mt-1 px-4 py-2 w-full border border-gray-300 rounded-md"
           >
             <option value="USDC">USDC</option>
             <option value="USDT">USDT</option>

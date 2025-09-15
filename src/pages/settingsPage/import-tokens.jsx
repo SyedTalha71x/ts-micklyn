@@ -90,12 +90,12 @@ const ImportTokens = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Chain Selection - Single select */}
             <div className="space-y-2">
-              <label className="block text-sm font-medium">Blockchain</label>
+              <label className="block text-xs md:text-sm  font-medium">Blockchain</label>
               <Select
                 value={formData.chain}
                 onValueChange={handleChainChange}
               >
-                <SelectTrigger className="w-full dark:bg-none dark:text-white dark:border-gray-500">
+                <SelectTrigger className="text-xs md:text-sm w-full dark:bg-none dark:text-white dark:border-gray-500">
                   <SelectValue placeholder="Select chain" />
                 </SelectTrigger>
                 <SelectContent className="dark:bg-[#2A2B2E]">
@@ -115,7 +115,7 @@ const ImportTokens = () => {
 
             {/* Contract Address Field */}
             <div className="space-y-2">
-              <label className="block text-sm font-medium">
+              <label className="text-xs md:text-sm block text-sm font-medium">
                 Token Contract Address
               </label>
               <Input
@@ -124,9 +124,9 @@ const ImportTokens = () => {
                 onChange={handleChange}
                 placeholder="Enter token contract address"
                 required
-                className="dark:bg-none dark:outline-none dark:border-gray-500"
+                className="text-xs md:text-sm dark:bg-none dark:outline-none dark:border-gray-500"
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs md:text-sm  text-muted-foreground">
                 Enter the token contract address to import
               </p>
             </div>

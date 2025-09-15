@@ -193,7 +193,7 @@ const AboutToken = () => {
 
   return (
     <div className="w-full px-4">
-      <div className="flex gap-4 mb-4">
+      <div className="flex flex-wrap gap-4 mb-4">
         {tabs.map((tab, index) => (
           <button
             key={index}
@@ -210,7 +210,7 @@ const AboutToken = () => {
       </div>
 
       <div className="bg-gray-100 dark:bg-[#2A2B2E] p-4 rounded-md">
-        <div className="flex gap-4 mb-4">
+        <div className="flex flex-wrap gap-4 mb-4">
           <select
             value={selectedNetwork}
             onChange={(e) => setSelectedNetwork(e.target.value)}
