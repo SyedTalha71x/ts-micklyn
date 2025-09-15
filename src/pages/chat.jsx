@@ -49,9 +49,9 @@ export default function Chat() {
       )}
 
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col relative h-full">
+      <div className="flex-1 flex flex-col flex-wrap relative h-full">
         {/* Bottom Navigation */}
-        <div className="fixed -ml-[2%] md:ml-0 mx-auto md:w-[80%] p-2">
+        <div className="fixed md:ml-0 mx-auto w-[100%] md:w-[80%] p-2">
           <NavigationTabs />
         </div>
       </div>

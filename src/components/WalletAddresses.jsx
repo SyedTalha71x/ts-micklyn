@@ -71,31 +71,41 @@ const WalletAddresses = ({ data }) => {
   };
 
   return (
-    <div className="bg-white dark:bg-[#1b1c1e] rounded-xl p-4 dark:text-white md:min-w-[25rem] mx-auto border border-gray-400 dark:border-gray-700">
+    <div className="w-full bg-white dark:bg-[#1b1c1e] rounded-xl p-4 dark:text-white md:min-w-[25rem] border border-[#A0AEC0] dark:border-gray-700">
       {/* Title */}
-      <h3 className="text-sm font-normal mb-4 text-gray-700 dark:text-gray-300">
+      <h3 className="text-sm font-normal mb-4 dark:text-gray-300">
         Here is the list of your wallet addresses
       </h3>
 
       {/* Wallet List */}
-      <div className="space-y-4">
+      <div className="space-y-2">
         {data.map((wallet, index) => (
-          <div key={index} className="border-b border-gray-300 dark:border-gray-700 pb-4 last:border-b-0">
+          <div key={index} className="border p-2 rounded-lg border-[#A0AEC0] dark:border-gray-700 pb-1 last:border-b-0">
             {/* Network Header */}
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center justify-between">
               <div className="flex gap-2">
-                {/* <span className="text-lg">{getNetworkIcon(wallet.blockchain)}</span> */}
                 <span className="text-sm font-medium text-gray-800 dark:text-white">
                   {getNetworkName(wallet.blockchain)}
                 </span>
               </div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">
+                {formatUSDValue(wallet.usdc, wallet.usdt)}
+              </div>
+            </div>
+
+             <div className="flex items-center justify-between mb-1">
+              <div className="flex gap-2">
+                <span className="text-xs font-medium text-gray-800 dark:text-white">
+                  {getNetworkName(wallet.blockchain)}
+                </span>
+              </div>
               <div className="text-xs text-gray-600 dark:text-gray-400">
-                Total: {formatUSDValue(wallet.usdc, wallet.usdt)}
+                {formatUSDValue(wallet.usdc, wallet.usdt)}
               </div>
             </div>
 
             {/* Balance Details */}
-            <div className="grid grid-cols-2 gap-3 mb-3">
+            {/* <div className="grid grid-cols-2 gap-3 mb-3">
               <div className="text-xs text-gray-600 dark:text-gray-400">Native Balance:</div>
               <div className="text-xs text-right font-medium text-gray-800 dark:text-white">
                 {formatBalance(wallet.balance)} {wallet.blockchain?.toLowerCase() === 'solana' ? 'SOL' : 'ETH'}
@@ -110,10 +120,10 @@ const WalletAddresses = ({ data }) => {
               <div className="text-xs text-right font-medium text-gray-800 dark:text-white">
                 {formatBalance(wallet.usdc)} USDC
               </div>
-            </div>
+            </div> */}
 
             {/* Wallet Address */}
-            <div className="flex items-center justify-between">
+            {/* <div className="flex items-center justify-between">
               <div className="text-xs text-gray-600 dark:text-gray-400 truncate mr-2">
                 {formatAddress(wallet.address)}
               </div>
@@ -127,13 +137,13 @@ const WalletAddresses = ({ data }) => {
                   <path d="M9 5H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-2"></path>
                 </svg>
               </button>
-            </div>
+            </div> */}
           </div>
         ))}
       </div>
 
       {/* Summary */}
-      <div className="mt-4 pt-4 border-t border-gray-300 dark:border-gray-700">
+      {/* <div className="mt-4 pt-4 border-t border-gray-300 dark:border-gray-700">
         <div className="flex justify-between items-center text-sm">
           <span className="text-gray-600 dark:text-gray-400">Total across all wallets:</span>
           <span className="font-medium text-gray-800 dark:text-white">
@@ -143,7 +153,7 @@ const WalletAddresses = ({ data }) => {
             )}
           </span>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

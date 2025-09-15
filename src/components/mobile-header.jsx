@@ -34,7 +34,7 @@ export default function MobileHeader({ onMenuClick }) {
         </Button>
       </div>
 
-      <div className="mt-6 flex items-center gap-3 p-2 rounded-xl border border-gray-300">
+      {/* <div className="mt-6 flex items-center gap-3 p-2 rounded-xl border border-gray-300">
         <Avatar className="h-8 w-8 border border-border">
           <AvatarFallback className="bg-muted text-xs dark:text-white">
             CC
@@ -48,7 +48,7 @@ export default function MobileHeader({ onMenuClick }) {
             Here are today top trending crypto..
           </p>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

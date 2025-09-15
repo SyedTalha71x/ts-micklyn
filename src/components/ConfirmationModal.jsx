@@ -115,7 +115,7 @@ const ConfirmationModal = (props) => {
         {/* Step Content */}
         <div className="mb-6">
           {activeStep === 0 && (
-            <div className="space-y-3">
+            <div className="space-y-3 border border-[#A0AEC0] p-3 rounded-md">
               {Object.entries(intent)
                 .filter(
                   ([key]) =>
@@ -124,11 +124,11 @@ const ConfirmationModal = (props) => {
                     )
                 )
                 .map(([key, value]) => (
-                  <div key={key} className="flex justify-between">
-                    <span className="text-gray-600 dark:text-gray-300">
-                      {key}:
+                  <div key={key} className="flex flex-wrap justify-between  overflow-x-auto scroll-none">
+                    <span className="text-black dark:text-gray-300">
+                      {key.charAt(0).toUpperCase() + key.slice(1)}:
                     </span>
-                    <span className="font-medium truncate max-w-[180px]">
+                    <span className="font-medium max-w-[180px]">
                       {value !== null ? value : "N/A"}
                     </span>
                   </div>
@@ -176,7 +176,7 @@ const ConfirmationModal = (props) => {
           {activeStep > 0 ? (
             <button
               onClick={() => setActiveStep(activeStep - 1)}
-              className="px-4 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 dark:border-gray-600 cursor-pointer dark:text-gray-300 dark:hover:bg-gray-700"
+              className="w-1/2 py-2 rounded-md border border-[#A0AEC0] text-gray-700 hover:bg-gray-100 dark:border-gray-600 cursor-pointer dark:text-gray-300 dark:hover:bg-gray-700"
               disabled={isProcessing}
             >
               Back
@@ -184,7 +184,7 @@ const ConfirmationModal = (props) => {
           ) : (
             <button
               onClick={() => handleFinalConfirmation(false)}
-              className="px-4 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 dark:border-gray-600 cursor-pointer dark:text-gray-300 dark:hover:bg-gray-700"
+              className="w-1/2 py-2 rounded-md border border-[#A0AEC0] text-gray-700 hover:bg-gray-200 dark:border-gray-600 cursor-pointer dark:text-gray-300 dark:hover:bg-gray-700"
               disabled={isProcessing}
             >
               Cancel
@@ -200,7 +200,7 @@ const ConfirmationModal = (props) => {
                   setActiveStep(activeStep + 1);
                 }
               }}
-              className="px-4 py-2 rounded-md cursor-pointer bg-black text-white hover:bg-black/80 dark:bg-white dark:text-black dark:hover:bg-blue-600"
+              className="w-1/2 py-2 rounded-md border border-[#A0AEC0] text-gray-700 hover:bg-gray-200 dark:border-gray-600 cursor-pointer dark:text-gray-300 dark:hover:bg-gray-700"
               disabled={isProcessing}
             >
               {isProcessing ? "Verifying..." : "Continue"}
@@ -208,7 +208,7 @@ const ConfirmationModal = (props) => {
           ) : (
             <button
               onClick={() => handleFinalConfirmation(true)}
-              className="px-4 py-2 rounded-md cursor-pointer bg-black text-white hover:bg-black/80 dark:bg-white dark:hover:bg-black/80 dark:text-black"
+              className="w-1/2 py-2 rounded-md cursor-pointer bg-black text-white hover:bg-black/80 dark:bg-white dark:hover:bg-black/80 dark:text-black"
               disabled={isProcessing}
             >
               Confirm Transaction

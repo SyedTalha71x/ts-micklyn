@@ -44,7 +44,7 @@ const CryptoDisplay = ({ data, metric }) => {
   };
 
   return (
-    <div className="bg-white dark:bg-[#1b1c1e] rounded-xl p-4 dark:text-white md:min-w-lg mx-auto border border-gray-400 dark:border-gray-700">
+    <div className="bg-white dark:bg-[#1b1c1e] rounded-xl p-4 dark:text-white md:min-w-md mx-auto border border-[#A0AEC0] dark:border-gray-700">
       {/* Title */}
       <h3 className="text-sm font-normal mb-4 leading-relaxed">{getTitle()}</h3>
 
@@ -54,7 +54,7 @@ const CryptoDisplay = ({ data, metric }) => {
           data.slice(0, 5).map((crypto, index) => (
             <div
               key={index}
-              className="flex items-center justify-between py-2 border-b border-gray-300 dark:border-gray-700"
+              className="flex items-center justify-between p-2 rounded-lg border border-[#A0AEC0] dark:border-gray-700"
             >
               <div className="flex flex-col items-start gap-3">
                 <div className="text-sm font-medium text-black dark:text-gray-300">
@@ -1052,7 +1052,7 @@ const NavigationTabsWithChat = () => {
         </h2>
       )}
 
-      <div className="p-4 text-center">
+      <div className="p-2 text-center">
         {messages.find((msg) => msg.wallet === "System") && (
           <div className="text-center mb-4">
             <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -1063,7 +1063,7 @@ const NavigationTabsWithChat = () => {
 
         <div
           ref={messageContainerRef}
-          className="w-full mt-2 md:mt-8 lg:h-[28rem] h-[22rem] overflow-y-auto rounded-md px-2 scroll-auto"
+          className="w-[100%] mt-2 md:mt-8 lg:h-[28rem] h-[22rem] overflow-y-auto rounded-md overflow-x-visible"
         >
           {messages.map((msg, index) => {
             const isLast = index === messages.length - 1;
@@ -1236,7 +1236,7 @@ const NavigationTabsWithChat = () => {
           )}
         </div>
 
-        <div className="sticky bottom-0 mt-[2rem] bg-white dark:bg-black border-t border-gray-200 dark:border-none dark:border py-2">
+        {/* <div className="sticky bottom-0 mt-[2rem] bg-white dark:bg-black border-t border-gray-200 dark:border-none dark:border py-2">
           <div className="max-w-4xl mx-auto flex items-center gap-2">
             <input
               className="flex-1 bg-gray-100 dark:bg-black dark:border rounded-lg px-4 py-2 text-sm dark:text-gray-200 dark:placeholder-gray-400"
@@ -1290,6 +1290,46 @@ const NavigationTabsWithChat = () => {
                 </div>
               ) : (
                 <Mic size={18} className="text-gray-800 dark:text-gray-200" />
+              )}
+            </button>
+          </div>
+        </div> */}
+        {/* Message Input Bar */}
+        <div className="sticky bottom-0 mt-6 bg-transparent px-2">
+          <div className="flex items-center w-full rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-black px-3 py-2 shadow-sm">
+            <button className="flex-shrink-0 mr-2 text-gray-700 dark:text-gray-300">
+              <img src={Icon} alt="Attachment" className="h-5 w-5" />
+            </button>
+
+            <input
+              className="flex-1 bg-transparent focus:outline-none text-sm text-gray-800 dark:text-gray-200 placeholder-gray-400"
+              placeholder="Write message here..."
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  sendMessage();
+                }
+              }}
+              disabled={isTyping}
+            />
+
+            <button
+              className={`h-10 w-10 rounded-full flex items-center justify-center shadow-md ${
+                recording ? "bg-red-600 animate-pulse" : "bg-black"
+              } text-white`}
+              onClick={recording ? stopRecording : startRecording}
+              disabled={isTyping}
+            >
+              {recording ? (
+                <div className="flex gap-0.5">
+                  <span className="w-1 h-2 bg-white animate-pulse" />
+                  <span className="w-1 h-3 bg-white animate-pulse" />
+                  <span className="w-1 h-4 bg-white animate-pulse" />
+                </div>
+              ) : (
+                <Mic size={18} className="text-white" />
               )}
             </button>
           </div>
