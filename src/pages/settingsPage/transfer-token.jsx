@@ -27,8 +27,7 @@ const TransferToken = () => {
 
   const getWalletAddresses = async () => {
     try {
-      const res = await FireApi("/portfolio");
-      // Filter out null values from the response
+      const res = await FireApi("/wallets");
       const validWallets = res?.data?.filter(wallet => wallet !== null) || [];
       setWalletDetails(validWallets);
       
@@ -112,7 +111,7 @@ const TransferToken = () => {
                   value={wallet.address}
                   className="text-sm cursor-pointer overflow-auto"
                 >
-                  {wallet.blockchain}: {wallet.address}
+                  {wallet.chain}: {wallet.address}
                 </option>
               ))
             )}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 
 const SimpleQRCode = ({ value, size = 120 }) => {
@@ -16,81 +16,78 @@ const SimpleQRCode = ({ value, size = 120 }) => {
   );
 };
 
-const UserBalance = ({ data }) => {
-  console.log(data, "user balance data");
+const TokenBalance = ({ data, title }) => {
+  console.log(data, 'Token balance data');
 
-  const walletData = Array.isArray(data) ? data[0] : data;
-
-  if (!walletData) {
+  // Handle case where data might be null or undefined
+  if (!data) {
     return (
-      <div className="bg-gray-300 rounded-xl p-4 text-black max-w-sm mx-auto">
-        <div className="text-center text-black">No wallet data available</div>
+      <div className="bg-white dark:bg-[#1b1c1e] rounded-xl p-6 text-white max-w-sm mx-auto border border-gray-400 dark:border-gray-700">
+        <div className="text-center text-gray-400">No token data available</div>
       </div>
     );
   }
 
-  const getNetworkName = (blockchain) => {
-    switch (blockchain?.toLowerCase()) {
-      case "ethereum":
-        return "ERC20";
-      case "polygon":
-        return "Polygon";
-      case "solana":
-        return "Solana";
-      case "bsc":
-        return "BSC";
-      default:
-        return "ERC20";
-    }
-  };
-
   const copyToClipboard = () => {
-    if (walletData.address) {
+    if (data.address) {
       navigator.clipboard
-        .writeText(walletData.address)
+        .writeText(data.address)
         .then(() => toast.success("Address copied to clipboard"))
         .catch(() => toast.error("Failed to copy address"));
     }
   };
 
-  // Filter out non-token keys
-  const tokenEntries = Object.entries(walletData).filter(
-    ([key]) =>
-      !["address", "balance", "blockchain", "title", "response_type"].includes(
-        key
-      )
+  // Extract token entries (excluding address, balance, symbol, title)
+  const tokenEntries = Object.entries(data).filter(
+    ([key]) => !["address", "balance", "symbol", "title"].includes(key)
   );
 
   return (
     <div className="bg-white dark:bg-[#1b1c1e] rounded-xl p-6 text-white max-w-sm mx-auto border border-gray-400 dark:border-gray-700">
       {/* Title */}
       <h3 className="text-sm font-normal mb-6 text-gray-700 dark:text-white">
-        {walletData.title || `Here is your ${walletData.blockchain} wallet`}
+        {title}
       </h3>
 
-      {/* Dynamic Token Balances */}
-      <div className="space-y-2 mb-6">
+      {/* Native Balance */}
+      <div className="mb-4 p-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
+        <div className="flex justify-between items-center">
+          <span className="text-sm font-medium text-gray-800 dark:text-white">
+            {data.chain}
+          </span>
+          <span className="text-sm font-bold text-gray-800 dark:text-white">
+            {data.balance || "0"} ETH
+          </span>
+        </div>
+      </div>
+
+      
+
+      {/* Token Balances */}
+      <div className="space-y-3 mb-6">
+        <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Token Balances</h4>
+        
         {tokenEntries.length > 0 ? (
           tokenEntries.map(([symbol, amount]) => (
             <div
               key={symbol}
-              className="flex items-center justify-between border-b border-dashed border-gray-600 pb-1"
+              className="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-800 rounded-lg"
             >
               <span className="text-sm font-medium text-gray-800 dark:text-white">
                 {symbol}
               </span>
-              <span className="text-sm text-gray-700 dark:text-gray-300">
+              <span className="text-sm font-bold text-gray-800 dark:text-white">
                 {amount}
               </span>
             </div>
           ))
         ) : (
-          <div className="text-gray-500 text-sm">No tokens found</div>
+          <div className="text-center text-gray-500 text-sm py-3">No tokens found</div>
         )}
       </div>
 
       {/* Wallet Address */}
-      <div className="mb-4">
+      <div className="mb-4 border p-3 rounded-md">
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm text-gray-800 dark:text-white">
             Wallet Address
@@ -120,15 +117,14 @@ const UserBalance = ({ data }) => {
             </svg>
           </button>
         </div>
-        <div className="text-xs text-gray-800 dark:text-white border border-gray-700 dark:border-white font-mono break-all dark:bg-gray-800 p-2 rounded">
-          {walletData.address || "No address available"}
+        <div className="text-xs text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600 font-mono break-all dark:bg-gray-800 p-2 rounded">
+          {data.address || "No address available"}
         </div>
-      </div>
 
       {/* QR Code */}
-      <div className="flex justify-center mb-6">
-        {walletData.address ? (
-          <SimpleQRCode value={walletData.address} size={120} />
+      <div className="flex justify-center mt-2">
+        {data.address ? (
+          <SimpleQRCode value={data.address} size={120} />
         ) : (
           <div className="w-32 h-32 dark:bg-gray-700 flex items-center justify-center rounded">
             <span className="text-gray-800 dark:text-white text-xs">
@@ -137,13 +133,15 @@ const UserBalance = ({ data }) => {
           </div>
         )}
       </div>
+            </div>
+
 
       {/* Network Info */}
-      <div className="border-t border-gray-700 pt-4">
+      <div className="border-t border-gray-300 dark:border-gray-700 pt-4">
         <div className="text-sm text-gray-800 dark:text-white mb-2">
-          Network: {getNetworkName(walletData.blockchain)}
+          Network: Ethereum
         </div>
-        <div className="text-xs text-gray-600 dark:text-white">
+        <div className="text-xs text-gray-600 dark:text-gray-400">
           Make sure that the address and network is correct
         </div>
       </div>
@@ -151,4 +149,4 @@ const UserBalance = ({ data }) => {
   );
 };
 
-export default UserBalance;
+export default TokenBalance;

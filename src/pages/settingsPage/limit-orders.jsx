@@ -20,7 +20,7 @@ const LimitOrders = () => {
   const fetchLimitOrders = async () => {
     try {
       setLoading(true);
-      const response = await FireApi("/transactions?type=limit_orders", "GET");
+      const response = await FireApi("/list-limit-orders", "GET");
 
       if (response.success) {
         setLimitOrders(response.limit_orders);

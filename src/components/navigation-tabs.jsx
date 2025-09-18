@@ -10,21 +10,89 @@ import { useHistory } from "@/Context/HistoryContext";
 import Catoshi from "./Catoshi";
 import UserBalance from "./UserBalance";
 import WalletAddresses from "./WalletAddresses";
+import MyAssets from "./MyAssets";
+import AllPortfolio from "./AllPortfolio";
+import TokenBalance from "./TokenBalance";
 
 // New Crypto Display Component
-const CryptoDisplay = ({ data, metric }) => {
-  const getTitle = () => {
-    switch (metric) {
-      case "volume":
-        return "Here is the top crypto by volume (24-Hours Basis)";
-      case "gainers":
-        return "Here Is the top Crypto Gainers (24-Hours Basis)";
-      case "market_cap":
-        return "Here is the top trending cryptocurrency";
-      default:
-        return "Top Cryptocurrencies";
-    }
-  };
+// const CryptoDisplay = ({ data, metric }) => {
+//   const getTitle = () => {
+//     switch (metric) {
+//       case "volume":
+//         return "Here is the top crypto by volume (24-Hours Basis)";
+//       case "gainers":
+//         return "Here Is the top Crypto Gainers (24-Hours Basis)";
+//       case "market_cap":
+//         return "Here is the top trending cryptocurrency";
+//       default:
+//         return "Top Cryptocurrencies";
+//     }
+//   };
+
+//   const formatPrice = (price) => {
+//     if (typeof price === "string") {
+//       return price;
+//     }
+//     return `$${parseFloat(price).toFixed(2)}`;
+//   };
+
+//   const formatChange = (change) => {
+//     if (typeof change === "string") {
+//       return change;
+//     }
+//     const changeValue = parseFloat(change);
+//     return changeValue >= 0
+//       ? `+${changeValue.toFixed(2)}%`
+//       : `${changeValue.toFixed(2)}%`;
+//   };
+
+//   return (
+//     <div className="bg-white dark:bg-[#1b1c1e] rounded-xl p-4 dark:text-white md:min-w-md mx-auto border border-[#A0AEC0] dark:border-gray-700">
+//       {/* Title */}
+//       <h3 className="text-sm font-normal mb-4 leading-relaxed">{getTitle()}</h3>
+
+//       {/* Crypto List */}
+//       <div className="space-y-2">
+//         {data && Array.isArray(data) ? (
+//           data.map((crypto, index) => (
+//             <div
+//               key={index}
+//               className="flex items-center justify-between p-2 rounded-lg border border-[#A0AEC0] dark:border-gray-700"
+//             >
+//               <div className="flex flex-col items-start gap-3">
+//                 <div className="text-sm font-medium text-black dark:text-gray-300">
+//                   {crypto.symbol || "N/A"}
+//                 </div>
+//                 <div className="text-sm text-gray-600 dark:text-gray-400">
+//                   {crypto.name || "Unknown"}
+//                 </div>
+//               </div>
+//               <div className="flex flex-col  items-end gap-3">
+//                 <div className="text-sm font-medium text-gray-800 dark:text-gray-300">
+//                   {formatPrice(crypto.price || "0")}
+//                 </div>
+//                 <div
+//                   className={`text-sm font-medium ${
+//                     (crypto.change_24h || "").toString().startsWith("-")
+//                       ? "text-red-400"
+//                       : "text-green-400"
+//                   }`}
+//                 >
+//                   {formatChange(crypto.change_24h || "0")}
+//                 </div>
+//               </div>
+//             </div>
+//           ))
+//         ) : (
+//           <div className="text-center text-gray-400">No data available</div>
+//         )}
+//       </div>
+//     </div>
+//   );
+// };
+
+const CryptoDisplay = ({ data, title }) => {
+  const [showAll, setShowAll] = useState(false);
 
   const formatPrice = (price) => {
     if (typeof price === "string") {
@@ -43,15 +111,17 @@ const CryptoDisplay = ({ data, metric }) => {
       : `${changeValue.toFixed(2)}%`;
   };
 
+  const displayedData = showAll ? data : data?.slice(0, 5);
+  console.log(title, "ajsdbbdsa");
   return (
     <div className="bg-white dark:bg-[#1b1c1e] rounded-xl p-4 dark:text-white md:min-w-md mx-auto border border-[#A0AEC0] dark:border-gray-700">
       {/* Title */}
-      <h3 className="text-sm font-normal mb-4 leading-relaxed">{getTitle()}</h3>
+      <h3 className="text-sm font-normal mb-4 leading-relaxed">{title}</h3>
 
       {/* Crypto List */}
       <div className="space-y-2">
-        {data && Array.isArray(data) ? (
-          data.slice(0, 5).map((crypto, index) => (
+        {displayedData && Array.isArray(displayedData) ? (
+          displayedData.map((crypto, index) => (
             <div
               key={index}
               className="flex items-center justify-between p-2 rounded-lg border border-[#A0AEC0] dark:border-gray-700"
@@ -64,7 +134,7 @@ const CryptoDisplay = ({ data, metric }) => {
                   {crypto.name || "Unknown"}
                 </div>
               </div>
-              <div className="flex flex-col  items-end gap-3">
+              <div className="flex flex-col items-end gap-3">
                 <div className="text-sm font-medium text-gray-800 dark:text-gray-300">
                   {formatPrice(crypto.price || "0")}
                 </div>
@@ -84,6 +154,18 @@ const CryptoDisplay = ({ data, metric }) => {
           <div className="text-center text-gray-400">No data available</div>
         )}
       </div>
+
+      {/* Show More / Show Less Button */}
+      {data?.length > 5 && (
+        <div className="flex justify-center mt-4">
+          <button
+            onClick={() => setShowAll(!showAll)}
+            className="px-4 py-2 text-sm font-medium border border-[#A0AEC0] hover:cursor-pointer rounded-lg text-gray-500 dark:text-gray-300 hover:underline"
+          >
+            {showAll ? "View Less" : "View More"}
+          </button>
+        </div>
+      )}
     </div>
   );
 };
@@ -255,7 +337,7 @@ const NavigationTabsWithChat = () => {
         ]);
         break;
 
-      case "all_wallet_addresses":
+      case "all_wallets_addresses":
         setMessages((prev) => [
           ...prev,
           {
@@ -263,24 +345,42 @@ const NavigationTabsWithChat = () => {
             content: reply,
             isJson: false,
             responseType: "all_wallet_addresses",
-            walletResponse: reply.all_wallet_addresses,
+            walletResponse: reply.all_wallets,
+            walletTitle: reply.title,
             isHistory: false,
           },
         ]);
         break;
 
-      case "get_token_balance":
+      case "all_assets":
         setMessages((prev) => [
           ...prev,
           {
             wallet: "Chat",
             content: reply,
-            isJson: true,
-            responseType: "get_token_balance",
+            isJson: false,
+            responseType: "all_assets",
+            assetResponse: reply.all_assets,
             isHistory: false,
           },
         ]);
         break;
+
+     case "get_token_balance":
+  setMessages((prev) => [
+    ...prev,
+    {
+      wallet: "Chat",
+      content: reply,
+      isJson: true,
+      responseType: "get_token_balance",
+      tokenResponse: reply.data || reply,
+      tokenTitle: reply.title || reply,
+      isHistory: false,
+    },
+  ]);
+  break;
+
 
       case "get_top_cryptos":
         // Updated to use the new CryptoDisplay component
@@ -292,6 +392,7 @@ const NavigationTabsWithChat = () => {
             isJson: false,
             responseType: "get_top_cryptos",
             cryptoData: reply?.data || reply,
+            cryptoTitle: reply?.title || reply,
             cryptoMetric: reply?.metric || "market_cap",
             isHistory: false,
           },
@@ -319,11 +420,25 @@ const NavigationTabsWithChat = () => {
             content: reply,
             isJson: true,
             responseType: "get_user_balance",
-            chainData: reply.data || reply,
+            chainData: reply,
             isHistory: false,
           },
         ]);
         break;
+
+      // case "get_token_balance":
+      //   setMessages((prev) => [
+      //     ...prev,
+      //     {
+      //       wallet: "Chat",
+      //       content: reply,
+      //       isJson: false,
+      //       responseType: "get_token_balance",
+      //       chainData: reply.data || reply,
+      //       isHistory: false,
+      //     },
+      //   ]);
+      //   break;
 
       case "get_token_info":
         setMessages((prev) => [
@@ -878,45 +993,22 @@ const NavigationTabsWithChat = () => {
                 };
                 break;
 
-              // case "all_wallet_addresses":
-              //   const addresses =
-              //     replyContent.all_wallet_addresses || replyContent;
-              //   let formattedAddresses;
-
-              //   if (Array.isArray(addresses)) {
-              //     formattedAddresses = addresses
-              //       .map(
-              //         (addr, index) =>
-              //           `🔹 Wallet ${index + 1}\n` +
-              //           `Chain: ${addr.blockchain.toUpperCase()}\n` +
-              //           `Address: ${addr.address}\n` +
-              //           (addr?.usdt ? `USDT: ${addr?.usdt}\n` : "") +
-              //           (addr?.usdc ? `USDC: ${addr?.usdc}\n` : "") +
-              //           (addr?.usdcPrice
-              //             ? `USDC Price: ${addr.usdcPrice}\n`
-              //             : "") +
-              //           (addr?.usdtPrice
-              //             ? `USDT Price: ${addr.usdtPrice}\n`
-              //             : "")
-              //       )
-              //       .join("\n");
-              //   } else {
-              //     formattedAddresses = JSON.stringify(addresses, null, 2);
-              //   }
-
-              //   content = formattedAddresses;
-              //   additionalProps = {
-              //     responseType: "all_wallet_addresses",
-              //     isMarkdown: true,
-              //   };
-              //   break;
-
-              case "all_wallet_addresses":
+              case "all_wallets_addresses":
                 content = replyContent;
                 additionalProps = {
                   responseType: "all_wallet_addresses",
-                  walletResponse:
-                    replyContent.all_wallet_addresses || replyContent,
+                  walletResponse: replyContent.all_wallets || replyContent,
+                  walletTitle: replyContent.title,
+                  isJson: false,
+                };
+                break;
+
+              case "all_portfolios":
+                content = replyContent;
+                additionalProps = {
+                  responseType: "all_portfolios",
+                  portfolioResponse:
+                    replyContent.all_portfolios || replyContent,
                   isJson: false,
                 };
                 break;
@@ -926,11 +1018,20 @@ const NavigationTabsWithChat = () => {
                 additionalProps = {
                   responseType: "get_top_cryptos",
                   cryptoData: replyContent?.data || replyContent,
+                  cryptoTitle: replyContent?.title || replyContent,
                   cryptoMetric: replyContent?.metric || "market_cap",
                 };
                 break;
 
-              case "get_token_balance":
+                  case "get_token_balance":
+  content = replyContent;
+  additionalProps = {
+    responseType: "get_token_balance",
+    tokenResponse: replyContent.data || replyContent,
+    tokenTitle: replyContent.title || replyContent,
+  };
+  break;
+
               case "get_token_info":
               case "get_user_balance":
                 content = replyContent;
@@ -1103,14 +1204,27 @@ const NavigationTabsWithChat = () => {
                     msg.responseType === "get_top_cryptos" ? (
                     <CryptoDisplay
                       data={msg.cryptoData}
-                      metric={msg.cryptoMetric}
+                      title={msg.cryptoTitle}
                     />
                   ) : msg.wallet === "Chat" &&
-                    msg.responseType === "get_user_balance" ? (
+                    msg.responseType === "get_user_balance"  ? (
                     <UserBalance data={msg.chainData} />
-                  ) : msg.wallet === "Chat" &&
+                  ) :msg.wallet === "Chat" && 
+                    msg.responseType==="get_token_balance" ? (
+                      <TokenBalance data={msg.tokenResponse} title={msg.tokenTitle}/>
+                    )
+                  : msg.wallet === "Chat" &&
                     msg.responseType === "all_wallet_addresses" ? (
-                    <WalletAddresses data={msg.walletResponse} />
+                    <WalletAddresses
+                      data={msg.walletResponse}
+                      title={msg.walletTitle}
+                    />
+                  ) : msg.wallet === "Chat" &&
+                    msg.responseType === "all_assets" ? (
+                    <MyAssets data={msg.assetResponse} />
+                  ) : msg.wallet === "Chat" &&
+                    msg.responseType === "all_portfolios" ? (
+                    <AllPortfolio data={msg.portfolioResponse} />
                   ) : msg.wallet === "Chat" && isLast && isTyping ? (
                     <Typewriter text={fullResponse} className="relative" />
                   ) : msg.isJson ? (

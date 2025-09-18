@@ -15,7 +15,7 @@ const Transactions = () => {
   const fetchTransactions = async () => {
     try {
       setLoading(true);        
-      const response = await FireApi(`/transactions?type=transactions`, 'GET');
+      const response = await FireApi(`/transactions`, 'GET');
       
       if (response.success) {
         setTransactions(response.transactions);

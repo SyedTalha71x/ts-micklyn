@@ -21,7 +21,7 @@ const CopyTrades = () => {
   const fetchCopyTrades = async () => {
     try {
       setLoading(true);
-      const response = await FireApi("/transactions?type=copy_trades", "GET");
+      const response = await FireApi("/list-copy-trades", "GET");
 
       if (response.success) {
         setCopyTrades(response.copy_trades);
