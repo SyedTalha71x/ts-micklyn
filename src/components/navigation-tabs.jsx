@@ -13,83 +13,7 @@ import WalletAddresses from "./WalletAddresses";
 import MyAssets from "./MyAssets";
 import AllPortfolio from "./AllPortfolio";
 import TokenBalance from "./TokenBalance";
-
-// New Crypto Display Component
-// const CryptoDisplay = ({ data, metric }) => {
-//   const getTitle = () => {
-//     switch (metric) {
-//       case "volume":
-//         return "Here is the top crypto by volume (24-Hours Basis)";
-//       case "gainers":
-//         return "Here Is the top Crypto Gainers (24-Hours Basis)";
-//       case "market_cap":
-//         return "Here is the top trending cryptocurrency";
-//       default:
-//         return "Top Cryptocurrencies";
-//     }
-//   };
-
-//   const formatPrice = (price) => {
-//     if (typeof price === "string") {
-//       return price;
-//     }
-//     return `$${parseFloat(price).toFixed(2)}`;
-//   };
-
-//   const formatChange = (change) => {
-//     if (typeof change === "string") {
-//       return change;
-//     }
-//     const changeValue = parseFloat(change);
-//     return changeValue >= 0
-//       ? `+${changeValue.toFixed(2)}%`
-//       : `${changeValue.toFixed(2)}%`;
-//   };
-
-//   return (
-//     <div className="bg-white dark:bg-[#1b1c1e] rounded-xl p-4 dark:text-white md:min-w-md mx-auto border border-[#A0AEC0] dark:border-gray-700">
-//       {/* Title */}
-//       <h3 className="text-sm font-normal mb-4 leading-relaxed">{getTitle()}</h3>
-
-//       {/* Crypto List */}
-//       <div className="space-y-2">
-//         {data && Array.isArray(data) ? (
-//           data.map((crypto, index) => (
-//             <div
-//               key={index}
-//               className="flex items-center justify-between p-2 rounded-lg border border-[#A0AEC0] dark:border-gray-700"
-//             >
-//               <div className="flex flex-col items-start gap-3">
-//                 <div className="text-sm font-medium text-black dark:text-gray-300">
-//                   {crypto.symbol || "N/A"}
-//                 </div>
-//                 <div className="text-sm text-gray-600 dark:text-gray-400">
-//                   {crypto.name || "Unknown"}
-//                 </div>
-//               </div>
-//               <div className="flex flex-col  items-end gap-3">
-//                 <div className="text-sm font-medium text-gray-800 dark:text-gray-300">
-//                   {formatPrice(crypto.price || "0")}
-//                 </div>
-//                 <div
-//                   className={`text-sm font-medium ${
-//                     (crypto.change_24h || "").toString().startsWith("-")
-//                       ? "text-red-400"
-//                       : "text-green-400"
-//                   }`}
-//                 >
-//                   {formatChange(crypto.change_24h || "0")}
-//                 </div>
-//               </div>
-//             </div>
-//           ))
-//         ) : (
-//           <div className="text-center text-gray-400">No data available</div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
+import { IoMicOutline } from "react-icons/io5";
 
 const CryptoDisplay = ({ data, title }) => {
   const [showAll, setShowAll] = useState(false);
@@ -116,7 +40,9 @@ const CryptoDisplay = ({ data, title }) => {
   return (
     <div className="bg-white dark:bg-[#1b1c1e] rounded-xl p-4 dark:text-white md:min-w-md mx-auto border border-[#A0AEC0] dark:border-gray-700">
       {/* Title */}
-      <h3 className="text-sm font-normal mb-4 leading-relaxed">{title}</h3>
+      <h3 className="text-xs md:text-sm font-normal mb-4 leading-relaxed">
+        {title}
+      </h3>
 
       {/* Crypto List */}
       <div className="space-y-2">
@@ -127,19 +53,19 @@ const CryptoDisplay = ({ data, title }) => {
               className="flex items-center justify-between p-2 rounded-lg border border-[#A0AEC0] dark:border-gray-700"
             >
               <div className="flex flex-col items-start gap-3">
-                <div className="text-sm font-medium text-black dark:text-gray-300">
+                <div className="text-xs md:text-sm  font-medium text-black dark:text-gray-300">
                   {crypto.symbol || "N/A"}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
+                <div className="text-xs md:text-sm  text-gray-600 dark:text-gray-400">
                   {crypto.name || "Unknown"}
                 </div>
               </div>
               <div className="flex flex-col items-end gap-3">
-                <div className="text-sm font-medium text-gray-800 dark:text-gray-300">
+                <div className="text-xs md:text-sm  font-medium text-gray-800 dark:text-gray-300">
                   {formatPrice(crypto.price || "0")}
                 </div>
                 <div
-                  className={`text-sm font-medium ${
+                  className={`text-xs md:text-sm  font-medium ${
                     (crypto.change_24h || "").toString().startsWith("-")
                       ? "text-red-400"
                       : "text-green-400"
@@ -151,7 +77,9 @@ const CryptoDisplay = ({ data, title }) => {
             </div>
           ))
         ) : (
-          <div className="text-center text-gray-400">No data available</div>
+          <div className="text-xs md:text-sm text-center text-gray-400">
+            No data available
+          </div>
         )}
       </div>
 
@@ -160,7 +88,7 @@ const CryptoDisplay = ({ data, title }) => {
         <div className="flex justify-center mt-4">
           <button
             onClick={() => setShowAll(!showAll)}
-            className="px-4 py-2 text-sm font-medium border border-[#A0AEC0] hover:cursor-pointer rounded-lg text-gray-500 dark:text-gray-300 hover:underline"
+            className="px-4 py-2 text-xs md:text-sm  font-medium border border-[#A0AEC0] hover:cursor-pointer rounded-lg text-gray-500 dark:text-gray-300 hover:underline"
           >
             {showAll ? "View Less" : "View More"}
           </button>
@@ -344,7 +272,7 @@ const NavigationTabsWithChat = () => {
             wallet: "Chat",
             content: reply,
             isJson: false,
-            responseType: "all_wallet_addresses",
+            responseType: "all_wallets_addresses",
             walletResponse: reply.all_wallets,
             walletTitle: reply.title,
             isHistory: false,
@@ -366,21 +294,20 @@ const NavigationTabsWithChat = () => {
         ]);
         break;
 
-     case "get_token_balance":
-  setMessages((prev) => [
-    ...prev,
-    {
-      wallet: "Chat",
-      content: reply,
-      isJson: true,
-      responseType: "get_token_balance",
-      tokenResponse: reply.data || reply,
-      tokenTitle: reply.title || reply,
-      isHistory: false,
-    },
-  ]);
-  break;
-
+      case "get_token_balance":
+        setMessages((prev) => [
+          ...prev,
+          {
+            wallet: "Chat",
+            content: reply,
+            isJson: true,
+            responseType: "get_token_balance",
+            tokenResponse: reply.data || reply,
+            tokenTitle: reply.title || reply,
+            isHistory: false,
+          },
+        ]);
+        break;
 
       case "get_top_cryptos":
         // Updated to use the new CryptoDisplay component
@@ -425,20 +352,6 @@ const NavigationTabsWithChat = () => {
           },
         ]);
         break;
-
-      // case "get_token_balance":
-      //   setMessages((prev) => [
-      //     ...prev,
-      //     {
-      //       wallet: "Chat",
-      //       content: reply,
-      //       isJson: false,
-      //       responseType: "get_token_balance",
-      //       chainData: reply.data || reply,
-      //       isHistory: false,
-      //     },
-      //   ]);
-      //   break;
 
       case "get_token_info":
         setMessages((prev) => [
@@ -996,7 +909,7 @@ const NavigationTabsWithChat = () => {
               case "all_wallets_addresses":
                 content = replyContent;
                 additionalProps = {
-                  responseType: "all_wallet_addresses",
+                  responseType: "all_wallets_addresses",
                   walletResponse: replyContent.all_wallets || replyContent,
                   walletTitle: replyContent.title,
                   isJson: false,
@@ -1023,14 +936,14 @@ const NavigationTabsWithChat = () => {
                 };
                 break;
 
-                  case "get_token_balance":
-  content = replyContent;
-  additionalProps = {
-    responseType: "get_token_balance",
-    tokenResponse: replyContent.data || replyContent,
-    tokenTitle: replyContent.title || replyContent,
-  };
-  break;
+              case "get_token_balance":
+                content = replyContent;
+                additionalProps = {
+                  responseType: "get_token_balance",
+                  tokenResponse: replyContent.data || replyContent,
+                  tokenTitle: replyContent.title || replyContent,
+                };
+                break;
 
               case "get_token_info":
               case "get_user_balance":
@@ -1039,6 +952,29 @@ const NavigationTabsWithChat = () => {
                 additionalProps = {
                   responseType: "get_user_balance",
                   chainData: replyContent.data || replyContent,
+                };
+                break;
+
+              //          case "all_assets":
+              // setMessages((prev) => [
+              //   ...prev,
+              //   {
+              //     wallet: "Chat",
+              //     content: reply,
+              //     isJson: false,
+              //     responseType: "all_assets",
+              //     assetResponse: reply.all_assets,
+              //     isHistory: false,
+              //   },
+              // ]);
+              // break;
+
+              case "all_assets":
+                content = replyContent.all_assets || replyContent;
+                isJson = true;
+                additionalProps = {
+                  responseType: "all_assets",
+                  assetResponse: content,
                 };
                 break;
 
@@ -1135,7 +1071,7 @@ const NavigationTabsWithChat = () => {
   }, [userInfo?.sessionId, userId]);
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <style dangerouslySetInnerHTML={{ __html: customStyles }} />
 
       {showConfirmation && (
@@ -1147,13 +1083,18 @@ const NavigationTabsWithChat = () => {
         />
       )}
 
-      {!messages.some((msg) => msg.wallet === "You") && (
-        <h2 className="text-2xl font-bold mb-2 dark:text-white text-center ">
-          What can I help with?
-        </h2>
-      )}
+      {/* Main Chat Container - Flex-grow to take available space */}
+      <div className="flex-1 flex flex-col max-w-6xl mx-auto w-full px-4 py-4">
+        {/* Header - Only show when no messages */}
+        {!messages.some((msg) => msg.wallet === "You") && (
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-bold dark:text-white">
+              What can I help with?
+            </h2>
+          </div>
+        )}
 
-      <div className="p-2 text-center">
+        {/* Connection Status */}
         {messages.find((msg) => msg.wallet === "System") && (
           <div className="text-center mb-4">
             <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -1162,260 +1103,215 @@ const NavigationTabsWithChat = () => {
           </div>
         )}
 
-        <div
-          ref={messageContainerRef}
-          className="w-[100%] mt-2 md:mt-8 lg:h-[28rem] h-[22rem] overflow-y-auto rounded-md overflow-x-visible"
-        >
-          {messages.map((msg, index) => {
-            const isLast = index === messages.length - 1;
+        {/* Messages Container - Flex-grow with proper overflow */}
+        <div className="flex-1 flex flex-col">
+          <div
+            ref={messageContainerRef}
+            className="lg:w-[90%] lg:mx-auto xl:w-[90%] w-[100%] flex-1 overflow-y-auto overflow-x-hidden space-y-4 md:px-2"
+            style={{
+              maxHeight: "calc(100vh - 200px)", // Adjusted for better spacing
+              minHeight: "300px", // Minimum height to prevent collapse
+            }}
+          >
+            {messages.map((msg, index) => {
+              const isLast = index === messages.length - 1;
 
-            const messageColorClasses = {
-              error:
-                "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
-              success:
-                "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
-              default: "text-gray-800 dark:text-gray-200",
-            };
+              const messageColorClasses = {
+                error:
+                  "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
+                success:
+                  "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
+                default: "text-gray-800 dark:text-gray-200",
+              };
 
-            const getMessageColor = () => {
-              if (msg.wallet === "You")
-                return "bg-gray-200 dark:bg-background dark:text-white dark:border dark:border-xs text-black";
-              if (msg.status === "error") return messageColorClasses.error;
-              if (msg.status === "success") return messageColorClasses.success;
-              return messageColorClasses.default;
-            };
+              const getMessageColor = () => {
+                if (msg.wallet === "You")
+                  return "bg-gray-200 dark:bg-background dark:text-white dark:border dark:border-xs text-black";
+                if (msg.status === "error") return messageColorClasses.error;
+                if (msg.status === "success")
+                  return messageColorClasses.success;
+                return messageColorClasses.default;
+              };
 
-            return (
-              <div
-                key={index}
-                className={`mb-2 flex ${
-                  msg.wallet === "You" ? "justify-end" : "justify-start"
-                }`}
-              >
+              return (
                 <div
-                  className={`px-3 py-2 rounded-lg text-sm max-w-auto text-left whitespace-pre-wrap ${getMessageColor()}`}
+                  key={index}
+                  className={`flex ${
+                    msg.wallet === "You" ? "justify-end" : "justify-start"
+                  }`}
                 >
-                  {msg.wallet === "Chat" && msg.responseType === "chatoshi" ? (
-                    <Catoshi
-                      data={msg.chatoshiData}
-                      isHistory={msg.isHistory}
-                    />
-                  ) : msg.wallet === "Chat" &&
-                    msg.responseType === "get_top_cryptos" ? (
-                    <CryptoDisplay
-                      data={msg.cryptoData}
-                      title={msg.cryptoTitle}
-                    />
-                  ) : msg.wallet === "Chat" &&
-                    msg.responseType === "get_user_balance"  ? (
-                    <UserBalance data={msg.chainData} />
-                  ) :msg.wallet === "Chat" && 
-                    msg.responseType==="get_token_balance" ? (
-                      <TokenBalance data={msg.tokenResponse} title={msg.tokenTitle}/>
-                    )
-                  : msg.wallet === "Chat" &&
-                    msg.responseType === "all_wallet_addresses" ? (
-                    <WalletAddresses
-                      data={msg.walletResponse}
-                      title={msg.walletTitle}
-                    />
-                  ) : msg.wallet === "Chat" &&
-                    msg.responseType === "all_assets" ? (
-                    <MyAssets data={msg.assetResponse} />
-                  ) : msg.wallet === "Chat" &&
-                    msg.responseType === "all_portfolios" ? (
-                    <AllPortfolio data={msg.portfolioResponse} />
-                  ) : msg.wallet === "Chat" && isLast && isTyping ? (
-                    <Typewriter text={fullResponse} className="relative" />
-                  ) : msg.isJson ? (
-                    <div className="mt-1">
-                      {typeof msg.content === "object" &&
-                      msg.content !== null ? (
-                        <div>
-                          <h4 className="font-bold mb-2">
-                            {msg.content.action
-                              ? `Action: ${convertKeysToCamelCase(
-                                  msg.content.action
-                                )}`
-                              : null}
-                          </h4>
-                          <div className="pl-4">
-                            {Object.entries(msg.content)
-                              .filter(([key, value]) => {
-                                if (
-                                  value === "" ||
-                                  value === null ||
-                                  value === undefined
-                                ) {
-                                  return false;
-                                }
-                                if (
-                                  ["success", "message", "status"].includes(key)
-                                ) {
-                                  return false;
-                                }
-                                if (
-                                  typeof value === "object" &&
-                                  Object.keys(value).length === 0
-                                ) {
-                                  return false;
-                                }
-                                return true;
-                              })
-                              .map(([key, value]) => {
-                                const formattedKey = key.replace(
-                                  /_([a-z])/g,
-                                  (g) => g[1].toUpperCase()
-                                );
-
-                                let displayValue;
-                                if (
-                                  typeof value === "object" &&
-                                  value !== null
-                                ) {
+                  <div
+                    className={`md:px-4 px-2 py-3 rounded-xl text-xs md:text-sm max-w-[100%] md:max-w-[75%] lg:max-w-[65%] text-left whitespace-pre-wrap shadow-sm ${getMessageColor()}`}
+                  >
+                    {msg.wallet === "Chat" &&
+                    msg.responseType === "chatoshi" ? (
+                      <Catoshi
+                        data={msg.chatoshiData}
+                        isHistory={msg.isHistory}
+                      />
+                    ) : msg.wallet === "Chat" &&
+                      msg.responseType === "get_top_cryptos" ? (
+                      <CryptoDisplay
+                        data={msg.cryptoData}
+                        title={msg.cryptoTitle}
+                      />
+                    ) : msg.wallet === "Chat" &&
+                      msg.responseType === "get_user_balance" ? (
+                      <UserBalance data={msg.chainData} />
+                    ) : msg.wallet === "Chat" &&
+                      msg.responseType === "get_token_balance" ? (
+                      <TokenBalance
+                        data={msg.tokenResponse}
+                        title={msg.tokenTitle}
+                      />
+                    ) : msg.wallet === "Chat" &&
+                      msg.responseType === "all_wallets_addresses" ? (
+                      <WalletAddresses
+                        data={msg.walletResponse}
+                        title={msg.walletTitle}
+                      />
+                    ) : msg.wallet === "Chat" &&
+                      msg.responseType === "all_assets" ? (
+                      <MyAssets data={msg.assetResponse} />
+                    ) : msg.wallet === "Chat" &&
+                      msg.responseType === "all_portfolios" ? (
+                      <AllPortfolio data={msg.portfolioResponse} />
+                    ) : msg.wallet === "Chat" && isLast && isTyping ? (
+                      <Typewriter text={fullResponse} className="relative" />
+                    ) : msg.isJson ? (
+                      <div className="mt-1">
+                        {typeof msg.content === "object" &&
+                        msg.content !== null ? (
+                          <div>
+                            <h4 className="font-bold mb-2">
+                              {msg.content.action
+                                ? `Action: ${convertKeysToCamelCase(
+                                    msg.content.action
+                                  )}`
+                                : null}
+                            </h4>
+                            <div className="pl-4">
+                              {Object.entries(msg.content)
+                                .filter(([key, value]) => {
                                   if (
-                                    Array.isArray(value) &&
-                                    value.length === 0
+                                    value === "" ||
+                                    value === null ||
+                                    value === undefined
                                   ) {
-                                    return null;
+                                    return false;
                                   }
-                                  displayValue = JSON.stringify(
-                                    convertKeysToCamelCase(value),
-                                    null,
-                                    2
+                                  if (
+                                    ["success", "message", "status"].includes(
+                                      key
+                                    )
+                                  ) {
+                                    return false;
+                                  }
+                                  if (
+                                    typeof value === "object" &&
+                                    Object.keys(value).length === 0
+                                  ) {
+                                    return false;
+                                  }
+                                  return true;
+                                })
+                                .map(([key, value]) => {
+                                  const formattedKey = key.replace(
+                                    /_([a-z])/g,
+                                    (g) => g[1].toUpperCase()
                                   );
-                                } else {
-                                  displayValue = convertKeysToCamelCase(value);
-                                }
 
-                                return (
-                                  <div key={key} className="mb-1">
-                                    <strong>
-                                      {formattedKey.charAt(0).toUpperCase() +
-                                        formattedKey.slice(1)}
-                                      :
-                                    </strong>{" "}
-                                    {displayValue}
-                                  </div>
-                                );
-                              })}
+                                  let displayValue;
+                                  if (
+                                    typeof value === "object" &&
+                                    value !== null
+                                  ) {
+                                    if (
+                                      Array.isArray(value) &&
+                                      value.length === 0
+                                    ) {
+                                      return null;
+                                    }
+                                    displayValue = JSON.stringify(
+                                      convertKeysToCamelCase(value),
+                                      null,
+                                      2
+                                    );
+                                  } else {
+                                    displayValue =
+                                      convertKeysToCamelCase(value);
+                                  }
+
+                                  return (
+                                    <div key={key} className="mb-1">
+                                      <strong>
+                                        {formattedKey.charAt(0).toUpperCase() +
+                                          formattedKey.slice(1)}
+                                        :
+                                      </strong>{" "}
+                                      {displayValue}
+                                    </div>
+                                  );
+                                })}
+                            </div>
                           </div>
-                        </div>
-                      ) : msg.isHistory ? (
-                        msg.content
-                      ) : (
-                        <Typewriter text={msg.content} className="relative" />
-                      )}
-                    </div>
-                  ) : typeof msg.content === "object" ? (
-                    JSON.stringify(convertKeysToCamelCase(msg.content), null, 2)
-                  ) : msg.isHistory ? (
-                    msg.content
-                  ) : (
-                    <Typewriter text={msg.content} className="relative" />
-                  )}
+                        ) : msg.isHistory ? (
+                          msg.content
+                        ) : (
+                          <Typewriter text={msg.content} className="relative" />
+                        )}
+                      </div>
+                    ) : typeof msg.content === "object" ? (
+                      JSON.stringify(
+                        convertKeysToCamelCase(msg.content),
+                        null,
+                        2
+                      )
+                    ) : msg.isHistory ? (
+                      msg.content
+                    ) : (
+                      <Typewriter text={msg.content} className="relative" />
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+
+            {isTyping && typingText && (
+              <div className="flex justify-start">
+                <div className="px-4 py-3 rounded-xl text-xs md:text-sm text-gray-800 dark:text-gray-200 max-w-[85%] md:max-w-[75%] lg:max-w-[65%] text-left whitespace-pre-wrap relative">
+                  {typingText}
+                  <span className="inline-block w-0.5 h-4 ml-0.5 bg-gray-800 dark:bg-gray-200 animate-cursor-blink absolute"></span>
                 </div>
               </div>
-            );
-          })}
+            )}
 
-          {isTyping && typingText && (
-            <div className="flex justify-start">
-              <div className="px-3 py-2 rounded-lg text-sm text-gray-800 dark:text-gray-200 max-w-[80%] text-left whitespace-pre-wrap relative">
-                {typingText}
-                <span className="inline-block w-0.5 h-4 ml-0.5 bg-gray-800 dark:bg-gray-200 animate-cursor-blink absolute"></span>
+            {loading && !isTyping && (
+              <div className="flex justify-start">
+                <div className="px-4 py-3 rounded-xl text-xs md:text-sm text-gray-800 dark:text-gray-200 shadow-sm">
+                  <span className="inline-flex gap-1">
+                    <span
+                      className="w-2 h-2 rounded-full bg-gray-500 animate-bounce"
+                      style={{ animationDelay: "0ms" }}
+                    ></span>
+                    <span
+                      className="w-2 h-2 rounded-full bg-gray-500 animate-bounce"
+                      style={{ animationDelay: "300ms" }}
+                    ></span>
+                    <span
+                      className="w-2 h-2 rounded-full bg-gray-500 animate-bounce"
+                      style={{ animationDelay: "600ms" }}
+                    ></span>
+                  </span>
+                </div>
               </div>
-            </div>
-          )}
-
-          {loading && !isTyping && (
-            <div className="flex justify-start">
-              <div className="px-3 py-2 rounded-lg text-sm text-gray-800 dark:text-gray-200">
-                <span className="inline-flex gap-1">
-                  <span
-                    className="w-2 h-2 rounded-full bg-gray-500 animate-bounce"
-                    style={{ animationDelay: "0ms" }}
-                  ></span>
-                  <span
-                    className="w-2 h-2 rounded-full bg-gray-500 animate-bounce"
-                    style={{ animationDelay: "300ms" }}
-                  ></span>
-                  <span
-                    className="w-2 h-2 rounded-full bg-gray-500 animate-bounce"
-                    style={{ animationDelay: "600ms" }}
-                  ></span>
-                </span>
-              </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
-        {/* <div className="sticky bottom-0 mt-[2rem] bg-white dark:bg-black border-t border-gray-200 dark:border-none dark:border py-2">
-          <div className="max-w-4xl mx-auto flex items-center gap-2">
-            <input
-              className="flex-1 bg-gray-100 dark:bg-black dark:border rounded-lg px-4 py-2 text-sm dark:text-gray-200 dark:placeholder-gray-400"
-              placeholder="Write message here..."
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  sendMessage();
-                }
-              }}
-              disabled={isTyping}
-            />
-
-            <button
-              className={`h-10 w-10 rounded-full bg-blue-500 text-white flex items-center justify-center cursor-pointer hover:bg-blue-600 ${
-                isTyping ? "opacity-50 cursor-not-allowed" : ""
-              }`}
-              onClick={sendMessage}
-              disabled={isTyping}
-            >
-              <img src={Icon} alt="Send" className="h-5 w-5" />
-            </button>
-
-            <button
-              className={`h-10 w-10 rounded-full ${
-                recording
-                  ? "bg-red-600 animate-pulse"
-                  : "bg-gray-200 dark:bg-gray-700"
-              } text-white flex items-center justify-center cursor-pointer ${
-                isTyping ? "opacity-50 cursor-not-allowed" : ""
-              }`}
-              onClick={recording ? stopRecording : startRecording}
-              disabled={isTyping}
-            >
-              {recording ? (
-                <div className="flex gap-0.5">
-                  <span
-                    className="w-1 h-2 bg-white animate-pulse"
-                    style={{ animationDelay: "0ms" }}
-                  ></span>
-                  <span
-                    className="w-1 h-3 bg-white animate-pulse"
-                    style={{ animationDelay: "150ms" }}
-                  ></span>
-                  <span
-                    className="w-1 h-4 bg-white animate-pulse"
-                    style={{ animationDelay: "300ms" }}
-                  ></span>
-                </div>
-              ) : (
-                <Mic size={18} className="text-gray-800 dark:text-gray-200" />
-              )}
-            </button>
-          </div>
-        </div> */}
-        {/* Message Input Bar */}
-        <div className="sticky bottom-0 mt-6 bg-transparent px-2">
-          <div className="flex items-center w-full rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-black px-3 py-2 shadow-sm">
-            {/* Attachment Button */}
-            <button className="flex-shrink-0 mr-2 text-gray-700 dark:text-gray-300">
-              <img src={Icon} alt="Attachment" className="h-5 w-5" />
-            </button>
-
+        {/* Input Bar - Fixed at bottom with proper spacing */}
+        <div className="mt-6 sticky bottom-0 bg-transparent">
+          <div className="flex items-center w-full max-w-4xl mx-auto rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-black px-4 py-3 shadow-lg">
             {/* Input Field */}
             <input
               className="flex-1 bg-transparent focus:outline-none text-sm text-gray-800 dark:text-gray-200 placeholder-gray-400"
@@ -1431,37 +1327,50 @@ const NavigationTabsWithChat = () => {
               disabled={isTyping || loading}
             />
 
-            {/* Mic Button (hidden on small screens) */}
+            {/* Mic Button */}
+            {/* Recording Button */}
             <button
-              className={`h-10 w-10 rounded-full items-center justify-center shadow-md mr-2 flex ${
-                recording ? "bg-red-600 animate-pulse" : "bg-black"
-              } text-white`}
+              className={`w-8 h-6 md:h-10 md:w-10 rounded-full flex items-center justify-center shadow-md mr-3 transition-all 
+    ${
+      recording
+        ? "bg-red-600 animate-pulse scale-105"
+        : "bg-black hover:bg-gray-800"
+    } text-white`}
               onClick={recording ? stopRecording : startRecording}
               disabled={isTyping}
             >
-              {recording ? (
-                <div className="flex gap-0.5">
-                  <span className="w-1 h-2 bg-white animate-pulse" />
-                  <span className="w-1 h-3 bg-white animate-pulse" />
-                  <span className="w-1 h-4 bg-white animate-pulse" />
-                </div>
-              ) : (
-                <Mic size={18} className="text-white" />
-              )}
+              {/* Mobile: Arrow dikhao */}
+              <span className="md:hidden p-1">
+                <IoMicOutline />
+              </span>
+
+              {/* Desktop: Recording UI */}
+              <span className="hidden md:flex">
+                {recording ? (
+                  <div className="flex gap-0.5">
+                    <span className="w-1 h-2 bg-white animate-pulse" />
+                    <span className="w-1 h-3 bg-white animate-pulse" />
+                    <span className="w-1 h-4 bg-white animate-pulse" />
+                  </div>
+                ) : (
+                  <img src="/recording-01.png" className="cursor-pointer" />
+                )}
+              </span>
             </button>
 
-            {/* Send Button (visible only on mobile) */}
+            {/* Send Button */}
             <button
-              className=" h-10 w-10 cursor-pointer rounded-full flex items-center justify-center bg-black text-white shadow-md"
+              className="md:hidden p-1 w-8 h-6 cursor-pointer rounded-full flex items-center justify-center bg-black hover:bg-gray-800 text-white shadow-md transition-colors"
               onClick={() => sendMessage()}
-              disabled={isTyping}
+              disabled={isTyping || !message.trim()}
             >
-              ➤
+              {/* Mobile: Arrow dikhao */}
+              <span className="md:hidden">➤</span>
             </button>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

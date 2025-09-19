@@ -1,28 +1,50 @@
 import React, { useEffect, useState } from "react";
-import { Loader } from "lucide-react";
+import { Loader, Copy } from "lucide-react";
 import { FireApi } from "@/hooks/fireApi";
 import toast from "react-hot-toast";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 const TransferToken = () => {
   const [formData, setFormData] = useState({
     address: "",
     receiverAddress: "",
     amount: "",
-    token: "USDC",
+    token: "",
   });
 
   const [walletDetails, setWalletDetails] = useState([]);
+  const [importedTokens, setImportedTokens] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [tokensLoading, setTokensLoading] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleChange = (name, value) => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleAddressChange = (e) => {
-    const { value } = e.target;
-    setFormData({ ...formData, address: value });
+  const handleAddressChange = (value) => {
+    const selectedWallet = walletDetails.find(wallet => wallet.address === value);
+    
+    setFormData({ 
+      ...formData, 
+      address: value,
+      token: "" // Reset token when wallet changes
+    });
+    
+    // Get imported tokens for the selected wallet's chain
+    if (selectedWallet) {
+      getImportedTokens(selectedWallet.chain);
+    }
   };
 
   const getWalletAddresses = async () => {
@@ -33,10 +55,14 @@ const TransferToken = () => {
       
       // Set the first valid wallet as default if available
       if (validWallets.length > 0 && !formData.address) {
+        const firstWallet = validWallets[0];
         setFormData(prev => ({
           ...prev,
-          address: validWallets[0].address
+          address: firstWallet.address
         }));
+        
+        // Also fetch tokens for the first wallet
+        getImportedTokens(firstWallet.chain);
       }
       
       return res;
@@ -49,6 +75,34 @@ const TransferToken = () => {
   useEffect(() => {
     getWalletAddresses();
   }, []);
+
+  const getImportedTokens = async (chain) => {
+    if (!chain) return;
+    
+    setTokensLoading(true);
+    try {
+      const res = await FireApi(`/get-imported-tokens?chain=${chain}`);
+      console.log(res, 'imported tokens api');
+      
+      if (res?.success && res.importedTokens) {
+        setImportedTokens(res.importedTokens);
+        
+        // Set the first token as default if available
+        if (res.importedTokens.length > 0 && !formData.token) {
+          const firstToken = res.importedTokens[0];
+          setFormData(prev => ({
+            ...prev,
+            token: firstToken.symbol || firstToken.name
+          }));
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching imported tokens:", error);
+      toast.error(error.message || "Failed to fetch imported tokens");
+    } finally {
+      setTokensLoading(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -87,112 +141,153 @@ const TransferToken = () => {
   };
 
   return (
-    <div className="border border-[#A0AEC0] dark:border-[#505050] w-full max-w-md mx-auto p-4 bg-gray-100 dark:bg-[#2A2B2E] rounded-md shadow-md overflow-hidden">
-      <h2 className="text-xl font-semibold text-center mb-4">Transfer Token</h2>
+    <div className="container mx-auto p-4 max-w-md">
+      <Card className="dark:bg-[#2A2B2E] bg-gray-100">
+        <CardHeader>
+          <CardTitle className="text-center text-xl font-semibold">
+            Transfer Token
+          </CardTitle>
+        </CardHeader>
+        
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Wallet Address Selection */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium">Select Wallet</label>
+              <Select value={formData.address} onValueChange={handleAddressChange}>
+                <SelectTrigger className="text-xs md:text-sm w-full dark:bg-none dark:text-white dark:border-gray-500">
+                  <SelectValue placeholder="Select wallet" />
+                </SelectTrigger>
+                <SelectContent className="dark:bg-[#2A2B2E]">
+                  {walletDetails.length === 0 ? (
+                    <SelectItem value="no-wallets" disabled>
+                      No wallets available
+                    </SelectItem>
+                  ) : (
+                    walletDetails.map((wallet) => (
+                      <SelectItem key={wallet.address} value={wallet.address}>
+                        {wallet.chain}: {wallet.address}
+                      </SelectItem>
+                    ))
+                  )}
+                </SelectContent>
+              </Select>
+              
+              {formData.address && (
+                <div className="flex flex-wrap gap-2">
+                  <Badge variant="outline" className="dark:bg-[#232428]">
+                    {walletDetails.find(w => w.address === formData.address)?.chain || 'Selected'}
+                  </Badge>
+                </div>
+              )}
+            </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-            Select Your Wallet Address:
-          </label>
-          <select
-            name="address"
-            value={formData.address}
-            onChange={handleAddressChange}
-            className="text-xs md:text-sm mt-1 px-4 py-2 w-full border border-gray-300 rounded-md cursor-pointer"
-            required
-          >
-            {walletDetails.length === 0 ? (
-              <option value="">No wallets available</option>
-            ) : (
-              walletDetails.map((wallet) => (
-                <option 
-                  key={wallet.address} 
-                  value={wallet.address}
-                  className="text-sm cursor-pointer overflow-auto"
+            {/* Receiver Address */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium">Receiver Address</label>
+              <Input
+                name="receiverAddress"
+                value={formData.receiverAddress}
+                onChange={(e) => handleChange("receiverAddress", e.target.value)}
+                placeholder="Enter receiver address"
+                required
+                className="text-xs md:text-sm dark:bg-none dark:outline-none dark:border-gray-500"
+              />
+            </div>
+
+            {/* Amount */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium">Amount</label>
+              <Input
+                name="amount"
+                type="number"
+                value={formData.amount}
+                onChange={(e) => handleChange("amount", e.target.value)}
+                placeholder="Enter amount"
+                min="0"
+                step="0.00000001"
+                required
+                className="text-xs md:text-sm dark:bg-none dark:outline-none dark:border-gray-500"
+              />
+            </div>
+
+            {/* Token Selection */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium">Token</label>
+              {tokensLoading ? (
+                <div className="flex items-center text-sm text-muted-foreground">
+                  <Loader className="h-4 w-4 animate-spin mr-2" />
+                  Loading tokens...
+                </div>
+              ) : (
+                <Select value={formData.token} onValueChange={(value) => handleChange("token", value)}>
+                  <SelectTrigger className="text-xs md:text-sm w-full dark:bg-none dark:text-white dark:border-gray-500">
+                    <SelectValue placeholder="Select token" />
+                  </SelectTrigger>
+                  <SelectContent className="dark:bg-[#2A2B2E]">
+                    {importedTokens.length === 0 ? (
+                      <SelectItem value="no-tokens" disabled>
+                        No tokens available
+                      </SelectItem>
+                    ) : (
+                      importedTokens.map((token) => (
+                        <SelectItem 
+                          key={token.id} 
+                          value={token.symbol || token.name}
+                        >
+                          {token.symbol || token.name}
+                        </SelectItem>
+                      ))
+                    )}
+                  </SelectContent>
+                </Select>
+              )}
+              
+              {formData.token && (
+                <div className="flex flex-wrap gap-2">
+                  <Badge variant="outline" className="dark:bg-[#232428]">
+                    {formData.token}
+                  </Badge>
+                </div>
+              )}
+            </div>
+
+            {/* Submit Button */}
+            <Button
+              type="submit"
+              className="w-full py-2 px-4 cursor-pointer bg-[#2A2B2E] dark:text-[#2A2B2E] dark:bg-gray-200 text-white font-semibold rounded-md disabled:opacity-50"
+              disabled={loading || walletDetails.length === 0 || !formData.token}
+            >
+              {loading ? (
+                <>
+                  <Loader className="animate-spin mr-2" size={16} />
+                  Transferring...
+                </>
+              ) : (
+                "Transfer Token"
+              )}
+            </Button>
+          </form>
+
+          {/* Transaction Hash Display */}
+          {message && (
+            <div className="mt-4 p-3 bg-muted rounded-md dark:bg-[#232428]">
+              <p className="text-sm font-medium">Transaction Hash:</p>
+              <div className="flex items-center justify-between mt-1">
+                <p className="text-sm break-all mr-2 text-xs">{message}</p>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={copyToClipboard}
+                  className="dark:text-white"
                 >
-                  {wallet.chain}: {wallet.address}
-                </option>
-              ))
-            )}
-          </select>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-            Receiver Address
-          </label>
-          <input
-            type="text"
-            name="receiverAddress"
-            value={formData.receiverAddress}
-            onChange={handleChange}
-            className="text-xs md:text-sm mt-1 px-4 py-2 w-full border border-gray-300 rounded-md"
-            placeholder="Enter receiver address"
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-            Amount
-          </label>
-          <input
-            type="number"
-            name="amount"
-            value={formData.amount}
-            onChange={handleChange}
-            className="text-xs md:text-sm mt-1 px-4 py-2 w-full border border-gray-300 rounded-md"
-            placeholder="Enter amount"
-            min="0"
-            step="0.00000001"
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-            Token
-          </label>
-          <select
-            name="token"
-            value={formData.token}
-            onChange={handleChange}
-            className="text-xs md:text-sm mt-1 px-4 py-2 w-full border border-gray-300 rounded-md"
-          >
-            <option value="USDC">USDC</option>
-            <option value="USDT">USDT</option>
-          </select>
-        </div>
-
-        <div className="flex justify-center">
-          <button
-            type="submit"
-            className="w-full py-2 px-4 cursor-pointer bg-[#2A2B2E] dark:text-[#2A2B2E] dark:bg-gray-200 text-white font-semibold rounded-md disabled:opacity-50"
-            disabled={loading || walletDetails.length === 0}
-          >
-            {loading ? (
-              <Loader className="animate-spin w-6 h-6 mx-auto" />
-            ) : (
-              "Transfer Token"
-            )}
-          </button>
-        </div>
-      </form>
-
-      {message && (
-        <div className="mt-4 p-2 bg-gray-200 dark:bg-gray-700 rounded-md">
-          <p className="text-sm font-medium text-gray-700 dark:text-gray-200">
-            Transaction Hash:
-          </p>
-          <p 
-            className="text-sm break-all cursor-pointer hover:text-blue-500 dark:hover:text-blue-300"
-            onClick={copyToClipboard}
-          >
-            {message} (Click to copy)
-          </p>
-        </div>
-      )}
+                  <Copy className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 };

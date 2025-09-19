@@ -1,30 +1,32 @@
-import React from 'react';
-import toast from 'react-hot-toast';
+import React from "react";
+import toast from "react-hot-toast";
+// import ethLogo from "../assets/eth.png"; // adjust path to your eth.png
 
+// QR Component
 const SimpleQRCode = ({ value, size = 120 }) => {
   if (!value) return null;
-
   return (
-    <div className="bg-white p-2 rounded">
+    <div className="p-2 bg-white rounded">
       <img
-        src={`https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(value)}`}
+        src={`https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(
+          value
+        )}`}
         alt="QR Code"
         width={size}
         height={size}
+        className="rounded"
       />
     </div>
   );
 };
 
 const UserBalance = ({ data }) => {
-  console.log(data, "user balance data");
-
   const walletData = Array.isArray(data) ? data[0] : data;
 
   if (!walletData) {
     return (
-      <div className="bg-gray-300 rounded-xl p-4 text-black max-w-sm mx-auto">
-        <div className="text-center text-black">No wallet data available</div>
+      <div className="bg-white dark:bg-[#1b1c1e] rounded-xl p-6 text-black max-w-sm mx-auto border border-gray-300">
+        <div className="text-center text-gray-500">No wallet data available</div>
       </div>
     );
   }
@@ -53,7 +55,7 @@ const UserBalance = ({ data }) => {
     }
   };
 
-  // Filter out non-token keys
+  // Only show token balances (exclude metadata fields)
   const tokenEntries = Object.entries(walletData).filter(
     ([key]) =>
       !["address", "balance", "blockchain", "title", "response_type"].includes(
@@ -62,26 +64,24 @@ const UserBalance = ({ data }) => {
   );
 
   return (
-    <div className="bg-white dark:bg-[#1b1c1e] rounded-xl p-6 text-white max-w-sm mx-auto border border-gray-400 dark:border-gray-700">
+    <div className="bg-white dark:bg-[#1b1c1e] text-black dark:text-gray-200 rounded-xl p-6 text-black max-w-sm mx-auto border border-[#A0AEC0] dark:border-gray-700">
       {/* Title */}
-      <h3 className="text-sm font-normal mb-6 text-gray-700 dark:text-white">
-        {walletData.title || `Here is your ${walletData.blockchain} wallet`}
+      <h3 className="text-xs md:text-sm  font-semibold mb-4 text-black dark:text-gray-200">
+        {walletData.title || `Your ${walletData.blockchain} Wallet`}
       </h3>
 
-      {/* Dynamic Token Balances */}
-      <div className="space-y-2 mb-6">
+      {/* Token Balances */}
+      <div className="border border-[#A0AEC0]  dark:border-gray-700 rounded-lg p-3 mb-2">
         {tokenEntries.length > 0 ? (
           tokenEntries.map(([symbol, amount]) => (
             <div
               key={symbol}
-              className="flex items-center justify-between border-b border-dashed border-gray-600 pb-1"
+              className="flex items-center justify-between text-xs md:text-sm  mb-2 last:mb-0"
             >
-              <span className="text-sm font-medium text-gray-800 dark:text-white">
-                {symbol}
-              </span>
-              <span className="text-sm text-gray-700 dark:text-gray-300">
-                {amount}
-              </span>
+              <div className="flex items-center gap-2 ">
+                <span className="font-medium">{symbol}</span>
+              </div>
+              <span className="text-black dark:text-gray-200">{amount}</span>
             </div>
           ))
         ) : (
@@ -90,60 +90,49 @@ const UserBalance = ({ data }) => {
       </div>
 
       {/* Wallet Address */}
-      <div className="mb-4">
+      <div className="border border-[#A0AEC0] dark:border-gray-700 rounded-lg p-3 mb-2">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm text-gray-800 dark:text-white">
-            Wallet Address
-          </span>
+          <span className="text-xs md:text-sm  font-medium text-black dark:text-gray-200">Wallet Address</span>
           <button
             onClick={copyToClipboard}
-            className="w-6 h-6 border border-gray-500 rounded flex items-center justify-center cursor-pointer dark:hover:bg-gray-700 text-gray-800 dark:text-white"
-            title="Copy to clipboard"
+            className="p-1 rounded hover:bg-gray-100"
+            title="Copy address"
           >
             <svg
-              width="14"
-              height="14"
+              width="16"
+              height="16"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
               strokeWidth="2"
             >
-              <rect
-                x="9"
-                y="9"
-                width="13"
-                height="13"
-                rx="2"
-                ry="2"
-              ></rect>
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
               <path d="M9 5H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-2"></path>
             </svg>
           </button>
         </div>
-        <div className="text-xs text-gray-800 dark:text-white border border-gray-700 dark:border-white font-mono break-all dark:bg-gray-800 p-2 rounded">
+        <div className="text-xs font-mono break-all p-2 rounded">
           {walletData.address || "No address available"}
         </div>
-      </div>
 
-      {/* QR Code */}
-      <div className="flex justify-center mb-6">
-        {walletData.address ? (
-          <SimpleQRCode value={walletData.address} size={120} />
-        ) : (
-          <div className="w-32 h-32 dark:bg-gray-700 flex items-center justify-center rounded">
-            <span className="text-gray-800 dark:text-white text-xs">
-              No address
-            </span>
-          </div>
-        )}
+        {/* QR Code */}
+        <div className="flex justify-center mt-2 ">
+          {walletData.address ? (
+            <SimpleQRCode value={walletData.address} size={140} />
+          ) : (
+            <div className="w-32 h-32 bg-gray-100 flex items-center justify-center rounded">
+              <span className="text-xs text-gray-500">No address</span>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Network Info */}
-      <div className="border-t border-gray-700 pt-4">
-        <div className="text-sm text-gray-800 dark:text-white mb-2">
+      <div className="text-xs md:text-sm  border border-[#A0AEC0] dark:border-gray-700 p-3 rounded-lg">
+        <div className="mb-1 font-medium text-black dark:text-gray-200">
           Network: {getNetworkName(walletData.blockchain)}
         </div>
-        <div className="text-xs text-gray-600 dark:text-white">
+        <div className="text-xs text-black dark:text-gray-200">
           Make sure that the address and network is correct
         </div>
       </div>
