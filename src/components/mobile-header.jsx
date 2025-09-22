@@ -17,9 +17,6 @@ export default function MobileHeader({ onMenuClick }) {
           <span className="sr-only">Menu</span>
           <Menu className="h-4 w-4 dark:text-white" />
         </Button>
-        <span className="font-semibold flex dark:text-white gap-1 text-sm">
-          Bell <div className="text-gray-400">:$69155.4</div>
-        </span>
         <Button variant="ghost" size="icon" className="h-5 w-5">
           <img
             src={NotificationIcon}

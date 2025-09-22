@@ -1,8 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
-import Icon from "../../public/Icon.svg";
 import { chatBaseUrl, chatHistoryUrl, FireApi } from "@/hooks/fireApi";
-import { Mic } from "lucide-react";
 import { jwtDecode } from "jwt-decode";
 import { Typewriter } from "@/lib/Typewriter";
 import ConfirmationModal from "./ConfirmationModal";
@@ -237,6 +235,51 @@ const NavigationTabsWithChat = () => {
           },
         ]);
         break;
+
+     case "toggle_watchlist":
+  console.log("🎯 toggle_watchlist case triggered");
+  console.log("📦 Reply content:", reply);
+  
+  setMessages((prev) => [
+    ...prev,
+    {
+      wallet: "Chat",
+      content: reply,
+      isJson: false,
+      responseType: "toggle_watchlist",
+      isHistory: false,
+    },
+  ]);
+  
+  // Method 1: Set localStorage flag
+  localStorage.setItem("watchlist_needs_refresh", "true");
+  localStorage.setItem("watchlist_debug", Date.now().toString());
+  
+  // Method 2: Dispatch custom event (most reliable for same window)
+  window.dispatchEvent(new CustomEvent('watchlist-refresh', { 
+    detail: { 
+      reason: 'toggle_watchlist',
+      timestamp: Date.now() 
+    } 
+  }));
+  
+  // Method 3: Force immediate check with timeout to ensure it's processed
+  setTimeout(() => {
+    const check = localStorage.getItem("watchlist_needs_refresh");
+    console.log("🔍 localStorage check:", check);
+    
+    // If still true, dispatch event again
+    if (check === 'true') {
+      window.dispatchEvent(new CustomEvent('watchlist-refresh', { 
+        detail: { 
+          reason: 'timeout_retry',
+          timestamp: Date.now() 
+        } 
+      }));
+    }
+  }, 100);
+  
+  break;
 
       case "transaction":
         if (Array.isArray(reply)) {
@@ -896,6 +939,13 @@ const NavigationTabsWithChat = () => {
                     : JSON.stringify(replyContent, null, 2);
                 break;
 
+              case "toggle_watchlist":
+                content =
+                  typeof replyContent === "string"
+                    ? replyContent.trim()
+                    : JSON.stringify(replyContent, null, 2);
+                break;
+
               case "transaction":
               case "transaction_complete":
                 content = replyContent;
@@ -1109,8 +1159,8 @@ const NavigationTabsWithChat = () => {
             ref={messageContainerRef}
             className="lg:w-[90%] lg:mx-auto xl:w-[90%] w-[100%] flex-1 overflow-y-auto overflow-x-hidden space-y-4 md:px-2"
             style={{
-              maxHeight: "calc(100vh - 200px)", // Adjusted for better spacing
-              minHeight: "300px", // Minimum height to prevent collapse
+              maxHeight: "calc(100vh - 200px)",
+              minHeight: "300px",
             }}
           >
             {messages.map((msg, index) => {
@@ -1141,7 +1191,7 @@ const NavigationTabsWithChat = () => {
                   }`}
                 >
                   <div
-                    className={`md:px-4 px-2 py-3 rounded-xl text-xs md:text-sm max-w-[100%] md:max-w-[75%] lg:max-w-[65%] text-left whitespace-pre-wrap shadow-sm ${getMessageColor()}`}
+                    className={`md:px-4 px-2 py-3 rounded-xl text-xs md:text-sm max-w-[100%] md:max-w-[75%] lg:max-w-[65%] text-left whitespace-pre-wrap ${getMessageColor()}`}
                   >
                     {msg.wallet === "Chat" &&
                     msg.responseType === "chatoshi" ? (
@@ -1288,7 +1338,7 @@ const NavigationTabsWithChat = () => {
 
             {loading && !isTyping && (
               <div className="flex justify-start">
-                <div className="px-4 py-3 rounded-xl text-xs md:text-sm text-gray-800 dark:text-gray-200 shadow-sm">
+                <div className="px-4 py-3 rounded-xl text-xs md:text-sm text-gray-800 dark:text-gray-200">
                   <span className="inline-flex gap-1">
                     <span
                       className="w-2 h-2 rounded-full bg-gray-500 animate-bounce"
