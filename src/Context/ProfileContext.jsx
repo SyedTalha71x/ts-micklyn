@@ -7,7 +7,23 @@ const profileContext = createContext(undefined);
 export const ProfileProvider = ({ children }) => {
 
   const [profile, setProfile] = useState([]);
+  const [loading, setLoading] = useState([]);
+  const [watchListData, setWatchListData] = useState([]);
 
+   const getWatchlistData = async () => {
+      try {
+        setLoading(true);
+        const res = await FireApi("/assets");
+        console.log(res, "watchlist data");
+        setWatchListData(res?.data || []);
+      } catch (error) {
+        toast.error(error?.message || "Failed to load the assets.");
+        setWatchListData([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
   const handleUserProfile = async () => {
     try {
         const res = await FireApi("/user", 'GET');
@@ -29,6 +45,11 @@ export const ProfileProvider = ({ children }) => {
         profile,
         setProfile,
         handleUserProfile,
+        loading,
+        setLoading,
+        getWatchlistData,
+        watchListData,
+        setWatchListData
       }}
     >
       {children}

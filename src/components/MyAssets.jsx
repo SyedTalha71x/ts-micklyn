@@ -33,7 +33,7 @@ export default function MyAssets({ data }) {
               <div className="flex gap-2">
                 <span className="text-xs md:text-sm font-medium text-gray-800 dark:text-white relative">
                   {asset.symbol}{" "}
-                  <span className="text-xs md:text-sm absolute ml-2 py-1 px-2 text-[8px] text-black bg-gray-200 dark:bg-gray-600 dark:text-gray-300 rounded-md">
+                  <span className="text-xs absolute ml-1 py-1 px-2 text-[8px] text-black bg-gray-200 dark:bg-gray-600 dark:text-gray-300 rounded-md">
                     {asset.chain}
                   </span>
                 </span>
@@ -48,6 +48,7 @@ export default function MyAssets({ data }) {
               <span className="text-xs md:text-sm text-gray-800 dark:text-white">
                 {asset.name}
               </span>
+              <span className="text-gray-400">$0.0</span>
             </div>
           </div>
         ))}

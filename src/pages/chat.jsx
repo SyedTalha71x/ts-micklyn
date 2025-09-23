@@ -59,7 +59,7 @@ export default function Chat() {
       </div>
 
       {/* Sidebar */}
-      <div className="hidden md:flex md:w-[20%] md:flex-shrink-0 dark:border dark:border-r">
+      <div className="hidden md:flex md:w-[20%] md:flex-shrink-0">
         <div className="h-full w-full flex flex-col">
           <div className="p-4 flex-1">
             <CryptoTable />
@@ -93,7 +93,7 @@ export default function Chat() {
           </span>
         </div>
         <div className="overflow-y-auto lg:hidden border max-w-[98%] text-xs flex flex-col gap- border border-[#A0AEC0] dark:border-gray-600 p-2 rounded-lg mt-4">
-          <div className="flex flex-row justify-between items-center font-medium mb-1">
+          <div className="flex flex-row justify-between items-center font-bold mb-1">
             Total Balances
             <button onClick={() => setShowBalances((prev) => !prev)}>
               {showBalances ? (
@@ -104,12 +104,12 @@ export default function Chat() {
             </button>
           </div>
 
-          {balances.map((item, idx) => (
-            <div key={idx} className="flex justify-between">
-              <span className="capitalize">{item.blockchain}</span>
-              <span>{showBalances ? item.balance : "****"}</span>
+          {/* {balances.map((item, idx) => ( */}
+            <div className="flex justify-between">
+              <span className="capitalize font-medium">USD:</span>
+              <span>{showBalances ? "$0" : "****"}</span>
             </div>
-          ))}
+          {/* ))} */}
         </div>
         <div className="h-full flex flex-col">
           <div className="overflow-y-auto flex-1 pt-7">
@@ -129,12 +129,12 @@ export default function Chat() {
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col absolute z-10 flex-wrap relative h-full">
        <div
-  className="hidden lg:block border max-w-[15%] text-xs flex flex-col gap-2
+  className="hidden lg:block border max-w-[12%] text-xs flex flex-col gap-2
              border-[#A0AEC0] dark:border-gray-600
              bg-white dark:bg-[#1b1c1e] 
-             p-2 rounded-lg ml-3 mt-4 shadow-sm z-50 relative"
+             p-2 rounded-lg -ml-1 mt-4 shadow-sm z-50 relative"
 >
-          <div className="flex flex-row justify-between items-center font-medium mb-1">
+          <div className="flex flex-row justify-between items-center mb-1 font-bold">
             Total Balances
             <button onClick={() => setShowBalances((prev) => !prev)}>
               {showBalances ? (
@@ -146,12 +146,12 @@ export default function Chat() {
           </div>
 
           {/* Show blockchain + balance */}
-          {balances.map((item, idx) => (
-            <div key={idx} className="flex justify-between">
-              <span className="capitalize">{item.blockchain}</span>
-              <span>{showBalances ? item.balance : "****"}</span>
+          {/* {balances.map((item, idx) => ( */}
+            <div className="flex gap-2">
+              <span className="capitalize">USD:</span>
+              <span>{showBalances ? "$0": "****"}</span>
             </div>
-          ))}
+          {/* ))} */}
         </div>
 
         <button
