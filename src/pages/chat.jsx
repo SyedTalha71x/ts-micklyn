@@ -92,7 +92,7 @@ export default function Chat() {
             <IoClose />
           </span>
         </div>
-        <div className="overflow-y-auto lg:hidden border max-w-[98%] text-xs flex flex-col gap- border border-[#A0AEC0] dark:border-gray-600 p-2 rounded-lg mt-4">
+        <div className="overflow-y-auto hidden border max-w-[98%] text-xs flex flex-col gap- border border-[#A0AEC0] dark:border-gray-600 p-2 rounded-lg mt-4">
           <div className="flex flex-row justify-between items-center font-bold mb-1">
             Total Balances
             <button onClick={() => setShowBalances((prev) => !prev)}>
@@ -162,7 +162,7 @@ export default function Chat() {
         </button>
 
         {/* Bottom Navigation */}
-        <div className="fixed md:ml-0 mx-auto w-[100%] md:w-[80%] p-2">
+        <div className="fixed md:ml-0 mx-auto w-[100%] h-full md:w-[80%] p-2">
           <NavigationTabs />
         </div>
       </div>

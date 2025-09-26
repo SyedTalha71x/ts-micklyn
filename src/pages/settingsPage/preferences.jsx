@@ -29,21 +29,21 @@ const PreferencesPage = () => {
   };
 
   return (
-    <Card4 className="w-full max-w-2xl">
-      <CardContent className="py-4">
-        <div className="space-y-4">
+    <Card4 className="w-full">
+      <CardContent className="-mt-6 md:py-4">
+        <div className="space-y-2 md:space-y-4">
           <div>
             <label className="block mb-2 text-sm dark:text-white">Currency</label>
             <div className="relative">
               <div 
-                className="border rounded-md p-2 dark:bg-[#232428] dark:text-white cursor-pointer flex items-center justify-between" 
+                className="border rounded-md py-[18px] px-3 dark:bg-[#232428] text-black dark:text-white cursor-pointer flex items-center justify-between" 
                 onClick={toggleWalletCurrency}
               >
-                <span className="text-sm text-gray-500">
+                <span className="text-sm text-black dark:text-white">
                   {selectedWalletCurrency === 'gbp' ? 'British pound' : 
                    selectedWalletCurrency === 'usd' ? 'US Dollar' : 'Euro'}
                 </span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="m6 9 6 6 6-6"/>
                 </svg>
               </div>

@@ -63,7 +63,7 @@ export default function ChangePassword() {
 
   return (
     <div
-    className="w-full max-w-md mx-auto p-4 rounded-md overflow-hidden "    >
+    className="w-full border border-2 max-w-md mx-auto p-4 rounded-lg overflow-hidden "    >
       {isMobile ? (
         <div className="w-full max-w-md">
           <div className="flex flex-col items-center space-y-4 pt-6">

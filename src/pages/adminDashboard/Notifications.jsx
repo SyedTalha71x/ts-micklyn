@@ -91,10 +91,10 @@ const Notifications = () => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <div className="flex justify-between items-center mb-6">
+    <div className="bg-white rounded-lg shadow p-4 md:p-6">
+      <div className="flex flex-wrap justify-between items-center mb-6">
         <h2 className="text-xl font-bold text-gray-800">Notifications & Alerts</h2>
-        <div className="flex space-x-3">
+        <div className="flex flex-wrap space-x-3">
           <button
             onClick={markAllAsRead}
             className="px-3 py-1 bg-indigo-600 text-white text-sm rounded-md hover:bg-indigo-700"

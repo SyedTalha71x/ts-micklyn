@@ -44,10 +44,10 @@ const MobileSidebar = ({ activeItem, setActiveItem, onItemClick, onClose }) => {
           key={item.path || index}
           onClick={() => handleItemClick(item)}
           className={`flex justify-between items-center p-4 rounded-lg border bg-white dark:bg-[#1B1C1E] shadow-sm text-sm cursor-pointer ${
-            activeItem === item.path ? "border-blue-500 dark:border-blue-400" : "border-gray-200 dark:border-gray-700"
+            activeItem === item.path ? "border-gray-500 dark:border-gray-400" : "border-gray-400 dark:border-gray-700"
           }`}
         >
-          <span className={activeItem === item.path ? "text-blue-600 dark:text-blue-400 font-medium" : ""}>
+          <span className={activeItem === item.path ? "text-gray-600 dark:text-white font-medium" : ""}>
             {item.name}
           </span>
           <span className="text-gray-400">›</span>

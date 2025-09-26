@@ -6,7 +6,7 @@ import VectorSvg from "../../public/Vector.svg";
 
 export default function MobileHeader({ onMenuClick }) {
   return (
-    <div className="p-4 ">
+    <div className="px-2 ">
       <div className="flex items-center justify-between">
         <Button
           variant="ghost"
@@ -17,17 +17,10 @@ export default function MobileHeader({ onMenuClick }) {
           <span className="sr-only">Menu</span>
           <Menu className="h-4 w-4 dark:text-white" />
         </Button>
+        <h2 className="mt-2"><span className="font-bold">USD</span>: $0</h2>
         <Button variant="ghost" size="icon" className="h-5 w-5">
-          <img
-            src={NotificationIcon}
-            className=" block dark:hidden"
-            alt="Light Mode Image"
-          />
-          <img
-            src={VectorSvg}
-            className=" hidden dark:block"
-            alt="Dark Mode Image"
-          />
+          <img src="/rotate-left.png" className="  dark:hidden"/>
+           <img src="/rotate-left light.png" className="hidden  dark:block"/>
         </Button>
       </div>
 

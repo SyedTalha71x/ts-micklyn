@@ -80,7 +80,7 @@ const ImportTokens = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 max-w-md">
+    <div className="container mx-auto md:p-4 max-w-md">
       <Card className="dark:bg-[#2A2B2E] bg-gray-100">
         <CardHeader>
           <h2 className="text-xl font-semibold text-center">Import Token</h2>

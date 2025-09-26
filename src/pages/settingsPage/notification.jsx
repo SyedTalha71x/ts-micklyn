@@ -104,9 +104,9 @@ const NotificationsPage = () => {
 
   return (
     <Card4 className="w-full max-w-2xl">
-      <CardContent className="py-4">
+      <CardContent className="md:py-4">
         <div className="space-y-4">
-          <div className="flex justify-between items-center">
+          <div className="flex flex-wrap gap-2 justify-between items-center">
             <div className="flex items-center space-x-2">
               <h2 className="text-lg font-semibold dark:text-white">Notifications</h2>
               {unreadCount > 0 && (

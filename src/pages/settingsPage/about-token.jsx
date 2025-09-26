@@ -192,7 +192,7 @@ const AboutToken = () => {
   };
 
   return (
-    <div className="w-full px-4">
+    <div className="w-full md:px-4">
       <div className="flex flex-wrap gap-4 mb-4">
         {tabs.map((tab, index) => (
           <button

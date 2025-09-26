@@ -16,9 +16,9 @@ export default function MyAssets({ data }) {
   const displayedAssets = showAll ? data : data.slice(0, 10);
 
   return (
-    <div className="w-full bg-white dark:bg-[#1b1c1e] rounded-xl p-4 dark:text-white min-w-[14rem] md:min-w-[25rem] border border-[#A0AEC0] dark:border-gray-700">
+    <div className="w-[21rem] md:w-[25rem] bg-white dark:bg-[#1b1c1e] rounded-xl p-4 dark:text-white border border-[#A0AEC0] dark:border-gray-700">
       {/* Title */}
-      <h3 className="text-xs md:text-sm font-normal mb-4 dark:text-gray-300">
+      <h3 className="text-xs md:text-sm font-normal mb-4 dark:text-white">
         Here are all of your assets
       </h3>
 
@@ -33,22 +33,22 @@ export default function MyAssets({ data }) {
               <div className="flex gap-2">
                 <span className="text-xs md:text-sm font-medium text-gray-800 dark:text-white relative">
                   {asset.symbol}{" "}
-                  <span className="text-xs absolute ml-1 py-1 px-2 text-[8px] text-black bg-gray-200 dark:bg-gray-600 dark:text-gray-300 rounded-md">
+                  <span className="text-xs absolute -top-1 md:top-0 ml-1 py-1 px-2 text-[8px] text-black bg-gray-200 dark:bg-gray-600 dark:text-gray-300 rounded-md">
                     {asset.chain}
                   </span>
                 </span>
               </div>
-              <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">
+              <div className="text-xs md:text-sm text-gray-900 dark:text-white">
                 {asset.balance} {asset.symbol}
               </div>
             </div>
 
             {/* Second Row */}
             <div className="flex items-center justify-between mt-1">
-              <span className="text-xs md:text-sm text-gray-800 dark:text-white">
+              <span className="text-xs md:text-sm text-gray-900 dark:text-white">
                 {asset.name}
               </span>
-              <span className="text-gray-400">$0.0</span>
+              <span className="text-gray-800 dark:text-white">$0.0</span>
             </div>
           </div>
         ))}

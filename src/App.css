@@ -37,3 +37,12 @@
   font-style: normal;
 }
 
+
+
+.select-arrow {
+  color: black;
+}
+
+.dark .select-arrow {
+  color: white;
+}

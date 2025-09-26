@@ -113,7 +113,7 @@ const Transactions = () => {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow p-6 dark:bg-[#232428] dark:text-white">
+    <div className="bg-white rounded-lg shadow p-4 md:p-6 dark:bg-[#232428] dark:text-white">
       <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-6 gap-4">
         <h2 className="text-xl font-bold text-gray-800 dark:text-white">Transaction History</h2>
         

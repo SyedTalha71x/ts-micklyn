@@ -23,7 +23,7 @@ const CryptoDisplay = ({ data, title }) => {
   const displayedData = showAll ? data : data?.slice(0, 5);
   console.log(title, "ajsdbbdsa");
   return (
-    <div className="bg-white dark:bg-[#1b1c1e] rounded-xl p-4 dark:text-white md:min-w-md mx-auto border border-[#A0AEC0] dark:border-gray-700">
+    <div className="bg-white dark:bg-[#1b1c1e] rounded-xl p-4 dark:text-white w-[21rem] md:min-w-sm mx-auto border border-[#A0AEC0] dark:border-gray-700">
       {/* Title */}
       <h3 className="text-xs md:text-sm font-normal mb-4 leading-relaxed">
         {title}

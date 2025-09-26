@@ -54,50 +54,45 @@ const SettingsLayout = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen   p-4 dark:bg-black bg-gray-50">
+    <div className="flex justify-center md:items-center min-h-screen md:p-4 dark:bg-black bg-gray-50">
       <div className="flex flex-col w-full max-w-4xl md:bg-white bg-[#FAFAFA]  md:dark:bg-[#101010] dark:bg-black md:shadow-lg shadow-none rounded-lg overflow-hidden">
-        <div className="p-6 flex items-center justify-between">
-          {isMobile && showContent ? (
-            <>
-              <ChevronLeft
-                size={24}
-                className="cursor-pointer"
-                onClick={handleBack}
-              />
-              <h1 className="text-xl manrope-font text-center flex-1">
-                {getPageTitle()}
-              </h1>
-              <div className="w-6"></div>
-            </>
-          ) : (
-            <div className="flex gap-6 items-center w-full px-4 py-2">
-              {/* Left Side: Arrow + Heading */}
-                <ChevronLeft
-                  size={24}
-                  className="cursor-pointer"
-                  onClick={() => navigate("/chat")}
-                />
-              <div className="flex items-center">
-                {/* <ArrowLeft
-                  size={24}
-                  className="cursor-pointer bg-black dark:bg-white dark:text-black rounded text-white p-1"
-                  onClick={() => navigate(-1)}
-                /> */}
-                <h3 className="text-xl dark:text-white font-bold manrope-font">
-                  Account Setting
-                </h3>
-              </div>
+        <div className="p-4 flex items-center justify-between">
+         {isMobile && showContent ? (
+  <>
+    <ChevronLeft
+      size={24}
+      className="cursor-pointer"
+      onClick={handleBack}
+    />
+    <h1 className="text-xl manrope-font text-center flex-1">
+      {getPageTitle()}
+    </h1>
+    <div className="w-6"></div>
+  </>
+) : (
+  <div className="relative flex items-center w-full py-2 md:px-4">
+    {/* Left Side: Arrow */}
+    <ChevronLeft
+      size={24}
+      className="absolute left-2 md:left-4 cursor-pointer"
+      onClick={() => navigate("/chat")}
+    />
 
+    {/* Center Heading */}
+    <h3 className="mx-auto text-xl dark:text-white font-bold manrope-font">
+      Account Setting
+    </h3>
 
-              {/* Right Side: Button */}
-              <button
-                onClick={() => navigate("/chat")}
-                className="hidden  hover:cursor-pointer hover:bg-black/70  text-sm md:text-base px-4 py-2 bg-black text-white dark:bg-[#202229] dark:text-white rounded-lg"
-              >
-                Back to Chat
-              </button>
-            </div>
-          )}
+    {/* Right Side: Button */}
+    <button
+      onClick={() => navigate("/chat")}
+      className="absolute right-2 md:right-4 hidden md:block hover:cursor-pointer hover:bg-black/70 text-sm md:text-base px-4 py-2 bg-black text-white dark:bg-[#202229] dark:text-white rounded-lg"
+    >
+      Back to Chat
+    </button>
+  </div>
+)}
+
         </div>
         {/* Content area */}
         <div className="flex flex-1 overflow-hidden">
@@ -135,7 +130,7 @@ const SettingsLayout = () => {
           )}
           {/* Mobile content view */}
           {isMobile && showContent && (
-            <main className="flex-1 p-4 overflow-y-auto ">
+            <main className="flex-1 px-4 py-2 overflow-y-auto ">
               <Outlet />
             </main>
           )}

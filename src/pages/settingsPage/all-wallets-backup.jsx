@@ -47,7 +47,7 @@ export default function BackupAllWallet() {
   };
 
   return (
-    <div className="container mx-auto p-4 max-w-2xl">
+    <div className="container mx-auto md:p-4 max-w-2xl">
       <Card className="dark:bg-[#2A2B2E]">
         <CardHeader className="border-b dark:border-gray-700 pb-3">
           <h1 className="text-base font-semibold">All Wallets Backup</h1>

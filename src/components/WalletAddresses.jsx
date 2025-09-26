@@ -76,7 +76,7 @@ const WalletAddresses = ({ data, title }) => {
           </div>
           <div className="flex justify-center mt-3">
             {wallet.address ? (
-              <SimpleQRCode value={wallet.address} size={140} />
+              <SimpleQRCode value={wallet.address} size={200} />
             ) : (
               <div className="w-32 h-32 flex items-center justify-center rounded bg-gray-100">
                 <span className="text-xs text-black dark:text-gray-200">No address</span>
@@ -116,7 +116,7 @@ const WalletAddresses = ({ data, title }) => {
           {/* Wallet Address + Copy + QR */}
           <div className="p-3 mb-3 border border-[#A0AEC0] dark:border-gray-700 rounded-lg">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs md:text-sm  font-medium">Wallet Address</span>
+              <span className="text-sm  font-medium">Wallet Address</span>
               <button
                 onClick={() => copyToClipboard(wallet.address)}
                 className="p-1 rounded hover:bg-gray-100"
@@ -153,7 +153,7 @@ const WalletAddresses = ({ data, title }) => {
           </div>
 
           {/* Network Info */}
-          <div className="text-xs md:text-sm  border border-[#A0AEC0] dark:border-gray-700 rounded-lg p-2">
+          <div className="text-sm font-medium  border border-[#A0AEC0] dark:border-gray-700 rounded-lg p-2">
             <div className="mb-1">Network: {wallet.chain || "Unknown"}</div>
             <div className="text-xs text-black dark:text-gray-300">
               Make sure that the address and network is correct

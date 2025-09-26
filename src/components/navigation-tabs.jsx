@@ -14,6 +14,8 @@ import TokenBalance from "./TokenBalance";
 import { IoMicOutline } from "react-icons/io5";
 import CryptoDisplay from "./CryptoDisplay";
 import { useProfile } from "@/Context/ProfileContext";
+import ListTransactions from "./ListTransactions";
+import { LucideWalletCards } from "lucide-react";
 
 const NavigationTabsWithChat = () => {
   // State variables
@@ -213,6 +215,36 @@ const NavigationTabsWithChat = () => {
         ]);
         break;
 
+        case "all_portfolios":
+          setMessages((prev) => [
+            ... prev,
+            {
+              wallet: "Chat",
+              content: reply,
+              isJson: false,
+              responseType: "all_portfolios",
+              portfolioResponse: reply.all_portfolios,
+              portfolioTitle: reply.title,
+              isHistory: false,
+            },
+          ]);
+          break;
+
+          case "all_transactions":
+          setMessages((prev) => [
+            ...prev,
+            {
+              wallet: "Chat",
+              content: reply,
+              isJson: false,
+              responseType: "all_transactions",
+              transactionResponse: reply.all_transactions,
+              transactionTitle: reply.title,
+              isHistory: false
+            }
+          ]);
+          break;
+
       case "all_assets":
         setMessages((prev) => [
           ...prev,
@@ -336,12 +368,15 @@ const NavigationTabsWithChat = () => {
 
     setSocket(newSocket);
 
-    newSocket.on("connection_status", (data) => {
-      setMessages((prev) => [
-        { wallet: "System", content: data.status, isHistory: false },
-        ...prev,
-      ]);
-    });
+   newSocket.on("connection_status", (data) => {
+  if (data.status !== "connected") {
+    setMessages((prev) => [
+      { wallet: "System", content: data.status, isHistory: false },
+      ...prev,
+    ]);
+  }
+});
+
 
     newSocket.on("error", (data) => {
       setMessages((prev) => [
@@ -866,9 +901,21 @@ const NavigationTabsWithChat = () => {
                   responseType: "all_portfolios",
                   portfolioResponse:
                     replyContent.all_portfolios || replyContent,
+                    portfolioTitle: replyContent.title || replyContent,
                   isJson: false,
                 };
                 break;
+
+                case "all_transactions":
+                  content = replyContent;
+                  additionalProps = {
+                    responseType: "all_transactions",
+                    transactionResponse: 
+                    replyContent.all_transactions || replyContent,
+                    portfolioTitle: replyContent.title || replyContent,
+                    isJson: false,
+                  };
+                  break;
 
               case "get_top_cryptos":
                 content = replyContent;
@@ -1028,7 +1075,7 @@ const NavigationTabsWithChat = () => {
       )}
 
       {/* Main Chat Container - Flex-grow to take available space */}
-      <div className="flex-1 flex flex-col max-w-6xl mx-auto w-full px-4 py-4">
+      <div className="flex-1 flex flex-col max-w-6xl mx-auto w-full mx-2 md:px-4 md:py-4">
         {/* Header - Only show when no messages */}
         {!messages.some((msg) => msg.wallet === "You") && (
           <div className="text-center mb-6">
@@ -1040,7 +1087,7 @@ const NavigationTabsWithChat = () => {
 
         {/* Connection Status */}
         {messages.find((msg) => msg.wallet === "System") && (
-          <div className="text-center mb-4">
+          <div className="hidden text-center mb-4">
             <p className="text-sm text-gray-500 dark:text-gray-400">
               System: Connected
             </p>
@@ -1051,9 +1098,9 @@ const NavigationTabsWithChat = () => {
         <div className="flex-1 flex flex-col">
           <div
             ref={messageContainerRef}
-            className="lg:w-[80%] lg:mx-auto xl:w-[82%] w-[100%] flex-1 overflow-y-auto overflow-x-hidden space-y-4 md:px-2"
+            className="lg:w-[80%] lg:mx-auto xl:w-[82%] w-[100%] flex-1 overflow-y-auto overflow-x-hidden md:space-y-4 md:px-2"
             style={{
-              maxHeight: "calc(100vh - 200px)",
+              maxHeight: "calc(100vh - 150px)",
               minHeight: "300px",
             }}
           >
@@ -1119,8 +1166,12 @@ const NavigationTabsWithChat = () => {
                       <MyAssets data={msg.assetResponse} />
                     ) : msg.wallet === "Chat" &&
                       msg.responseType === "all_portfolios" ? (
-                      <AllPortfolio data={msg.portfolioResponse} />
-                    ) : msg.wallet === "Chat" && isLast && isTyping ? (
+                      <AllPortfolio data={msg.portfolioResponse} title={msg.portfolioTitle} />
+                    ) : msg.wallet === "Chat" &&
+                      msg.responseType === "all_transactions" ? (
+                        <ListTransactions data={msg.transactionResponse} title={msg.transactionTitle}/>
+                      )
+                    : msg.wallet === "Chat" && isLast && isTyping ? (
                       <Typewriter text={fullResponse} className="relative" />
                     ) : msg.isJson ? (
                       <div className="mt-1">
@@ -1255,7 +1306,7 @@ const NavigationTabsWithChat = () => {
 
         {/* Input Bar - Fixed at bottom with proper spacing */}
         <div className="mt-6 sticky bottom-0 bg-transparent">
-          <div className="flex items-center w-full max-w-[78%] mx-auto rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-black px-4 py-3 shadow-lg">
+          <div className=" relative flex items-center w-full md:max-w-[78%] md:mx-auto rounded-3xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-black px-4 py-6 mb-2 md:mb-0 md:py-5 shadow-lg">
             {/* Input Field */}
             <input
               className="flex-1 bg-transparent focus:outline-none text-sm text-gray-800 dark:text-gray-200 placeholder-gray-400"
@@ -1274,18 +1325,18 @@ const NavigationTabsWithChat = () => {
             {/* Mic Button */}
             {/* Recording Button */}
             <button
-              className={`w-8 h-6 md:h-10 md:w-10 rounded-full flex items-center justify-center shadow-md mr-3 transition-all 
+              className={`w-8 h-8 md:h-10 md:w-10 rounded-full flex items-center justify-center shadow-md mr-3 transition-all 
     ${
       recording
         ? "bg-red-600 animate-pulse scale-105"
-        : "bg-black hover:bg-gray-800"
+        : "bg-black dark:bg-[#353535] hover:bg-gray-800"
     } text-white`}
               onClick={recording ? stopRecording : startRecording}
               disabled={isTyping}
             >
               {/* Mobile: Arrow dikhao */}
               <span className="md:hidden p-1">
-                <IoMicOutline />
+               <img src="/recording-01.png"/>
               </span>
 
               {/* Desktop: Recording UI */}
@@ -1303,15 +1354,16 @@ const NavigationTabsWithChat = () => {
             </button>
 
             {/* Send Button */}
-            <button
-              className="md:hidden p-1 w-8 h-6 cursor-pointer rounded-full flex items-center justify-center bg-black hover:bg-gray-800 text-white shadow-md transition-colors"
+            {/* <button
+              className="md:hidden p-1 w-8 h-8 cursor-pointer rounded-full flex items-center justify-center bg-black hover:bg-gray-800 text-white shadow-md transition-colors"
               onClick={() => sendMessage()}
               disabled={isTyping || !message.trim()}
             >
-              {/* Mobile: Arrow dikhao */}
-              <span className="md:hidden">➤</span>
-            </button>
+              <img src="/recording-01.png" className="md:hidden"></img>
+            </button> */}
+          <LucideWalletCards className="absolute bottom-2 left-4 dark:text-gray-300 text-gray-800 hover:text-gray-600 cursor-pointer" size={18}/>
           </div>
+
         </div>
       </div>
     </div>

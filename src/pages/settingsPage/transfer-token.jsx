@@ -141,7 +141,7 @@ const TransferToken = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 max-w-md">
+    <div className="container mx-auto md:p-4 max-w-md">
       <Card className="dark:bg-[#2A2B2E] bg-gray-100">
         <CardHeader>
           <CardTitle className="text-center text-xl font-semibold">
