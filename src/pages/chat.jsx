@@ -86,7 +86,7 @@ export default function Chat() {
             Settings
           </span>
           <span
-            className="bg-black text-white p-2 rounded-md mr-2"
+            className="bg-black dark:bg-[#1b1c1e] text-white p-2 rounded-md mr-2"
             onClick={() => setSidebarOpen(!sidebarOpen)}
           >
             <IoClose />

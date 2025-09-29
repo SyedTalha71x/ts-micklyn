@@ -20,7 +20,7 @@ const SimpleQRCode = ({ value, size = 120 }) => {
 const WalletAddresses = ({ data, title }) => {
   if (!data || !Array.isArray(data) || data.length === 0) {
     return (
-      <div className="bg-white rounded-xl p-4 text-black text-xs md:text-sm mx-auto border border-[#A0AEC0] dark:border-gray-700">
+      <div className="bg-white rounded-xl p-4 text-black text-xs md:text-sm mx-auto border border-[#A0AEC0] dark:border-gray-700 assets-responsive">
         <div className="text-center text-gray-400">
           No wallet data available
         </div>
@@ -40,14 +40,22 @@ const WalletAddresses = ({ data, title }) => {
   if (data.length === 1) {
     const wallet = data[0];
     return (
-      <div className="bg-white dark:bg-[#1b1c1e] text-black  dark:text-gray-200 rounded-xl p-4 text-black border border-[#A0AEC0] dark:border-gray-700 max-w-sm mx-auto">
+      <div className="bg-white dark:bg-[#1b1c1e] text-black  dark:text-gray-200 rounded-xl p-4 border border-[#A0AEC0] dark:border-gray-700 assets-responsive mx-auto">
         <h3 className="text-xs md:text-sm font-medium mb-4">{title}</h3>
 
         {/* Balance */}
-        <div className="border border-[#A0AEC0] dark:border-gray-700 rounded-lg p-3 mb-2 flex justify-between">
+        <div className="border border-[#A0AEC0] dark:border-gray-700 rounded-lg p-3 mb-2 flex flex-col gap-2 justify-between">
+          <div className="flex justify-between w-full items-center">
           <span className="font-medium">{wallet.chain}</span>
           <span>{`${wallet.balance} ${wallet.chain}`}</span>
+          </div>
+          <div className="flex justify-between w-full items-center">
+          <span className="font-medium">{wallet.blockchain}</span>
+          <span>{`$ ${wallet.balance}`}</span>
+          </div>
+          
         </div>
+        
 
         {/* Address + QR */}
         <div className="border border-[#A0AEC0] dark:border-gray-700 rounded-lg p-3 mb-2">
@@ -76,7 +84,7 @@ const WalletAddresses = ({ data, title }) => {
           </div>
           <div className="flex justify-center mt-3">
             {wallet.address ? (
-              <SimpleQRCode value={wallet.address} size={200} />
+              <SimpleQRCode value={wallet.address} size={180} />
             ) : (
               <div className="w-32 h-32 flex items-center justify-center rounded bg-gray-100">
                 <span className="text-xs text-black dark:text-gray-200">No address</span>

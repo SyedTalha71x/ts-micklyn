@@ -46,3 +46,32 @@
 .dark .select-arrow {
   color: white;
 }
+.assets-responsive {
+  width: 24rem;      
+}
+
+/* For small screens (e.g. below 640px) */
+@media (min-width: 320px) and (max-width: 360px) {
+  .assets-responsive {
+    width: 20rem !important;
+  }
+}
+
+@media (min-width: 361px) and (max-width: 380px) {
+  .assets-responsive {
+    width: 21rem !important;
+  }
+}
+
+
+@media (min-width: 381px) and (max-width: 400px) {
+  .assets-responsive {
+    width: 22rem !important;
+  }
+}
+
+@media (min-width: 401px) and (max-width: 640px) {
+  .assets-responsive {
+    width: 24.5rem !important;
+  }
+}

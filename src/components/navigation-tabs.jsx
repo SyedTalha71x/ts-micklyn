@@ -11,11 +11,11 @@ import WalletAddresses from "./WalletAddresses";
 import MyAssets from "./MyAssets";
 import AllPortfolio from "./AllPortfolio";
 import TokenBalance from "./TokenBalance";
-import { IoMicOutline } from "react-icons/io5";
+import { IoMicOutline, IoSend } from "react-icons/io5";
 import CryptoDisplay from "./CryptoDisplay";
 import { useProfile } from "@/Context/ProfileContext";
 import ListTransactions from "./ListTransactions";
-import { LucideWalletCards } from "lucide-react";
+import { ArrowUp, LucideWalletCards } from "lucide-react";
 
 const NavigationTabsWithChat = () => {
   // State variables
@@ -50,6 +50,11 @@ const NavigationTabsWithChat = () => {
     bsc: "",
   });
 
+  // Mobile detection state
+  const [isMobile, setIsMobile] = useState(false);
+  const inputRef = useRef(null);
+  const [isInputFocused, setIsInputFocused] = useState(false);
+
   const { userInfo } = useHistory();
   const { getWatchlistData } = useProfile();
   const animationFrameRef = useRef(null);
@@ -57,6 +62,65 @@ const NavigationTabsWithChat = () => {
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
   const microphoneRef = useRef(null);
+
+  // Detect mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Handle keyboard visibility and scroll behavior for mobile
+  useEffect(() => {
+    if (!isMobile) return;
+
+    const handleResize = () => {
+      // When keyboard opens, scroll to bottom to show latest messages
+      setTimeout(() => {
+        if (messageContainerRef.current) {
+          messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
+        }
+      }, 500);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isMobile]);
+
+  // Auto-scroll to bottom when new messages arrive
+  useEffect(() => {
+    if (messageContainerRef.current) {
+      const scrollToBottom = () => {
+        messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
+      };
+      
+      // Immediate scroll
+      scrollToBottom();
+      
+      // Additional scroll after a short delay for mobile
+      if (isMobile) {
+        setTimeout(scrollToBottom, 100);
+      }
+    }
+  }, [messages, loading, typingText, isMobile]);
+
+  // Reset scroll position when message is sent
+  useEffect(() => {
+    if (!loading && messages.length > 0) {
+      setTimeout(() => {
+        if (messageContainerRef.current) {
+          messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
+        }
+        // Reset input focus state after message is sent
+        setIsInputFocused(false);
+      }, 300);
+    }
+  }, [loading, messages.length]);
 
   useEffect(() => {
     // Get addresses from localStorage
@@ -98,14 +162,6 @@ const NavigationTabsWithChat = () => {
     setProcessedIntents([]);
     setAllIntentsData(null);
   }, [setUserId]);
-
-  // Auto-scroll to bottom of chat
-  useEffect(() => {
-    if (messageContainerRef.current) {
-      messageContainerRef.current.scrollTop =
-        messageContainerRef.current.scrollHeight;
-    }
-  }, [messages, loading, typingText]);
 
   useEffect(() => {
     hasHandledIntents.current = { intent0: false, intent1: false };
@@ -602,7 +658,7 @@ const NavigationTabsWithChat = () => {
           chat_history: messages,
           bearer_token: myToken,
           is_confirmed1: updatedProcessedIntents[0]?.confirmed || false,
-          is_confirmed2: updatedProcessedIntents[1]?.confirmed || false,
+          is_confirmed2: updatedProcessiredIntents[1]?.confirmed || false,
           user_id: userId,
           session_id: userInfo?.sessionId,
           email_address: email,
@@ -946,20 +1002,6 @@ const NavigationTabsWithChat = () => {
                 };
                 break;
 
-              //          case "all_assets":
-              // setMessages((prev) => [
-              //   ...prev,
-              //   {
-              //     wallet: "Chat",
-              //     content: reply,
-              //     isJson: false,
-              //     responseType: "all_assets",
-              //     assetResponse: reply.all_assets,
-              //     isHistory: false,
-              //   },
-              // ]);
-              // break;
-
               case "all_assets":
                 content = replyContent.all_assets || replyContent;
                 isJson = true;
@@ -1061,6 +1103,48 @@ const NavigationTabsWithChat = () => {
     }
   }, [userInfo?.sessionId, userId]);
 
+  // Dynamic icon based on message input
+  const getActionIcon = () => {
+    if (message.trim().length > 0) {
+      // Show send icon when user types something
+      return (
+        <ArrowUp
+          className="text-white" 
+          size={isMobile ? 16 : 18}
+        />
+      );
+    } else {
+      // Show recording icon when input is empty
+      return recording ? (
+        <div className="flex gap-0.5">
+          <span className="w-1 h-2 bg-white animate-pulse" />
+          <span className="w-1 h-3 bg-white animate-pulse" />
+          <span className="w-1 h-4 bg-white animate-pulse" />
+        </div>
+      ) : (
+        <img 
+          src="/recording-01.png" 
+          alt="record" 
+          className={`${isMobile ? "w-4 h-4" : "w-5 h-5"}`}
+        />
+      );
+    }
+  };
+
+  const handleActionButtonClick = () => {
+    if (message.trim().length > 0) {
+      // Send message if there's text
+      sendMessage();
+    } else {
+      // Start recording if input is empty
+      if (recording) {
+        stopRecording();
+      } else {
+        startRecording();
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <style dangerouslySetInnerHTML={{ __html: customStyles }} />
@@ -1074,9 +1158,9 @@ const NavigationTabsWithChat = () => {
         />
       )}
 
-      {/* Main Chat Container - Flex-grow to take available space */}
+      {/* Main Chat Container */}
       <div className="flex-1 flex flex-col max-w-6xl mx-auto w-full mx-2 md:px-4 md:py-4">
-        {/* Header - Only show when no messages */}
+        {/* Header */}
         {!messages.some((msg) => msg.wallet === "You") && (
           <div className="text-center mb-6">
             <h2 className="text-2xl font-bold dark:text-white">
@@ -1085,16 +1169,7 @@ const NavigationTabsWithChat = () => {
           </div>
         )}
 
-        {/* Connection Status */}
-        {messages.find((msg) => msg.wallet === "System") && (
-          <div className="hidden text-center mb-4">
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              System: Connected
-            </p>
-          </div>
-        )}
-
-        {/* Messages Container - Flex-grow with proper overflow */}
+        {/* Messages Container */}
         <div className="flex-1 flex flex-col">
           <div
             ref={messageContainerRef}
@@ -1304,9 +1379,12 @@ const NavigationTabsWithChat = () => {
           </div>
         </div>
 
-        {/* Input Bar - Fixed at bottom with proper spacing */}
-        <div className="mt-6 sticky bottom-0 bg-transparent">
-          <div className=" relative flex items-center w-full md:max-w-[78%] md:mx-auto rounded-3xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-black px-4 py-6 mb-2 md:mb-0 md:py-5 shadow-lg">
+        {/* Input Bar - Fixed mobile behavior */}
+        <div 
+          ref={inputRef}
+          className="mt-6 sticky bottom-0 bg-white dark:bg-black md:bg-transparent py-2 md:py-0 border-t md:border-t-0 border-gray-200 dark:border-gray-600"
+        >
+          <div className="relative flex items-center w-full md:max-w-[78%] md:mx-auto rounded-3xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-black px-4 py-6 md:py-5 shadow-lg">
             {/* Input Field */}
             <input
               className="flex-1 bg-transparent focus:outline-none text-sm text-gray-800 dark:text-gray-200 placeholder-gray-400"
@@ -1319,51 +1397,43 @@ const NavigationTabsWithChat = () => {
                   sendMessage();
                 }
               }}
+              onFocus={() => {
+                setIsInputFocused(true);
+                if (isMobile) {
+                  setTimeout(() => {
+                    if (messageContainerRef.current) {
+                      messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
+                    }
+                  }, 300);
+                }
+              }}
+              onBlur={() => {
+                setIsInputFocused(false);
+              }}
               disabled={isTyping || loading}
             />
 
-            {/* Mic Button */}
-            {/* Recording Button */}
+            {/* Dynamic Action Button */}
             <button
-              className={`w-8 h-8 md:h-10 md:w-10 rounded-full flex items-center justify-center shadow-md mr-3 transition-all 
+              className={`w-8 h-8 md:h-10 md:w-10 rounded-full flex items-center justify-center shadow-md mr-0 transition-all 
     ${
       recording
         ? "bg-red-600 animate-pulse scale-105"
+        : message.trim().length > 0
+        ? "bg-black dark:bg-[#353535] hover:bg-gray-800"
         : "bg-black dark:bg-[#353535] hover:bg-gray-800"
     } text-white`}
-              onClick={recording ? stopRecording : startRecording}
-              disabled={isTyping}
+              onClick={handleActionButtonClick}
+              disabled={isTyping || (recording && message.trim().length > 0)}
             >
-              {/* Mobile: Arrow dikhao */}
-              <span className="md:hidden p-1">
-               <img src="/recording-01.png"/>
-              </span>
-
-              {/* Desktop: Recording UI */}
-              <span className="hidden md:flex">
-                {recording ? (
-                  <div className="flex gap-0.5">
-                    <span className="w-1 h-2 bg-white animate-pulse" />
-                    <span className="w-1 h-3 bg-white animate-pulse" />
-                    <span className="w-1 h-4 bg-white animate-pulse" />
-                  </div>
-                ) : (
-                  <img src="/recording-01.png" className="cursor-pointer" />
-                )}
-              </span>
+              {getActionIcon()}
             </button>
-
-            {/* Send Button */}
-            {/* <button
-              className="md:hidden p-1 w-8 h-8 cursor-pointer rounded-full flex items-center justify-center bg-black hover:bg-gray-800 text-white shadow-md transition-colors"
-              onClick={() => sendMessage()}
-              disabled={isTyping || !message.trim()}
-            >
-              <img src="/recording-01.png" className="md:hidden"></img>
-            </button> */}
-          <LucideWalletCards className="absolute bottom-2 left-4 dark:text-gray-300 text-gray-800 hover:text-gray-600 cursor-pointer" size={18}/>
+            
+            <LucideWalletCards 
+              className="absolute bottom-2 left-4 dark:text-gray-300 text-gray-800 hover:text-gray-600 cursor-pointer" 
+              size={18}
+            />
           </div>
-
         </div>
       </div>
     </div>

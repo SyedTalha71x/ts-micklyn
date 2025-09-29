@@ -75,10 +75,10 @@ export default function TotalBalance() {
   return (
     <div className="flex flex-col gap-4 relative min-h-screen">
       {/* create new chat */}
-      <div className="sticky top-0 z-10 bg-none pt-2 pb-2">
+      <div className="z-10 bg-none pt-2 pb-2">
         <button
           onClick={handleNewChat}
-          className="w-[96%] rounded-md cursor-pointer shadow-md gap-2 dark:bg-[#101010] dark:border dark:shadow-sm text-sm font-semibold text-black bg-[#d1d5dc] text-center py-2 w-20 dark:text-white hover:opacity-90 transition-opacity"
+          className="w-[98%] rounded-md cursor-pointer shadow-md gap-2 dark:bg-[#101010] dark:border dark:shadow-sm text-sm font-semibold text-black bg-[#d1d5dc] text-center py-2 dark:text-white hover:opacity-90 transition-opacity"
         >
           New Chat
         </button>

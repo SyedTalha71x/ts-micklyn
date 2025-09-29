@@ -1,7 +1,4 @@
-"use client";
 import { useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 
 export default function MyAssets({ data }) {
   const [showAll, setShowAll] = useState(false);
@@ -12,11 +9,10 @@ export default function MyAssets({ data }) {
     );
   }
 
-  // Agar showAll false hai to sirf 10 dikhao
   const displayedAssets = showAll ? data : data.slice(0, 10);
 
   return (
-    <div className="w-[21rem] md:w-[25rem] bg-white dark:bg-[#1b1c1e] rounded-xl p-4 dark:text-white border border-[#A0AEC0] dark:border-gray-700">
+    <div className="w-full bg-white dark:bg-[#1b1c1e] rounded-xl p-4 dark:text-white border border-[#A0AEC0] dark:border-gray-700 mx-auto assets-responsive">
       {/* Title */}
       <h3 className="text-xs md:text-sm font-normal mb-4 dark:text-white">
         Here are all of your assets
@@ -56,11 +52,9 @@ export default function MyAssets({ data }) {
 
       {/* View More / Less */}
       {data.length > 10 && (
-        <div className="mt-3 flex justify-center ">
+        <div className="mt-3 flex justify-center">
           <button
-            variant="outline"
-            size="sm"
-            className="text-xs border px-3 py-2 rounded-lg hover:bg-black/50"
+            className="text-xs border border-[#A0AEC0] dark:border-gray-700 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             onClick={() => setShowAll(!showAll)}
           >
             {showAll ? "View Less" : "View More"}

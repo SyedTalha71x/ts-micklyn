@@ -25,7 +25,7 @@ const UserBalance = ({ data }) => {
 
   if (!walletData) {
     return (
-      <div className="bg-white dark:bg-[#1b1c1e] rounded-xl p-6 text-black max-w-sm mx-auto border border-gray-300">
+      <div className="bg-white dark:bg-[#1b1c1e] rounded-xl p-6 text-black mx-auto border border-gray-300 assets-responsive">
         <div className="text-center text-gray-500">No wallet data available</div>
       </div>
     );
