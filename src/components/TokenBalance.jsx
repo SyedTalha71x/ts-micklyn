@@ -43,7 +43,7 @@ const TokenBalance = ({ data, title }) => {
   );
 
   return (
-    <div className="bg-white dark:bg-[#1b1c1e] rounded-xl p-6 text-white max-w-sm mx-auto border border-gray-400 dark:border-gray-700">
+    <div className="bg-white dark:bg-[#1b1c1e] rounded-xl p-6 text-white assets-responsive border border-gray-400 dark:border-gray-700">
       {/* Title */}
       <h3 className="text-sm font-normal mb-6 text-gray-700 dark:text-white">
         {title}

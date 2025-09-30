@@ -8,7 +8,7 @@ const ListTransactions = ({ data, title }) => {
   }
 
   return (
-    <div className="w-full bg-white dark:bg-[#1b1c1e] rounded-xl p-4 dark:text-white md:min-w-[25rem] border border-[#A0AEC0] dark:border-gray-700">
+    <div className="w-full bg-white dark:bg-[#1b1c1e] rounded-xl p-4 dark:text-white border border-[#A0AEC0] dark:border-gray-700 assets-responsive">
       {/* Title */}
       <h3 className="text-sm font-normal mb-4 dark:text-gray-300">
         {title}
@@ -34,7 +34,7 @@ const ListTransactions = ({ data, title }) => {
               To: {tx.receiver}
             </div>
 
-            <div className="flex justify-between text-[10px] text-gray-700 mt-2">
+            <div className="flex justify-between text-[10px] text-gray-700 dark:text-white mt-2">
               <span>{tx.chain?.toUpperCase()}</span>
               <span>{new Date(tx.createdAt).toLocaleString()}</span>
             </div>

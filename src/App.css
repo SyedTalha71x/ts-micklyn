@@ -51,18 +51,30 @@
 }
 
 /* For small screens (e.g. below 640px) */
-@media (min-width: 320px) and (max-width: 360px) {
+@media (min-width: 320px) and (max-width: 340px) {
   .assets-responsive {
     width: 20rem !important;
   }
 }
 
-@media (min-width: 361px) and (max-width: 380px) {
+@media (min-width: 341px) and (max-width: 360px) {
   .assets-responsive {
-    width: 21rem !important;
+    width: 19rem !important;
   }
 }
 
+@media (min-width: 360px) and (max-width: 374px) {
+  .assets-responsive {
+    width: 20.5rem !important;
+  }
+}
+
+
+@media (min-width: 375px) and (max-width: 380px) {
+  .assets-responsive {
+    width: 21.5rem !important;
+  }
+}
 
 @media (min-width: 381px) and (max-width: 400px) {
   .assets-responsive {
@@ -70,8 +82,74 @@
   }
 }
 
-@media (min-width: 401px) and (max-width: 640px) {
+@media (min-width: 401px) and (max-width: 410px) {
   .assets-responsive {
     width: 24.5rem !important;
+  }
+}
+
+
+@media (min-width: 411px) and (max-width: 429px) {
+  .assets-responsive {
+    width: 23.5rem !important;
+  }
+}
+
+
+@media (min-width: 430px) and (max-width: 440px) {
+  .assets-responsive {
+    width: 24.5rem !important;
+  }
+}
+
+@media (min-width: 450px) and (max-width: 470px) {
+  .assets-responsive {
+    width: 26rem !important;
+  }
+}
+
+@media (min-width: 472px) and (max-width: 490px) {
+  .assets-responsive {
+    width: 27rem !important;
+  }
+}
+
+
+@media (min-width: 501px) and (max-width: 560px) {
+  .assets-responsive {
+    width: 31rem !important;
+  }
+}
+/* tablet for  */
+
+@media (min-width: 768px) and (max-width: 800px) {
+  .assets-responsive {
+    width: 32rem !important;
+  }
+}
+
+@media (min-width: 801px) and (max-width: 830px) {
+  .assets-responsive {
+    width: 34rem !important;
+  }
+}
+
+
+@media (min-width: 841px) and (max-width: 950px) {
+  .assets-responsive {
+    width: 38rem !important;
+  }
+}
+
+
+@media (min-width: 851px) and (max-width: 950px) {
+  .assets-responsive {
+    width: 36rem !important;
+  }
+}
+
+@media (min-width: 1000px) and (max-width: 1030px) {
+  .assets-responsive {
+    width: 34rem !important;
   }
 }

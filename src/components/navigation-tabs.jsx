@@ -54,6 +54,7 @@ const NavigationTabsWithChat = () => {
   const [isMobile, setIsMobile] = useState(false);
   const inputRef = useRef(null);
   const [isInputFocused, setIsInputFocused] = useState(false);
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
 
   const { userInfo } = useHistory();
   const { getWatchlistData } = useProfile();
@@ -75,52 +76,128 @@ const NavigationTabsWithChat = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Handle keyboard visibility and scroll behavior for mobile
+  // Enhanced keyboard detection and scroll management
   useEffect(() => {
     if (!isMobile) return;
 
+    let originalHeight = window.innerHeight;
+
     const handleResize = () => {
-      // When keyboard opens, scroll to bottom to show latest messages
-      setTimeout(() => {
-        if (messageContainerRef.current) {
-          messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
-        }
-      }, 500);
+      const newHeight = window.innerHeight;
+      const isKeyboardOpen = newHeight < originalHeight;
+
+      setKeyboardVisible(isKeyboardOpen);
+
+      if (isKeyboardOpen) {
+        // Keyboard opened - scroll to bottom after a delay
+        setTimeout(() => {
+          if (messageContainerRef.current) {
+            messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
+          }
+        }, 300);
+      } else {
+        // Keyboard closed - restore scroll position
+        setTimeout(() => {
+          if (messageContainerRef.current) {
+            messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
+          }
+        }, 100);
+      }
+
+      originalHeight = newHeight;
+    };
+
+    // Visual Viewport API for better mobile handling
+    const handleVisualViewportChange = () => {
+      if (window.visualViewport) {
+        setTimeout(() => {
+          if (messageContainerRef.current) {
+            messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
+          }
+        }, 150);
+      }
     };
 
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', handleVisualViewportChange);
+    }
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', handleVisualViewportChange);
+      }
+    };
   }, [isMobile]);
 
-  // Auto-scroll to bottom when new messages arrive
+  // Improved auto-scroll with better mobile handling
   useEffect(() => {
-    if (messageContainerRef.current) {
-      const scrollToBottom = () => {
-        messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
-      };
-      
-      // Immediate scroll
-      scrollToBottom();
-      
-      // Additional scroll after a short delay for mobile
-      if (isMobile) {
-        setTimeout(scrollToBottom, 100);
+    if (!messageContainerRef.current) return;
+
+    const scrollToBottom = () => {
+      const container = messageContainerRef.current;
+      if (container) {
+        // Use smooth scroll for better UX
+        container.scrollTo({
+          top: container.scrollHeight,
+          behavior: 'smooth'
+        });
       }
+    };
+
+    // Immediate scroll
+    scrollToBottom();
+
+    // Additional delayed scrolls for mobile
+    if (isMobile) {
+      const timeouts = [
+        setTimeout(scrollToBottom, 100),
+        setTimeout(scrollToBottom, 300),
+        setTimeout(scrollToBottom, 500)
+      ];
+
+      return () => timeouts.forEach(clearTimeout);
     }
   }, [messages, loading, typingText, isMobile]);
 
-  // Reset scroll position when message is sent
+  // Enhanced message sent handler
   useEffect(() => {
     if (!loading && messages.length > 0) {
-      setTimeout(() => {
+      const scrollToBottom = () => {
         if (messageContainerRef.current) {
-          messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
+          messageContainerRef.current.scrollTo({
+            top: messageContainerRef.current.scrollHeight,
+            behavior: 'smooth'
+          });
         }
-        // Reset input focus state after message is sent
-        setIsInputFocused(false);
-      }, 300);
+      };
+
+      // Multiple scroll attempts for reliability
+      scrollToBottom();
+      
+      const timeouts = [
+        setTimeout(scrollToBottom, 100),
+        setTimeout(scrollToBottom, 200),
+        setTimeout(scrollToBottom, 400)
+      ];
+
+      // Reset input focus
+      setIsInputFocused(false);
+      
+      // On mobile, don't immediately blur input - let user see the message first
+      if (isMobile && inputRef.current) {
+        setTimeout(() => {
+          const input = inputRef.current.querySelector('input');
+          if (input && document.activeElement === input) {
+            input.blur();
+          }
+        }, 500);
+      }
+
+      return () => timeouts.forEach(clearTimeout);
     }
-  }, [loading, messages.length]);
+  }, [loading, messages.length, isMobile]);
 
   useEffect(() => {
     // Get addresses from localStorage
@@ -658,7 +735,7 @@ const NavigationTabsWithChat = () => {
           chat_history: messages,
           bearer_token: myToken,
           is_confirmed1: updatedProcessedIntents[0]?.confirmed || false,
-          is_confirmed2: updatedProcessiredIntents[1]?.confirmed || false,
+          is_confirmed2: updatedProcessedIntents[1]?.confirmed || false,
           user_id: userId,
           session_id: userInfo?.sessionId,
           email_address: email,
@@ -1145,6 +1222,57 @@ const NavigationTabsWithChat = () => {
     }
   };
 
+  // Custom scroll handler to prevent layout jumps
+  const handleContainerScroll = () => {
+    if (messageContainerRef.current && isMobile) {
+      // Prevent unwanted scrolling during keyboard interactions
+      const container = messageContainerRef.current;
+      const isAtBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 10;
+      
+      if (!isAtBottom && keyboardVisible) {
+        // If keyboard is visible and user is not at bottom, maintain position
+        requestAnimationFrame(() => {
+          container.scrollTop = container.scrollHeight - container.clientHeight;
+        });
+      }
+    }
+  };
+
+  // Enhanced input focus handlers
+  const handleInputFocus = () => {
+    setIsInputFocused(true);
+    setKeyboardVisible(true);
+    
+    if (isMobile) {
+      // Delay scroll to ensure keyboard is fully open
+      setTimeout(() => {
+        if (messageContainerRef.current) {
+          messageContainerRef.current.scrollTo({
+            top: messageContainerRef.current.scrollHeight,
+            behavior: 'smooth'
+          });
+        }
+      }, 500);
+    }
+  };
+
+  const handleInputBlur = () => {
+    setIsInputFocused(false);
+    setKeyboardVisible(false);
+    
+    if (isMobile) {
+      // Small delay to allow for keyboard close animation
+      setTimeout(() => {
+        if (messageContainerRef.current) {
+          messageContainerRef.current.scrollTo({
+            top: messageContainerRef.current.scrollHeight,
+            behavior: 'smooth'
+          });
+        }
+      }, 200);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <style dangerouslySetInnerHTML={{ __html: customStyles }} />
@@ -1177,7 +1305,11 @@ const NavigationTabsWithChat = () => {
             style={{
               maxHeight: "calc(100vh - 150px)",
               minHeight: "300px",
+              // Prevent layout shifts
+              overflowAnchor: "none",
+              WebkitOverflowScrolling: "touch"
             }}
+            onScroll={handleContainerScroll}
           >
             {messages.map((msg, index) => {
               const isLast = index === messages.length - 1;
@@ -1379,10 +1511,15 @@ const NavigationTabsWithChat = () => {
           </div>
         </div>
 
-        {/* Input Bar - Fixed mobile behavior */}
+        {/* Enhanced Input Bar with better mobile handling */}
         <div 
           ref={inputRef}
-          className="mt-6 sticky bottom-0 bg-white dark:bg-black md:bg-transparent py-2 md:py-0 border-t md:border-t-0 border-gray-200 dark:border-gray-600"
+          className={`mt-6 sticky bottom-0 bg-white dark:bg-black md:bg-transparent py-2 md:py-0 transition-all ${
+            keyboardVisible ? 'pb-4' : ''
+          }`}
+          style={{
+            transform: 'translateZ(10px)'
+          }}
         >
           <div className="relative flex items-center w-full md:max-w-[78%] md:mx-auto rounded-3xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-black px-4 py-6 md:py-5 shadow-lg">
             {/* Input Field */}
@@ -1397,19 +1534,8 @@ const NavigationTabsWithChat = () => {
                   sendMessage();
                 }
               }}
-              onFocus={() => {
-                setIsInputFocused(true);
-                if (isMobile) {
-                  setTimeout(() => {
-                    if (messageContainerRef.current) {
-                      messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
-                    }
-                  }, 300);
-                }
-              }}
-              onBlur={() => {
-                setIsInputFocused(false);
-              }}
+              onFocus={handleInputFocus}
+              onBlur={handleInputBlur}
               disabled={isTyping || loading}
             />
 

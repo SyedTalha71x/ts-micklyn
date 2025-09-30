@@ -20,7 +20,7 @@ const SimpleQRCode = ({ value, size = 120 }) => {
 const AllPortfolio = ({ data, title }) => {
   if (!data || !Array.isArray(data) || data.length === 0) {
     return (
-      <div className="bg-white rounded-xl p-4 text-black text-xs md:text-sm mx-auto border border-[#A0AEC0] dark:border-gray-700">
+      <div className="bg-white rounded-xl p-4 text-black text-xs md:text-sm mx-auto border border-[#A0AEC0] dark:border-gray-700 assets-responsive">
         <div className="text-center text-gray-400">
           No wallet data available
         </div>
@@ -40,7 +40,7 @@ const AllPortfolio = ({ data, title }) => {
   if (data.length === 1) {
     const wallet = data[0];
     return (
-      <div className="bg-white dark:bg-[#1b1c1e] text-black  dark:text-gray-200 rounded-xl p-4 text-black border border-[#A0AEC0] dark:border-gray-700 max-w-sm mx-auto">
+      <div className="bg-white dark:bg-[#1b1c1e] dark:text-gray-200 rounded-xl p-4 text-black border border-[#A0AEC0] dark:border-gray-700 assets-responsive">
         <h3 className="text-xs md:text-sm font-medium mb-4">{title}</h3>
 
         {/* Balance */}
