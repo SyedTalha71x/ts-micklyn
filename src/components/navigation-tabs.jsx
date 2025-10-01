@@ -17,7 +17,7 @@ import { useProfile } from "@/Context/ProfileContext";
 import ListTransactions from "./ListTransactions";
 import { ArrowUp, LucideWalletCards } from "lucide-react";
 
-const NavigationTabsWithChat = () => {
+const NavigationTabs = () => {
   // State variables
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -52,6 +52,8 @@ const NavigationTabsWithChat = () => {
 
   // Mobile detection state
   const [isMobile, setIsMobile] = useState(false);
+  const [mobileHeaderHeight, setMobileHeaderHeight] = useState(0);
+  const [inputBarHeight, setInputBarHeight] = useState(0);
   const inputRef = useRef(null);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
@@ -64,10 +66,25 @@ const NavigationTabsWithChat = () => {
   const analyserRef = useRef(null);
   const microphoneRef = useRef(null);
 
-  // Detect mobile device
+  // Detect mobile device and calculate heights
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      
+      if (mobile) {
+        // Calculate mobile header height (approx 64px based on your MobileHeader)
+        setMobileHeaderHeight(64);
+        
+        // Calculate input bar height
+        const inputBar = document.querySelector('.input-bar-container');
+        if (inputBar) {
+          setInputBarHeight(inputBar.offsetHeight);
+        } else {
+          // Default input bar height estimation
+          setInputBarHeight(80);
+        }
+      }
     };
     
     checkMobile();
@@ -75,6 +92,34 @@ const NavigationTabsWithChat = () => {
     
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Update input bar height when component mounts and on resize
+  useEffect(() => {
+    if (!isMobile) return;
+
+    const updateHeights = () => {
+      const inputBar = document.querySelector('.input-bar-container');
+      if (inputBar) {
+        setInputBarHeight(inputBar.offsetHeight);
+      }
+    };
+
+    updateHeights();
+    window.addEventListener('resize', updateHeights);
+    
+    return () => window.removeEventListener('resize', updateHeights);
+  }, [isMobile]);
+
+  // Calculate available height for messages container
+  const getMessagesContainerHeight = () => {
+    if (!isMobile) {
+      return "calc(100vh - 150px)";
+    }
+    
+    // Mobile calculation: 100vh - mobileHeaderHeight - inputBarHeight - some padding
+    const availableHeight = `calc(100vh - ${mobileHeaderHeight}px - ${inputBarHeight}px - 20px)`;
+    return availableHeight;
+  };
 
   // Enhanced keyboard detection and scroll management
   useEffect(() => {
@@ -89,14 +134,14 @@ const NavigationTabsWithChat = () => {
       setKeyboardVisible(isKeyboardOpen);
 
       if (isKeyboardOpen) {
-        // Keyboard opened - scroll to bottom after a delay
+        // Adjust height when keyboard is open
         setTimeout(() => {
           if (messageContainerRef.current) {
             messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
           }
         }, 300);
       } else {
-        // Keyboard closed - restore scroll position
+        // Restore when keyboard closes
         setTimeout(() => {
           if (messageContainerRef.current) {
             messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
@@ -107,7 +152,6 @@ const NavigationTabsWithChat = () => {
       originalHeight = newHeight;
     };
 
-    // Visual Viewport API for better mobile handling
     const handleVisualViewportChange = () => {
       if (window.visualViewport) {
         setTimeout(() => {
@@ -138,7 +182,6 @@ const NavigationTabsWithChat = () => {
     const scrollToBottom = () => {
       const container = messageContainerRef.current;
       if (container) {
-        // Use smooth scroll for better UX
         container.scrollTo({
           top: container.scrollHeight,
           behavior: 'smooth'
@@ -1222,22 +1265,6 @@ const NavigationTabsWithChat = () => {
     }
   };
 
-  // Custom scroll handler to prevent layout jumps
-  const handleContainerScroll = () => {
-    if (messageContainerRef.current && isMobile) {
-      // Prevent unwanted scrolling during keyboard interactions
-      const container = messageContainerRef.current;
-      const isAtBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 10;
-      
-      if (!isAtBottom && keyboardVisible) {
-        // If keyboard is visible and user is not at bottom, maintain position
-        requestAnimationFrame(() => {
-          container.scrollTop = container.scrollHeight - container.clientHeight;
-        });
-      }
-    }
-  };
-
   // Enhanced input focus handlers
   const handleInputFocus = () => {
     setIsInputFocused(true);
@@ -1274,7 +1301,7 @@ const NavigationTabsWithChat = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col md:ml-[10rem]">
       <style dangerouslySetInnerHTML={{ __html: customStyles }} />
 
       {showConfirmation && (
@@ -1287,10 +1314,12 @@ const NavigationTabsWithChat = () => {
       )}
 
       {/* Main Chat Container */}
-      <div className="flex-1 flex flex-col max-w-6xl mx-auto w-full mx-2 md:px-4 md:py-4">
+      <div className="flex-1 flex flex-col max-w-8xl mx-auto w-full md:px-4 md:py-4">
         {/* Header */}
         {!messages.some((msg) => msg.wallet === "You") && (
-          <div className="text-center mb-6">
+          <div className="text-center mb-6" style={{
+            paddingTop: isMobile ? "80px" : "0",
+          }}>
             <h2 className="text-2xl font-bold dark:text-white">
               What can I help with?
             </h2>
@@ -1301,15 +1330,15 @@ const NavigationTabsWithChat = () => {
         <div className="flex-1 flex flex-col">
           <div
             ref={messageContainerRef}
-            className="lg:w-[80%] lg:mx-auto xl:w-[82%] w-[100%] flex-1 overflow-y-auto overflow-x-hidden md:space-y-4 md:px-2"
+            className="lg:w-[90%] lg:mx-auto xl:w-[100%] w-[100%] flex-1 overflow-y-auto overflow-x-hidden md:space-y-4 md:px-2"
             style={{
-              maxHeight: "calc(100vh - 150px)",
-              minHeight: "300px",
-              // Prevent layout shifts
+              maxHeight: getMessagesContainerHeight(),
+              minHeight: isMobile ? "200px" : "300px",
               overflowAnchor: "none",
-              WebkitOverflowScrolling: "touch"
+              WebkitOverflowScrolling: "touch",
+            paddingTop: isMobile ? "50px" : "0",
+              paddingBottom: isMobile ? "5px" : "0"
             }}
-            onScroll={handleContainerScroll}
           >
             {messages.map((msg, index) => {
               const isLast = index === messages.length - 1;
@@ -1336,7 +1365,7 @@ const NavigationTabsWithChat = () => {
                   key={index}
                   className={`flex ${
                     msg.wallet === "You" ? "justify-end" : "justify-start"
-                  }`}
+                  } mb-3 last:mb-0`}
                 >
                   <div
                     className={`md:px-4 px-2 py-3 rounded-xl text-xs md:text-sm max-w-[100%] md:max-w-[75%] lg:max-w-[65%] text-left whitespace-pre-wrap ${getMessageColor()}`}
@@ -1514,17 +1543,17 @@ const NavigationTabsWithChat = () => {
         {/* Enhanced Input Bar with better mobile handling */}
         <div 
           ref={inputRef}
-          className={`mt-6 sticky bottom-0 bg-white dark:bg-black md:bg-transparent py-2 md:py-0 transition-all ${
+          className={`input-bar-container mx-2 mt-2 sticky bottom-0 bg-white dark:bg-black md:bg-transparent py-2 md:py-0 transition-all ${
             keyboardVisible ? 'pb-4' : ''
           }`}
           style={{
             transform: 'translateZ(10px)'
           }}
         >
-          <div className="relative flex items-center w-full md:max-w-[78%] md:mx-auto rounded-3xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-black px-4 py-6 md:py-5 shadow-lg">
+          <div className="relative flex items-center w-full md:max-w-[100%] md:mx-auto rounded-3xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-black px-4 py-6 md:py-5 shadow-lg">
             {/* Input Field */}
             <input
-              className="flex-1 bg-transparent focus:outline-none text-sm text-gray-800 dark:text-gray-200 placeholder-gray-400"
+              className="flex-1 bg-transparent focus:outline-none text-sm text-gray-800 dark:text-gray-200 placeholder-gray-400 ios-input-fix"
               placeholder="Write message here..."
               value={message}
               onChange={(e) => setMessage(e.target.value)}
@@ -1537,6 +1566,11 @@ const NavigationTabsWithChat = () => {
               onFocus={handleInputFocus}
               onBlur={handleInputBlur}
               disabled={isTyping || loading}
+              style={{
+                fontSize: '16px',
+                transform: 'translateZ(0)',
+                WebkitAppearance: 'none'
+              }}
             />
 
             {/* Dynamic Action Button */}
@@ -1566,4 +1600,4 @@ const NavigationTabsWithChat = () => {
   );
 };
 
-export default NavigationTabsWithChat;
+export default NavigationTabs;

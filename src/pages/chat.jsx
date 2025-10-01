@@ -52,9 +52,9 @@ export default function Chat() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background dark:bg-black flex flex-col md:flex-row">
+    <div className="relative min-h-screen bg-background dark:bg-black flex flex-col md:flex-row">
       {/* Mobile Header */}
-      <div className="md:hidden">
+      <div className="md:hidden fixed w-full z-40 bg-white py-2">
         <MobileHeader onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
       </div>
 
@@ -127,12 +127,12 @@ export default function Chat() {
       )}
 
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col absolute z-10 flex-wrap relative h-full">
+      <div className="flex-1 flex flex-col relative h-full">
        <div
   className="hidden lg:block border max-w-[12%] text-xs flex flex-col gap-2
              border-[#A0AEC0] dark:border-gray-600
              bg-white dark:bg-[#1b1c1e] 
-             p-2 rounded-lg -ml-1 mt-4 shadow-sm z-50 relative"
+             p-2 rounded-lg absolute left-4 top-4 shadow-sm z-50"
 >
           <div className="flex flex-row justify-between items-center mb-1 font-bold">
             Total Balances
@@ -162,7 +162,7 @@ export default function Chat() {
         </button>
 
         {/* Bottom Navigation */}
-        <div className="fixed md:ml-0 mx-auto w-[100%] h-full md:w-[80%] p-2">
+        <div className="flex-1 md:ml-0 w-full h-full md:w-[80%]">
           <NavigationTabs />
         </div>
       </div>
