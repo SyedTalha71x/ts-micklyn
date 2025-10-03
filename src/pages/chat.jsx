@@ -133,8 +133,8 @@ export default function Chat() {
       {/* Main Chat Area - Fixed Layout */}
       <div className="flex-1 flex flex-col h-screen md:ml-0">
         {/* Desktop Balances */}
-        <div className="hidden lg:block border max-w-[12%] text-xs flex-col gap-2 border-[#A0AEC0] dark:border-gray-600 bg-white dark:bg-[#1b1c1e] p-2 rounded-lg absolute top-4 shadow-sm z-50">
-          <div className="flex flex-row justify-between items-center mb-1 font-bold">
+        <div className="hidden lg:block border text-xs flex-col gap-2 border-[#A0AEC0] dark:border-gray-600 bg-white dark:bg-[#1b1c1e] p-2 rounded-lg absolute top-4 shadow-sm z-50">
+          <div className="flex flex-row justify-between items-center mb-1 font-bold gap-4">
             Total Balances
             <button onClick={() => setShowBalances((prev) => !prev)}>
               {showBalances ? (
