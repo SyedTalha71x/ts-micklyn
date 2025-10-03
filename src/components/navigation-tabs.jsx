@@ -96,7 +96,7 @@ const NavigationTabs = () => {
 
     const getMessagesContainerHeight = () => {
     if (!isMobile) {
-      return "calc(100vh - 200px)";
+      return "calc(100vh - 100px)";
     }
     return "calc(100vh - 180px)";
   };
