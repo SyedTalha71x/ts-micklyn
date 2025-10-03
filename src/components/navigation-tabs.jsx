@@ -66,31 +66,15 @@ const NavigationTabs = () => {
   const analyserRef = useRef(null);
   const microphoneRef = useRef(null);
 
-  // Detect mobile device and calculate heights
-  useEffect(() => {
+   useEffect(() => {
     const checkMobile = () => {
-      const mobile = window.innerWidth < 768;
-      setIsMobile(mobile);
-      
-      if (mobile) {
-        // Calculate mobile header height (approx 64px based on your MobileHeader)
-        setMobileHeaderHeight(64);
-        
-        // Calculate input bar height
-        const inputBar = document.querySelector('.input-bar-container');
-        if (inputBar) {
-          setInputBarHeight(inputBar.offsetHeight);
-        } else {
-          // Default input bar height estimation
-          setInputBarHeight(80);
-        }
-      }
+      setIsMobile(window.innerWidth < 768);
     };
-    
+
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   // Update input bar height when component mounts and on resize
@@ -98,27 +82,23 @@ const NavigationTabs = () => {
     if (!isMobile) return;
 
     const updateHeights = () => {
-      const inputBar = document.querySelector('.input-bar-container');
+      const inputBar = document.querySelector(".input-bar-container");
       if (inputBar) {
         setInputBarHeight(inputBar.offsetHeight);
       }
     };
 
     updateHeights();
-    window.addEventListener('resize', updateHeights);
-    
-    return () => window.removeEventListener('resize', updateHeights);
+    window.addEventListener("resize", updateHeights);
+
+    return () => window.removeEventListener("resize", updateHeights);
   }, [isMobile]);
 
-  // Calculate available height for messages container
-  const getMessagesContainerHeight = () => {
+    const getMessagesContainerHeight = () => {
     if (!isMobile) {
-      return "calc(100vh - 150px)";
+      return "calc(100vh - 200px)";
     }
-    
-    // Mobile calculation: 100vh - mobileHeaderHeight - inputBarHeight - some padding
-    const availableHeight = `calc(100vh - ${mobileHeaderHeight}px - ${inputBarHeight}px - 20px)`;
-    return availableHeight;
+    return "calc(100vh - 180px)";
   };
 
   // Enhanced keyboard detection and scroll management
@@ -134,17 +114,17 @@ const NavigationTabs = () => {
       setKeyboardVisible(isKeyboardOpen);
 
       if (isKeyboardOpen) {
-        // Adjust height when keyboard is open
         setTimeout(() => {
           if (messageContainerRef.current) {
-            messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
+            messageContainerRef.current.scrollTop =
+              messageContainerRef.current.scrollHeight;
           }
         }, 300);
       } else {
-        // Restore when keyboard closes
         setTimeout(() => {
           if (messageContainerRef.current) {
-            messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
+            messageContainerRef.current.scrollTop =
+              messageContainerRef.current.scrollHeight;
           }
         }, 100);
       }
@@ -156,27 +136,33 @@ const NavigationTabs = () => {
       if (window.visualViewport) {
         setTimeout(() => {
           if (messageContainerRef.current) {
-            messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
+            messageContainerRef.current.scrollTop =
+              messageContainerRef.current.scrollHeight;
           }
         }, 150);
       }
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
     if (window.visualViewport) {
-      window.visualViewport.addEventListener('resize', handleVisualViewportChange);
+      window.visualViewport.addEventListener(
+        "resize",
+        handleVisualViewportChange
+      );
     }
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
       if (window.visualViewport) {
-        window.visualViewport.removeEventListener('resize', handleVisualViewportChange);
+        window.visualViewport.removeEventListener(
+          "resize",
+          handleVisualViewportChange
+        );
       }
     };
   }, [isMobile]);
 
-  // Improved auto-scroll with better mobile handling
-  useEffect(() => {
+ useEffect(() => {
     if (!messageContainerRef.current) return;
 
     const scrollToBottom = () => {
@@ -184,54 +170,49 @@ const NavigationTabs = () => {
       if (container) {
         container.scrollTo({
           top: container.scrollHeight,
-          behavior: 'smooth'
+          behavior: "smooth",
         });
       }
     };
 
-    // Immediate scroll
     scrollToBottom();
 
-    // Additional delayed scrolls for mobile
     if (isMobile) {
       const timeouts = [
         setTimeout(scrollToBottom, 100),
         setTimeout(scrollToBottom, 300),
-        setTimeout(scrollToBottom, 500)
       ];
 
       return () => timeouts.forEach(clearTimeout);
     }
   }, [messages, loading, typingText, isMobile]);
 
-  // Enhanced message sent handler
   useEffect(() => {
     if (!loading && messages.length > 0) {
       const scrollToBottom = () => {
         if (messageContainerRef.current) {
           messageContainerRef.current.scrollTo({
             top: messageContainerRef.current.scrollHeight,
-            behavior: 'smooth'
+            behavior: "smooth",
           });
         }
       };
 
       // Multiple scroll attempts for reliability
       scrollToBottom();
-      
+
       const timeouts = [
         setTimeout(scrollToBottom, 100),
         setTimeout(scrollToBottom, 200),
-        setTimeout(scrollToBottom, 400)
+        setTimeout(scrollToBottom, 400),
       ];
 
       // Reset input focus
       setIsInputFocused(false);
-      
-      // On mobile, don't immediately blur input - let user see the message first
+
       if (isMobile && inputRef.current) {
         setTimeout(() => {
-          const input = inputRef.current.querySelector('input');
+          const input = inputRef.current.querySelector("input");
           if (input && document.activeElement === input) {
             input.blur();
           }
@@ -391,35 +372,35 @@ const NavigationTabs = () => {
         ]);
         break;
 
-        case "all_portfolios":
-          setMessages((prev) => [
-            ... prev,
-            {
-              wallet: "Chat",
-              content: reply,
-              isJson: false,
-              responseType: "all_portfolios",
-              portfolioResponse: reply.all_portfolios,
-              portfolioTitle: reply.title,
-              isHistory: false,
-            },
-          ]);
-          break;
+      case "all_portfolios":
+        setMessages((prev) => [
+          ...prev,
+          {
+            wallet: "Chat",
+            content: reply,
+            isJson: false,
+            responseType: "all_portfolios",
+            portfolioResponse: reply.all_portfolios,
+            portfolioTitle: reply.title,
+            isHistory: false,
+          },
+        ]);
+        break;
 
-          case "all_transactions":
-          setMessages((prev) => [
-            ...prev,
-            {
-              wallet: "Chat",
-              content: reply,
-              isJson: false,
-              responseType: "all_transactions",
-              transactionResponse: reply.all_transactions,
-              transactionTitle: reply.title,
-              isHistory: false
-            }
-          ]);
-          break;
+      case "all_transactions":
+        setMessages((prev) => [
+          ...prev,
+          {
+            wallet: "Chat",
+            content: reply,
+            isJson: false,
+            responseType: "all_transactions",
+            transactionResponse: reply.all_transactions,
+            transactionTitle: reply.title,
+            isHistory: false,
+          },
+        ]);
+        break;
 
       case "all_assets":
         setMessages((prev) => [
@@ -544,15 +525,14 @@ const NavigationTabs = () => {
 
     setSocket(newSocket);
 
-   newSocket.on("connection_status", (data) => {
-  if (data.status !== "connected") {
-    setMessages((prev) => [
-      { wallet: "System", content: data.status, isHistory: false },
-      ...prev,
-    ]);
-  }
-});
-
+    newSocket.on("connection_status", (data) => {
+      if (data.status !== "connected") {
+        setMessages((prev) => [
+          { wallet: "System", content: data.status, isHistory: false },
+          ...prev,
+        ]);
+      }
+    });
 
     newSocket.on("error", (data) => {
       setMessages((prev) => [
@@ -1077,21 +1057,21 @@ const NavigationTabs = () => {
                   responseType: "all_portfolios",
                   portfolioResponse:
                     replyContent.all_portfolios || replyContent,
-                    portfolioTitle: replyContent.title || replyContent,
+                  portfolioTitle: replyContent.title || replyContent,
                   isJson: false,
                 };
                 break;
 
-                case "all_transactions":
-                  content = replyContent;
-                  additionalProps = {
-                    responseType: "all_transactions",
-                    transactionResponse: 
+              case "all_transactions":
+                content = replyContent;
+                additionalProps = {
+                  responseType: "all_transactions",
+                  transactionResponse:
                     replyContent.all_transactions || replyContent,
-                    portfolioTitle: replyContent.title || replyContent,
-                    isJson: false,
-                  };
-                  break;
+                  portfolioTitle: replyContent.title || replyContent,
+                  isJson: false,
+                };
+                break;
 
               case "get_top_cryptos":
                 content = replyContent;
@@ -1227,12 +1207,7 @@ const NavigationTabs = () => {
   const getActionIcon = () => {
     if (message.trim().length > 0) {
       // Show send icon when user types something
-      return (
-        <ArrowUp
-          className="text-white" 
-          size={isMobile ? 16 : 18}
-        />
-      );
+      return <ArrowUp className="text-white" size={isMobile ? 16 : 18} />;
     } else {
       // Show recording icon when input is empty
       return recording ? (
@@ -1242,9 +1217,9 @@ const NavigationTabs = () => {
           <span className="w-1 h-4 bg-white animate-pulse" />
         </div>
       ) : (
-        <img 
-          src="/recording-01.png" 
-          alt="record" 
+        <img
+          src="/recording-01.png"
+          alt="record"
           className={`${isMobile ? "w-4 h-4" : "w-5 h-5"}`}
         />
       );
@@ -1265,18 +1240,16 @@ const NavigationTabs = () => {
     }
   };
 
-  // Enhanced input focus handlers
   const handleInputFocus = () => {
     setIsInputFocused(true);
     setKeyboardVisible(true);
-    
+
     if (isMobile) {
-      // Delay scroll to ensure keyboard is fully open
       setTimeout(() => {
         if (messageContainerRef.current) {
           messageContainerRef.current.scrollTo({
             top: messageContainerRef.current.scrollHeight,
-            behavior: 'smooth'
+            behavior: "smooth",
           });
         }
       }, 500);
@@ -1286,22 +1259,21 @@ const NavigationTabs = () => {
   const handleInputBlur = () => {
     setIsInputFocused(false);
     setKeyboardVisible(false);
-    
+
     if (isMobile) {
-      // Small delay to allow for keyboard close animation
       setTimeout(() => {
         if (messageContainerRef.current) {
           messageContainerRef.current.scrollTo({
             top: messageContainerRef.current.scrollHeight,
-            behavior: 'smooth'
+            behavior: "smooth",
           });
         }
       }, 200);
     }
   };
 
-  return (
-    <div className="min-h-screen flex flex-col md:ml-[10rem]">
+ return (
+    <div className="h-full flex flex-col">
       <style dangerouslySetInnerHTML={{ __html: customStyles }} />
 
       {showConfirmation && (
@@ -1313,31 +1285,23 @@ const NavigationTabs = () => {
         />
       )}
 
-      {/* Main Chat Container */}
-      <div className="flex-1 flex flex-col max-w-8xl mx-auto w-full md:px-4 md:py-4">
+      <div className="flex-1 flex flex-col h-full w-full md:px-4 md:py-4 overflow-hidden">
         {/* Header */}
         {!messages.some((msg) => msg.wallet === "You") && (
-          <div className="text-center mb-6" style={{
-            paddingTop: isMobile ? "80px" : "0",
-          }}>
+          <div className="text-center mb-4 pt-2">
             <h2 className="text-2xl font-bold dark:text-white">
               What can I help with?
             </h2>
           </div>
         )}
 
-        {/* Messages Container */}
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col min-h-0">
           <div
             ref={messageContainerRef}
-            className="lg:w-[90%] lg:mx-auto xl:w-[100%] w-[100%] flex-1 overflow-y-auto overflow-x-hidden md:space-y-4 md:px-2"
+            className="w-full md:w-[70%] md:mx-auto flex-1 overflow-y-auto overflow-x-hidden space-y-2 "
             style={{
               maxHeight: getMessagesContainerHeight(),
-              minHeight: isMobile ? "200px" : "300px",
-              overflowAnchor: "none",
-              WebkitOverflowScrolling: "touch",
-            paddingTop: isMobile ? "50px" : "0",
-              paddingBottom: isMobile ? "5px" : "0"
+              minHeight: "200px",
             }}
           >
             {messages.map((msg, index) => {
@@ -1365,12 +1329,13 @@ const NavigationTabs = () => {
                   key={index}
                   className={`flex ${
                     msg.wallet === "You" ? "justify-end" : "justify-start"
-                  } mb-3 last:mb-0`}
+                  } mb-2 last:mb-0`}
                 >
                   <div
-                    className={`md:px-4 px-2 py-3 rounded-xl text-xs md:text-sm max-w-[100%] md:max-w-[75%] lg:max-w-[65%] text-left whitespace-pre-wrap ${getMessageColor()}`}
+                    className={`px-3 py-2 rounded-xl text-xs md:text-sm max-w-[85%] text-left whitespace-pre-wrap ${getMessageColor()}`}
                   >
-                    {msg.wallet === "Chat" &&
+                    {/* Your existing message rendering logic */}
+                         {msg.wallet === "Chat" &&
                     msg.responseType === "chatoshi" ? (
                       <Catoshi
                         data={msg.chatoshiData}
@@ -1402,12 +1367,17 @@ const NavigationTabs = () => {
                       <MyAssets data={msg.assetResponse} />
                     ) : msg.wallet === "Chat" &&
                       msg.responseType === "all_portfolios" ? (
-                      <AllPortfolio data={msg.portfolioResponse} title={msg.portfolioTitle} />
+                      <AllPortfolio
+                        data={msg.portfolioResponse}
+                        title={msg.portfolioTitle}
+                      />
                     ) : msg.wallet === "Chat" &&
                       msg.responseType === "all_transactions" ? (
-                        <ListTransactions data={msg.transactionResponse} title={msg.transactionTitle}/>
-                      )
-                    : msg.wallet === "Chat" && isLast && isTyping ? (
+                      <ListTransactions
+                        data={msg.transactionResponse}
+                        title={msg.transactionTitle}
+                      />
+                    ) : msg.wallet === "Chat" && isLast && isTyping ? (
                       <Typewriter text={fullResponse} className="relative" />
                     ) : msg.isJson ? (
                       <div className="mt-1">
@@ -1510,7 +1480,7 @@ const NavigationTabs = () => {
 
             {isTyping && typingText && (
               <div className="flex justify-start">
-                <div className="px-4 py-3 rounded-xl text-xs md:text-sm text-gray-800 dark:text-gray-200 max-w-[85%] md:max-w-[75%] lg:max-w-[65%] text-left whitespace-pre-wrap relative">
+                <div className="px-3 py-2 rounded-xl text-xs md:text-sm text-gray-800 dark:text-gray-200 max-w-[85%] text-left whitespace-pre-wrap relative">
                   {typingText}
                   <span className="inline-block w-0.5 h-4 ml-0.5 bg-gray-800 dark:bg-gray-200 animate-cursor-blink absolute"></span>
                 </div>
@@ -1519,7 +1489,7 @@ const NavigationTabs = () => {
 
             {loading && !isTyping && (
               <div className="flex justify-start">
-                <div className="px-4 py-3 rounded-xl text-xs md:text-sm text-gray-800 dark:text-gray-200">
+                <div className="px-3 py-2 rounded-xl text-xs md:text-sm text-gray-800 dark:text-gray-200">
                   <span className="inline-flex gap-1">
                     <span
                       className="w-2 h-2 rounded-full bg-gray-500 animate-bounce"
@@ -1540,20 +1510,12 @@ const NavigationTabs = () => {
           </div>
         </div>
 
-        {/* Enhanced Input Bar with better mobile handling */}
-        <div 
-          ref={inputRef}
-          className={`input-bar-container mx-2 mt-2 sticky bottom-0 bg-white dark:bg-black md:bg-transparent py-2 md:py-0 transition-all ${
-            keyboardVisible ? 'pb-4' : ''
-          }`}
-          style={{
-            transform: 'translateZ(10px)'
-          }}
-        >
-          <div className="relative flex items-center w-full md:max-w-[100%] md:mx-auto rounded-3xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-black px-4 py-6 md:py-5 shadow-lg">
+        {/* Fixed Input Bar */}
+        <div className="md:w-[70%] md:mx-auto mx-2 mt-2 pb-2 bg-white dark:bg-black md:bg-transparent">
+          <div className="relative flex items-center w-full rounded-3xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-black px-4 py-8 shadow-lg">
             {/* Input Field */}
             <input
-              className="flex-1 bg-transparent focus:outline-none text-sm text-gray-800 dark:text-gray-200 placeholder-gray-400 ios-input-fix"
+              className="flex-1 bg-transparent focus:outline-none text-xs text-gray-800 dark:text-gray-200 placeholder-gray-400"
               placeholder="Write message here..."
               value={message}
               onChange={(e) => setMessage(e.target.value)}
@@ -1563,19 +1525,12 @@ const NavigationTabs = () => {
                   sendMessage();
                 }
               }}
-              onFocus={handleInputFocus}
-              onBlur={handleInputBlur}
               disabled={isTyping || loading}
-              style={{
-                fontSize: '16px',
-                transform: 'translateZ(0)',
-                WebkitAppearance: 'none'
-              }}
             />
 
             {/* Dynamic Action Button */}
             <button
-              className={`w-8 h-8 md:h-10 md:w-10 rounded-full flex items-center justify-center shadow-md mr-0 transition-all 
+              className={`w-8 h-8 rounded-full flex items-center justify-center shadow-md transition-all 
     ${
       recording
         ? "bg-red-600 animate-pulse scale-105"
@@ -1586,11 +1541,25 @@ const NavigationTabs = () => {
               onClick={handleActionButtonClick}
               disabled={isTyping || (recording && message.trim().length > 0)}
             >
-              {getActionIcon()}
+              {message.trim().length > 0 ? (
+                <ArrowUp className="text-white" size={16} />
+              ) : recording ? (
+                <div className="flex gap-0.5">
+                  <span className="w-1 h-2 bg-white animate-pulse" />
+                  <span className="w-1 h-3 bg-white animate-pulse" />
+                  <span className="w-1 h-4 bg-white animate-pulse" />
+                </div>
+              ) : (
+                <img
+                  src="/recording-01.png"
+                  alt="record"
+                  className="w-4 h-4"
+                />
+              )}
             </button>
-            
-            <LucideWalletCards 
-              className="absolute bottom-2 left-4 dark:text-gray-300 text-gray-800 hover:text-gray-600 cursor-pointer" 
+
+            <LucideWalletCards
+              className="absolute bottom-2 left-4 dark:text-gray-300 text-gray-800 hover:text-gray-600 cursor-pointer"
               size={18}
             />
           </div>

@@ -64,7 +64,7 @@ const UserBalance = ({ data }) => {
   );
 
   return (
-    <div className="bg-white dark:bg-[#1b1c1e] text-black dark:text-gray-200 rounded-xl p-6 text-black max-w-sm mx-auto border border-[#A0AEC0] dark:border-gray-700">
+    <div className="bg-white dark:bg-[#1b1c1e] text-black dark:text-gray-200 rounded-xl p-6 text-black max-w-sm mx-auto border border-[#A0AEC0] dark:border-gray-700 assets-responsive">
       {/* Title */}
       <h3 className="text-xs md:text-sm  font-semibold mb-4 text-black dark:text-gray-200">
         {walletData.title || `Your ${walletData.blockchain} Wallet`}

@@ -11,8 +11,7 @@ export default function CryptoTable({ onClose }) {
   const contentRef = useRef(null);
   const tabIndicatorRef = useRef(null);
   const { watchListData, loading, getWatchlistData } = useProfile();
-  const [openRow, setOpenRow] = useState(null); // track kis row ka dropdown open hai
-
+  const [openRow, setOpenRow] = useState(null);
 
   // Initial data load
   useEffect(() => {
@@ -27,7 +26,7 @@ export default function CryptoTable({ onClose }) {
       });
       getWatchlistData();
       toast.success(`${symbol} removed from watchlist`);
-      setOpenRow(null); // Dropdown band karo after removal
+      setOpenRow(null);
     } catch (error) {
       toast.error(error || "Failed to remove asset");
     }
@@ -80,12 +79,12 @@ export default function CryptoTable({ onClose }) {
   };
 
   return (
-    <div className="relative border border-[#A0AEC0] dark:border-gray-600 p-2 rounded-xl h-full overflow-auto bg-white dark:bg-[#101010] dark:text-white">
+    <div className="h-[100%] border border-[#A0AEC0] dark:border-gray-600 p-2 rounded-xl bg-white dark:bg-[#101010] dark:text-white overflow-auto">
       {/* Tab Switcher */}
       <div className="relative flex flex-wrap cursor-pointer gap-2 p-1 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-md mb-4">
         <div
           ref={tabIndicatorRef}
-          className="absolute left-0 top-0 bottom-0 w-1/2 bg-gray-300 dark:bg-[#232428] border-5 border-white dark:border-[#101010] rounded-lg "
+          className="absolute left-0 top-0 bottom-0 w-1/2 bg-gray-300 dark:bg-[#232428] border-5 border-white dark:border-[#101010] rounded-lg"
         />
         <button
           className={`relative flex-1 py-2 inter-font px-4 rounded-md text-sm font-medium z-10 ${
@@ -112,7 +111,13 @@ export default function CryptoTable({ onClose }) {
       {/* Animated Content */}
       <div className="px-4" ref={contentRef}>
         {activeTab === "watchlist" && (
-          <div className="space-y-4">
+          <div className="space-y-4 md:max-h-[30rem] overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [-webkit-overflow-scrolling:touch]">
+            {/* Hide scrollbar for Webkit browsers */}
+            <style jsx>{`
+              .space-y-4::-webkit-scrollbar {
+                display: none;
+              }
+            `}</style>
             {loading ? (
               <div className="text-center py-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-white mx-auto"></div>
@@ -143,7 +148,7 @@ export default function CryptoTable({ onClose }) {
                 )}
 
                 {/* Non-Favorites */}
-                {/* {nonFavoriteItems.length > 0 && (
+                {nonFavoriteItems.length > 0 && (
                   <div>
                     {nonFavoriteItems.map((crypto) => (
                       <WatchlistItem
@@ -156,13 +161,23 @@ export default function CryptoTable({ onClose }) {
                       />
                     ))}
                   </div>
-                )} */}
+                )}
               </>
             )}
           </div>
         )}
 
-        {activeTab === "history" && <TotalBalance />}
+        {activeTab === "history" && (
+          <div className="md:max-h-[30rem] overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [-webkit-overflow-scrolling:touch]">
+            {/* Hide scrollbar for Webkit browsers */}
+            <style jsx>{`
+              .md\\:max-h-\\[30rem\\]::-webkit-scrollbar {
+                display: none;
+              }
+            `}</style>
+            <TotalBalance />
+          </div>
+        )}
       </div>
     </div>
   );
@@ -198,7 +213,7 @@ const WatchlistItem = ({ crypto, onRemoveWatchlist, formatBalance, isOpen, onTog
           <li
             className="px-4 py-2 text-xs hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
             onClick={(e) => {
-              e.stopPropagation(); // Prevent row click event
+              e.stopPropagation();
               onRemoveWatchlist(crypto.symbol, crypto.chain);
             }}
           >

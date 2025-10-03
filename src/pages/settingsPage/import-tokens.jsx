@@ -115,7 +115,7 @@ const ImportTokens = () => {
 
             {/* Contract Address Field */}
             <div className="space-y-2">
-              <label className="text-xs md:text-sm block text-sm font-medium">
+              <label className="text-xs md:text-sm block font-medium">
                 Token Contract Address
               </label>
               <Input

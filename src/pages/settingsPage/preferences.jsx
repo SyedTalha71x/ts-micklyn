@@ -36,7 +36,7 @@ const PreferencesPage = () => {
             <label className="block mb-2 text-sm dark:text-white">Currency</label>
             <div className="relative">
               <div 
-                className="border rounded-md py-[18px] px-3 dark:bg-[#232428] text-black dark:text-white cursor-pointer flex items-center justify-between" 
+                className="border rounded-md py-[5px] px-3 dark:bg-[#232428] text-black dark:text-white cursor-pointer flex items-center justify-between" 
                 onClick={toggleWalletCurrency}
               >
                 <span className="text-sm text-black dark:text-white">
