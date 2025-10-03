@@ -17,7 +17,7 @@ export default function MobileHeader({ onMenuClick }) {
           <span className="sr-only">Menu</span>
           <Menu className="h-4 w-4 dark:text-white" />
         </Button>
-        <h2 className="mt-2"><span className="font-bold">USD</span>: $0</h2>
+        <h2 className="mt-0"><span className="font-bold">USD</span>: $0</h2>
         <Button variant="ghost" size="icon" className="h-5 w-5">
           <img src="/rotate-left.png" className="  dark:hidden"/>
            <img src="/rotate-left light.png" className="hidden  dark:block"/>

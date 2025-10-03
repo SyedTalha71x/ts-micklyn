@@ -65,7 +65,7 @@
 
 @media (min-width: 360px) and (max-width: 374px) {
   .assets-responsive {
-    width: 20.5rem !important;
+    width: 21rem !important;
   }
 }
 
@@ -78,7 +78,7 @@
 
 @media (min-width: 381px) and (max-width: 400px) {
   .assets-responsive {
-    width: 23.5rem !important;
+    width: 23rem !important;
   }
 }
 
@@ -98,7 +98,7 @@
 
 @media (min-width: 430px) and (max-width: 440px) {
   .assets-responsive {
-    width: 25.5rem !important;
+    width: 24rem !important;
   }
 }
 
@@ -117,7 +117,7 @@
 
 @media (min-width: 501px) and (max-width: 560px) {
   .assets-responsive {
-    width: 31rem !important;
+    width: 27rem !important;
   }
 }
 /* tablet for  */
