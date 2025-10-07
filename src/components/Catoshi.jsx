@@ -65,6 +65,8 @@ const StaticText = ({ text = "" }) => {
 };
 
 const Catoshi = ({ data, isHistory = false }) => {
+  const chartRef = React.useRef(null);
+
   const [step, setStep] = useState(0);
   const [loadingSteps, setLoadingSteps] = useState([]);
   const [timeRange, setTimeRange] = useState("all");
@@ -174,7 +176,7 @@ const Catoshi = ({ data, isHistory = false }) => {
     <div className="space-y-4">
       {/* Step 0: Description */}
       {descriptionData && (
-        <div className="prose dark:prose-invert max-w-none p-4 rounded-lg">
+        <div className="prose dark:prose-invert max-w-none rounded-lg">
           {isHistory ? (
             <StaticText text={descriptionData.data} />
           ) : (
@@ -221,7 +223,7 @@ const Catoshi = ({ data, isHistory = false }) => {
       {/* Step 2-3: Chart Loading & Chart Display */}
       {chartData && (
         (isHistory || step >= 2) && (
-          <div className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
+          <div ref={chartRef} className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
             {isHistory || step === 3 ? (
               <>
                 <div className="flex justify-end mb-4">

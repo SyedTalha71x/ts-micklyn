@@ -79,9 +79,9 @@ export default function CryptoTable({ onClose }) {
   };
 
   return (
-    <div className="h-[100%] border border-[#A0AEC0] dark:border-gray-600 p-2 rounded-xl bg-white dark:bg-[#101010] dark:text-white overflow-auto">
+    <div className="h-[94.5vh] 2xl:h-[96.5vh] border border-[#A0AEC0] dark:border-gray-600 p-2 rounded-xl bg-white dark:bg-[#101010] dark:text-white overflow-hidden flex flex-col">
       {/* Tab Switcher */}
-      <div className="relative flex flex-wrap cursor-pointer gap-2 p-1 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-md mb-4">
+      <div className="relative flex flex-wrap cursor-pointer gap-2 p-1 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-md mb-4 flex-shrink-0">
         <div
           ref={tabIndicatorRef}
           className="absolute left-0 top-0 bottom-0 w-1/2 bg-gray-300 dark:bg-[#232428] border-5 border-white dark:border-[#101010] rounded-lg"
@@ -109,9 +109,9 @@ export default function CryptoTable({ onClose }) {
       </div>
 
       {/* Animated Content */}
-      <div className="px-4" ref={contentRef}>
+      <div className="px-4 flex-1 overflow-hidden" ref={contentRef}>
         {activeTab === "watchlist" && (
-          <div className="space-y-4 md:max-h-[30rem] overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [-webkit-overflow-scrolling:touch]">
+          <div className="h-full overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [-webkit-overflow-scrolling:touch]">
             {/* Hide scrollbar for Webkit browsers */}
             <style jsx>{`
               .space-y-4::-webkit-scrollbar {
@@ -125,53 +125,33 @@ export default function CryptoTable({ onClose }) {
                   Loading assets...
                 </p>
               </div>
-            ) : watchListData.length === 0 ? (
+            ) : favoriteItems.length === 0 ? (
               <div className="text-center py-8 text-sm text-gray-500 dark:text-gray-400">
-                No assets found in your watchlist
+                No favorite assets found in your watchlist
               </div>
             ) : (
-              <>
-                {/* Favorites First */}
-                {favoriteItems.length > 0 && (
-                  <div className="mb-6">
-                    {favoriteItems.map((crypto) => (
-                      <WatchlistItem
-                        key={`${crypto.symbol}-${crypto.chain}`}
-                        crypto={crypto}
-                        onRemoveWatchlist={removeWatchlist}
-                        formatBalance={formatBalance}
-                        isOpen={openRow === crypto.symbol + crypto.chain}
-                        onToggle={() => handleRowClick(crypto.symbol + crypto.chain)}
-                      />
-                    ))}
-                  </div>
-                )}
-
-                {/* Non-Favorites */}
-                {nonFavoriteItems.length > 0 && (
-                  <div>
-                    {nonFavoriteItems.map((crypto) => (
-                      <WatchlistItem
-                        key={`${crypto.symbol}-${crypto.chain}`}
-                        crypto={crypto}
-                        onRemoveWatchlist={removeWatchlist}
-                        formatBalance={formatBalance}
-                        isOpen={openRow === crypto.symbol + crypto.chain}
-                        onToggle={() => handleRowClick(crypto.symbol + crypto.chain)}
-                      />
-                    ))}
-                  </div>
-                )}
-              </>
+              <div className="space-y-4 pb-4">
+                {/* Only Favorites */}
+                {favoriteItems.map((crypto) => (
+                  <WatchlistItem
+                    key={`${crypto.symbol}-${crypto.chain}`}
+                    crypto={crypto}
+                    onRemoveWatchlist={removeWatchlist}
+                    formatBalance={formatBalance}
+                    isOpen={openRow === crypto.symbol + crypto.chain}
+                    onToggle={() => handleRowClick(crypto.symbol + crypto.chain)}
+                  />
+                ))}
+              </div>
             )}
           </div>
         )}
 
         {activeTab === "history" && (
-          <div className="md:max-h-[30rem] overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [-webkit-overflow-scrolling:touch]">
+          <div className="h-full overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [-webkit-overflow-scrolling:touch]">
             {/* Hide scrollbar for Webkit browsers */}
             <style jsx>{`
-              .md\\:max-h-\\[30rem\\]::-webkit-scrollbar {
+              .md\\:max-h-\\[85vh\\]::-webkit-scrollbar {
                 display: none;
               }
             `}</style>

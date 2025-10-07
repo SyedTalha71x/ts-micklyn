@@ -23,11 +23,12 @@ const CryptoDisplay = ({ data, title }) => {
   const displayedData = showAll ? data : data?.slice(0, 5);
   console.log(title, "ajsdbbdsa");
   return (
-    <div className="bg-white dark:bg-[#1b1c1e] rounded-xl p-4 dark:text-white md:min-w-sm mx-auto border border-[#A0AEC0] dark:border-gray-700 assets-responsive">
+    <>
       {/* Title */}
       <h3 className="text-xs md:text-sm font-normal mb-4 leading-relaxed">
         {title}
       </h3>
+    <div className="bg-white dark:bg-[#1b1c1e] rounded-xl p-4 dark:text-white md:min-w-sm mx-auto border border-[#A0AEC0] dark:border-gray-700 assets-responsive">
 
       {/* Crypto List */}
       <div className="space-y-2">
@@ -80,6 +81,7 @@ const CryptoDisplay = ({ data, title }) => {
         </div>
       )}
     </div>
+    </>
   );
 };
 

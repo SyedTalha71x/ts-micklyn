@@ -383,6 +383,7 @@ const NavigationTabs = () => {
             isJson: false,
             responseType: "all_assets",
             assetResponse: reply.all_assets,
+            assetTitle: reply.title | reply,
             isHistory: false,
           },
         ])
@@ -1019,7 +1020,8 @@ const NavigationTabs = () => {
                 isJson = true
                 additionalProps = {
                   responseType: "all_assets",
-                  assetResponse: content,
+                  assetResponse: replyContent.all_assets,
+                  assetTitle: replyContent.title
                 }
                 break
 
@@ -1239,10 +1241,10 @@ const NavigationTabs = () => {
               return (
                 <div
                   key={index}
-                  className={`flex ${msg.wallet === "You" ? "justify-end" : "justify-start"} mb-2 last:mb-0`}
+                  className={`flex ${msg.wallet === "You" ? "justify-end" : "justify-start"} mb-2 last:mb-0 `}
                 >
                   <div
-                    className={`px-3 py-2 rounded-xl text-xs md:text-sm max-w-[85%] md:max-w-[70%] text-left whitespace-pre-wrap ${getMessageColor()}`}
+                    className={`px-3 py-2 rounded-xl text-xs ${msg.wallet === "Chat" ? "md:w-full" : ""} md:text-sm max-w-[85%] md:max-w-[100%] text-left whitespace-pre-wrap ${getMessageColor()}`}
                   >
                     {msg.wallet === "Chat" && msg.responseType === "chatoshi" ? (
                       <Catoshi data={msg.chatoshiData} isHistory={msg.isHistory} />
@@ -1255,7 +1257,7 @@ const NavigationTabs = () => {
                     ) : msg.wallet === "Chat" && msg.responseType === "all_wallets_addresses" ? (
                       <WalletAddresses data={msg.walletResponse} title={msg.walletTitle} />
                     ) : msg.wallet === "Chat" && msg.responseType === "all_assets" ? (
-                      <MyAssets data={msg.assetResponse} />
+                      <MyAssets data={msg.assetResponse} title={msg.assetTitle} />
                     ) : msg.wallet === "Chat" && msg.responseType === "all_portfolios" ? (
                       <AllPortfolio data={msg.portfolioResponse} title={msg.portfolioTitle} />
                     ) : msg.wallet === "Chat" && msg.responseType === "all_transactions" ? (
@@ -1320,7 +1322,7 @@ const NavigationTabs = () => {
 
         {/* DESKTOP INPUT - Normal flow */}
         {!isMobile && (
-          <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-800">
+          <div className="px-4 py-3">
             <div className="relative flex items-center w-full rounded-3xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-black px-4 py-3 shadow-lg">
               <input
                 className="flex-1 bg-transparent focus:outline-none text-sm text-gray-800 dark:text-gray-200 placeholder-gray-400"

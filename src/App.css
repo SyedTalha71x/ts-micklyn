@@ -150,10 +150,15 @@
 
 @media (min-width: 1000px) and (max-width: 1030px) {
   .assets-responsive {
-    width: 34rem !important;
+    width: 100% !important;
   }
 }
 
+@media (min-width: 1030px){
+  .assets-responsive{
+    width: 100% !important;
+  }
+}
 .scrollbar-hide {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */

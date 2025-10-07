@@ -40,8 +40,9 @@ const WalletAddresses = ({ data, title }) => {
   if (data.length === 1) {
     const wallet = data[0];
     return (
-      <div className="bg-white dark:bg-[#1b1c1e] text-black  dark:text-gray-200 rounded-xl p-4 border border-[#A0AEC0] dark:border-gray-700 assets-responsive">
+      <>
         <h3 className="text-xs md:text-sm font-medium mb-4">{title}</h3>
+      <div className="bg-white dark:bg-[#1b1c1e] text-black  dark:text-gray-200 rounded-xl p-4 border border-[#A0AEC0] dark:border-gray-700 assets-responsive">
 
         {/* Balance */}
         <div className="border border-[#A0AEC0] dark:border-gray-700 rounded-lg p-3 mb-2 flex flex-col gap-2 justify-between">
@@ -101,6 +102,7 @@ const WalletAddresses = ({ data, title }) => {
           </div>
         </div>
       </div>
+      </>
     );
   }
 

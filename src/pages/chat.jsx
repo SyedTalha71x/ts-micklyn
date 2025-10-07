@@ -63,7 +63,7 @@ export default function Chat() {
       {/* Sidebar */}
       <div className="hidden md:flex md:w-[20%] md:flex-shrink-0">
         <div className="h-full w-full flex flex-col">
-          <div className="p-4 flex-1">
+          <div className="p-4">
             <CryptoTable />
           </div>
         </div>
