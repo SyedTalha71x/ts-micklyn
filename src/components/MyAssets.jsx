@@ -17,7 +17,7 @@ export default function MyAssets({ data, title }) {
     <>
       {/* Title */}
       <h3 className="text-xs md:text-sm font-normal mb-4 dark:text-white">
-        {title}
+        Here are all of your assets
       </h3>
       <div className="w-full bg-white dark:bg-[#1b1c1e] rounded-xl p-4 dark:text-white border border-[#A0AEC0] dark:border-gray-700 mx-auto assets-responsive">
         <div className="flex flex-col">

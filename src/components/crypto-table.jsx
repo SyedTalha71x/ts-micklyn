@@ -38,11 +38,6 @@ export default function CryptoTable({ onClose }) {
     }
     return parseFloat(balance).toFixed(2);
   };
-
-  // Filter favorites if needed
-  const favoriteItems = watchListData.filter((item) => item.favorite === 1);
-  const nonFavoriteItems = watchListData.filter((item) => item.favorite !== 1);
-
   useEffect(() => {
     if (contentRef.current) {
       gsap.fromTo(
@@ -125,14 +120,14 @@ export default function CryptoTable({ onClose }) {
                   Loading assets...
                 </p>
               </div>
-            ) : favoriteItems.length === 0 ? (
+            ) : watchListData.length === 0 ? (
               <div className="text-center py-8 text-sm text-gray-500 dark:text-gray-400">
                 No favorite assets found in your watchlist
               </div>
             ) : (
               <div className="space-y-4 pb-4">
                 {/* Only Favorites */}
-                {favoriteItems.map((crypto) => (
+                {watchListData.map((crypto) => (
                   <WatchlistItem
                     key={`${crypto.symbol}-${crypto.chain}`}
                     crypto={crypto}

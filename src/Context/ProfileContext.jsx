@@ -13,9 +13,9 @@ export const ProfileProvider = ({ children }) => {
    const getWatchlistData = async () => {
       try {
         setLoading(true);
-        const res = await FireApi("/assets");
+        const res = await FireApi("/watchlist");
         console.log(res, "watchlist data");
-        setWatchListData(res?.data || []);
+        setWatchListData(res?.data.tokens || []);
       } catch (error) {
         toast.error(error?.message || "Failed to load the assets.");
         setWatchListData([]);
