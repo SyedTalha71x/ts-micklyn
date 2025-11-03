@@ -105,7 +105,6 @@ const NavigationTabs = () => {
     return "calc(100vh - 200px - env(safe-area-inset-bottom))";
   };
 
-  // Enhanced keyboard detection and scroll management
   useEffect(() => {
     if (!isMobile) return;
 
@@ -828,7 +827,20 @@ const NavigationTabs = () => {
         ...prev,
         { wallet: "You", content: text, isHistory: false },
       ]);
+
+      // Clear message and reset textarea height
       setMessage("");
+
+      // Force reset textarea height
+      setTimeout(() => {
+        const textareas = document.querySelectorAll("textarea");
+        textareas.forEach((textarea) => {
+          if (textarea.value === "") {
+            textarea.style.height = "auto";
+          }
+        });
+      }, 0);
+
       setLoading(true);
 
       hasHandledIntents.current = { intent0: false, intent1: false };
@@ -909,16 +921,6 @@ const NavigationTabs = () => {
     analyserRef.current = null;
     microphoneRef.current = null;
   };
-
-  const customStyles = `
-    @keyframes cursor-blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-    .animate-cursor-blink {
-      animation: cursor-blink 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
-    }
-  `;
 
   const resetChat = () => {
     setMessages([]);
@@ -1110,7 +1112,7 @@ const NavigationTabs = () => {
                   TokenInfo: replyContent.data || replyContent,
                   TokenTitle: replyContent.title || replyContent,
                 };
-                break ;
+                break;
 
               case "get_user_balance":
                 content = replyContent;
@@ -1233,72 +1235,15 @@ const NavigationTabs = () => {
     }
   }, [userInfo?.sessionId, userId]);
 
-  // Dynamic icon based on message input
-  const getActionIcon = () => {
-    if (message.trim().length > 0) {
-      // Show send icon when user types something
-      return <ArrowUp className="text-white" size={isMobile ? 16 : 18} />;
-    } else {
-      // Show recording icon when input is empty
-      return recording ? (
-        <div className="flex gap-0.5">
-          <span className="w-1 h-2 bg-white animate-pulse" />
-          <span className="w-1 h-3 bg-white animate-pulse" />
-          <span className="w-1 h-4 bg-white animate-pulse" />
-        </div>
-      ) : (
-        <img
-          src="/recording-01.png"
-          alt="record"
-          className={`${isMobile ? "w-4 h-4" : "w-5 h-5"}`}
-        />
-      );
-    }
-  };
-
   const handleActionButtonClick = () => {
     if (message.trim().length > 0) {
-      // Send message if there's text
       sendMessage();
     } else {
-      // Start recording if input is empty
       if (recording) {
         stopRecording();
       } else {
         startRecording();
       }
-    }
-  };
-
-  const handleInputFocus = () => {
-    setIsInputFocused(true);
-    setKeyboardVisible(true);
-
-    if (isMobile) {
-      setTimeout(() => {
-        if (messageContainerRef.current) {
-          messageContainerRef.current.scrollTo({
-            top: messageContainerRef.current.scrollHeight,
-            behavior: "smooth",
-          });
-        }
-      }, 500);
-    }
-  };
-
-  const handleInputBlur = () => {
-    setIsInputFocused(false);
-    setKeyboardVisible(false);
-
-    if (isMobile) {
-      setTimeout(() => {
-        if (messageContainerRef.current) {
-          messageContainerRef.current.scrollTo({
-            top: messageContainerRef.current.scrollHeight,
-            behavior: "smooth",
-          });
-        }
-      }, 200);
     }
   };
 
@@ -1362,24 +1307,30 @@ const NavigationTabs = () => {
 
               const getMessageColor = () => {
                 if (msg.wallet === "You")
-                  return "bg-gray-200 dark:bg-background dark:text-white dark:border dark:border-xs text-black";
+                  return " bg-gray-200 dark:bg-background dark:text-white dark:border dark:border-xs text-black";
                 if (msg.status === "error") return messageColorClasses.error;
                 if (msg.status === "success")
                   return messageColorClasses.success;
                 return messageColorClasses.default;
               };
 
+              // Check if message should have animation
+              const shouldAnimate = msg.wallet === "Chat" && !msg.isHistory;
+
               return (
                 <div
                   key={index}
                   className={`flex ${
                     msg.wallet === "You" ? "justify-end" : "justify-start"
-                  } mb-2 last:mb-0 `}
+                  } mb-2 last:mb-0`}
                 >
                   <div
-                    className={`px-3 py-2 rounded-xl text-xs ${
-                      msg.wallet === "Chat" ? "md:w-full" : ""
-                    } md:text-sm  md:max-w-[100%] text-left whitespace-pre-wrap ${getMessageColor()}`}
+                    className={`px-3 py-2 rounded-xl text-xs md:text-sm text-left whitespace-pre-wrap ${getMessageColor()} 
+        ${
+          msg.wallet === "Chat"
+            ? "max-w-full w-full"
+            : "max-w-[80%] sm:max-w-[70%] md:max-w-[60%]"
+        }`}
                   >
                     {msg.wallet === "Chat" &&
                     msg.responseType === "chatoshi" ? (
@@ -1402,11 +1353,13 @@ const NavigationTabs = () => {
                     ) : msg.wallet === "Chat" &&
                       msg.responseType === "get_user_balance" ? (
                       <UserBalance data={msg.chainData} />
-                    ) : msg.wallet === "Chat" && 
+                    ) : msg.wallet === "Chat" &&
                       msg.responseType === "get_token_info" ? (
-                        <GetTokenInfo data={msg.TokenInfo} title={msg.TokenTitle}/>
-                      )
-                    : msg.wallet === "Chat" &&
+                      <GetTokenInfo
+                        data={msg.TokenInfo}
+                        title={msg.TokenTitle}
+                      />
+                    ) : msg.wallet === "Chat" &&
                       msg.responseType === "get_token_balance" ? (
                       <TokenBalance
                         data={msg.tokenResponse}
@@ -1499,12 +1452,18 @@ const NavigationTabs = () => {
                                 })}
                             </div>
                           </div>
-                        ) : (
+                        ) : // Apply animation only for new Chat messages
+                        shouldAnimate ? (
                           <Typewriter text={msg.content} className="relative" />
+                        ) : (
+                          <span>{msg.content}</span>
                         )}
                       </div>
-                    ) : (
+                    ) : // Apply animation only for new Chat messages
+                    shouldAnimate ? (
                       <Typewriter text={msg.content} className="relative" />
+                    ) : (
+                      <span>{msg.content}</span>
                     )}
                   </div>
                 </div>
@@ -1545,7 +1504,7 @@ const NavigationTabs = () => {
                 onChange={(e) => {
                   setMessage(e.target.value);
                   e.target.style.height = "auto";
-                  e.target.style.height = `${e.target.scrollHeight}px`;
+                  e.target.style.height = e.target.scrollHeight + "px";
                 }}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
@@ -1554,6 +1513,11 @@ const NavigationTabs = () => {
                   }
                 }}
                 disabled={isTyping || loading}
+                ref={(el) => {
+                  if (el && message === "") {
+                    el.style.height = "auto";
+                  }
+                }}
               />
 
               <button
