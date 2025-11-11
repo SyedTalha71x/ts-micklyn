@@ -1,14 +1,14 @@
 // server ip
-// export const baseUrl = "http://64.23.166.88:8016";
-export const baseUrl = "https://fd707bc75489.ngrok-free.app";
+export const baseUrl = "http://64.23.166.88:8016";
+// export const baseUrl = "https://fd707bc75489.ngrok-free.app";
 
 // this server api for the chat history & collection
-// export const chatHistoryUrl = "http://64.23.166.88:5019";
-export const chatHistoryUrl = "http://192.168.18.14:5019";
+export const chatHistoryUrl = "http://64.23.166.88:5019";
+// export const chatHistoryUrl = "http://192.168.18.14:5019";
 
 // server ip of Python backend
-// export const chatBaseUrl = "http://64.23.166.88:5019";
-export const chatBaseUrl = "http://192.168.18.14:5019";
+export const chatBaseUrl = "http://64.23.166.88:5019";
+// export const chatBaseUrl = "http://192.168.18.14:5019";
 
 export const FireApi = async (url, method, data = null, chatHistoryUrl) => {
   const token = localStorage.getItem("user-visited-dashboard");
