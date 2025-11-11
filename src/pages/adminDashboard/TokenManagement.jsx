@@ -198,7 +198,7 @@ const TokenManagement = () => {
                 </div>
 
                 {/* Optional Fields */}
-                <div className="mb-4">
+                {/* <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     CoinGecko ID
                   </label>
@@ -256,7 +256,7 @@ const TokenManagement = () => {
                     placeholder="0x..."
                   />
                   <p className="mt-1 text-xs text-gray-500">Optional: Liquidity pool pair address</p>
-                </div>
+                </div> */}
               </div>
 
               <div className="mt-6 flex justify-end space-x-3">
