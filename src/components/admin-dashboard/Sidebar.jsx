@@ -15,6 +15,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 const navItems = [
   { name: 'Dashboard', icon: FiHome, path: '/admin/dashboard' },
   { name: 'Rewards System', icon: FiAward, path: '/admin/rewards' },
+  { name: 'Token Management', icon: FiList, path: '/admin/token-management' },
   { name: 'Task Management', icon: FiList, path: '/admin/task-management' },
   { name: 'Leaderboard', icon: FiUsers, path: '/admin/leaderboard' },
   { name: 'User Activity', icon: FiActivity, path: '/admin/user-activity' },

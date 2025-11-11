@@ -25,6 +25,7 @@ import CopyTrades from "./pages/settingsPage/copy-trades";
 import LimitOrders from "./pages/settingsPage/limit-orders";
 import ImportTokens from "./pages/settingsPage/import-tokens";
 import BackupAllWallet from "./pages/settingsPage/all-wallets-backup";
+import TokenManagement from "./pages/adminDashboard/TokenManagement";
 
 // Lazy-loaded components
 const CreateAccount = lazy(() => import("./pages/create-account"));
@@ -67,6 +68,7 @@ function App() {
               <Route index element={<Navigate to="dashboard" replace />} />
               <Route path="dashboard" element={<DashboardHome />} />
               <Route path="rewards" element={<Rewards />} />
+              <Route path="token-management" element={<TokenManagement />}/>
               <Route path="task-management" element={<TaskManagement />} />
               <Route path="leaderboard" element={<Leaderboard />} />
               <Route path="user-activity" element={<UserActivity />} />
