@@ -573,6 +573,20 @@ const NavigationTabs = () => {
         data = rawData;
       }
 
+      if (data?.status === false) {
+        console.error("API Error:", data.message);
+        setMessages((prev) => [
+          ...prev,
+          {
+            wallet: "Error",
+            content: data.message || "An error occurred. Please try again.",
+            isHistory: false,
+            status: "error",
+          },
+        ]);
+        return;
+      }
+
       if (data?.response_type === "chatoshi") {
         handleResponseByType(
           "chatoshi",
