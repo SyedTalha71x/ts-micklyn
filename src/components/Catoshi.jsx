@@ -8,50 +8,50 @@ const StaticText = ({ text = "" }) => {
   const parseTextSegments = (text) => {
     const segments = [];
     let currentIndex = 0;
-    
+
     const boldRegex = /\*\*(.*?)\*\*/g;
     let match;
-    
+
     while ((match = boldRegex.exec(text)) !== null) {
       if (match.index > currentIndex) {
         const beforeText = text.slice(currentIndex, match.index);
-        beforeText.split('').forEach(char => {
+        beforeText.split("").forEach((char) => {
           segments.push({ char, isBold: false });
         });
       }
-      
-      match[1].split('').forEach(char => {
+
+      match[1].split("").forEach((char) => {
         segments.push({ char, isBold: true });
       });
-      
+
       currentIndex = match.index + match[0].length;
     }
-    
+
     if (currentIndex < text.length) {
       const remainingText = text.slice(currentIndex);
-      remainingText.split('').forEach(char => {
+      remainingText.split("").forEach((char) => {
         segments.push({ char, isBold: false });
       });
     }
-    
+
     return segments;
   };
 
   const segments = parseTextSegments(text);
 
   return (
-    <div style={{ fontFamily: 'inherit', lineHeight: 1.6 }}>
+    <div style={{ fontFamily: "inherit", lineHeight: 1.6 }}>
       {segments.map((segment, index) => {
-        if (segment.char === '\n') {
+        if (segment.char === "\n") {
           return <br key={`br-${index}`} />;
         }
-        
+
         return (
           <span
             key={`${segment.char}-${index}`}
             style={{
-              fontWeight: segment.isBold ? 600 : 'normal',
-              fontSize: segment.isBold ? '1.1em' : '1em',
+              fontWeight: segment.isBold ? 600 : "normal",
+              fontSize: segment.isBold ? "1.1em" : "1em",
             }}
           >
             {segment.char}
@@ -74,12 +74,12 @@ const Catoshi = ({ data, isHistory = false }) => {
   const descriptionData = data.find(
     (item) => item.response_type === "chatoshi_description"
   );
-  
+
   // Get all current data items (multiple tokens)
   const currentDataItems = data.filter(
     (item) => item.response_type === "chatoshi_current_data"
   );
-  
+
   // Get all chart data items (multiple tokens)
   const chartDataItems = data.filter(
     (item) => item.response_type === "chatoshi_chart"
@@ -138,18 +138,18 @@ const Catoshi = ({ data, isHistory = false }) => {
       toolbar: { show: true },
     },
     title: {
-      text: `${token} on ${chain} - Price Chart`,
+      text: ``,
       size: 18,
       align: "left",
     },
     xaxis: { type: "datetime" },
-    yaxis: { 
+    yaxis: {
       tooltip: { enabled: true },
       labels: {
-        formatter: function(value) {
+        formatter: function (value) {
           return "$" + value.toFixed(3);
-        }
-      }
+        },
+      },
     },
     plotOptions: {
       candlestick: {
@@ -157,13 +157,27 @@ const Catoshi = ({ data, isHistory = false }) => {
         wick: { useFillColor: true },
       },
     },
+    tooltip: {
+    enabled: true,
+    // Light mode tooltip
+    theme: 'light', // 'light' ya 'dark' kar sakte ho
+    style: {
+      fontSize: '12px',
+      fontFamily: 'inherit'
+    },
+    // Custom tooltip colors
+    custom: function({ seriesIndex, dataPointIndex, w }) {
+      // Default tooltip ke liye
+      return '';
+    },
+  },
   });
 
   // Generate chart series for each token
   const getChartSeries = (token, chain) => {
     const key = `${token}-${chain}`;
     const chartData = filteredChartData[key] || [];
-    
+
     return [
       {
         name: `${token} (${chain})`,
@@ -188,20 +202,20 @@ const Catoshi = ({ data, isHistory = false }) => {
       align: "left",
     },
     xaxis: { type: "datetime" },
-    yaxis: { 
+    yaxis: {
       tooltip: { enabled: true },
       labels: {
-        formatter: function(value) {
+        formatter: function (value) {
           return "$" + value.toFixed(3);
-        }
-      }
+        },
+      },
     },
     stroke: {
-      curve: 'smooth',
-      width: 2
+      curve: "smooth",
+      width: 2,
     },
     markers: {
-      size: 0
+      size: 0,
     },
   });
 
@@ -209,15 +223,15 @@ const Catoshi = ({ data, isHistory = false }) => {
     return chartDataItems.map((chartData, index) => {
       const key = `${chartData.token}-${chartData.chain}`;
       const chartDataFiltered = filteredChartData[key] || [];
-      const colors = ['#008FFB', '#00E396', '#FEB019', '#FF4560', '#775DD0'];
-      
+      const colors = ["#008FFB", "#00E396", "#FEB019", "#FF4560", "#775DD0"];
+
       return {
         name: `${chartData.token} (${chartData.chain})`,
         data: chartDataFiltered.map((item) => ({
           x: new Date(item.Date).getTime(),
-          y: item.Close
+          y: item.Close,
         })),
-        color: colors[index % colors.length]
+        color: colors[index % colors.length],
       };
     });
   };
@@ -258,117 +272,160 @@ const Catoshi = ({ data, isHistory = false }) => {
       )}
 
       {/* Step 1: Current Data Comparison */}
-      {currentDataItems.length > 0 && (
-        (isHistory || step >= 1) && (
-          <div className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow">
-            <h3 className="font-bold text-lg mb-4 border-b pb-2">
-              {isHistory ? "Market Data Comparison" : "Current Market Data Comparison"}
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {currentDataItems.map((currentData, index) => (
-                <div key={`${currentData.token}-${currentData.chain}`} 
-                     className="border rounded-lg p-4 bg-gray-50">
-                  <h4 className="font-semibold text-md mb-3 text-center">
-                    {currentData.token} on {currentData.chain}
-                  </h4>
-                  <div className="space-y-2">
-                    {Object.entries(currentData.data).map(([key, value]) => (
-                      <div key={key} className="flex justify-between">
-                        <span className="font-medium text-sm text-gray-600">
-                          {isHistory ? (
-                            <StaticText text={`${key}:`} />
-                          ) : (
-                            <Typewriter text={`${key}:`} speed={30} />
-                          )}
-                        </span>
-                        <span className="font-semibold text-sm">
-                          {isHistory ? (
-                            <StaticText text={value.toString()} />
-                          ) : (
-                            <Typewriter
-                              text={value.toString()}
-                              speed={30}
-                              delay={key.length * 50}
-                            />
-                          )}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
+      {currentDataItems.length > 0 && (isHistory || step >= 1) && (
+        <div className="bg-white dark:bg-[#1b1c1e] border border-[#A0AEC0] dark:border-gray-600 p-6 rounded-lg shadow">
+          <h3 className="font-bold text-lg mb-4 border-b pb-2 border-[#A0AEC0] dark:border-gray-600">
+            {isHistory
+              ? "Market Data Comparison"
+              : "Current Market Data Comparison"}
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {currentDataItems.map((currentData, index) => (
+              <div
+                key={`${currentData.token}-${currentData.chain}`}
+                className="border rounded-lg dark:bg-[#1b1c1e] border-[#A0AEC0] dark:border-gray-600"
+              >
+                <h4 className="font-semibold text-md mb-3 py-2 text-center border-b border-[#A0AEC0] dark:border-gray-600">
+                  {currentData.token} on {currentData.chain}
+                </h4>
+                <div className="space-y-2">
+                  {Object.entries(currentData.data).map(([key, value]) => (
+                    <div key={key} className="flex justify-between px-4">
+                      <span className="font-medium text-sm text-gray-600 dark:text-gray-300">
+                        {isHistory ? (
+                          <StaticText text={`${key}:`} />
+                        ) : (
+                          <Typewriter text={`${key}:`} speed={30} />
+                        )}
+                      </span>
+                      <span className="font-semibold text-sm">
+                        {isHistory ? (
+                          <StaticText text={value.toString()} />
+                        ) : (
+                          <Typewriter
+                            text={value.toString()}
+                            speed={30}
+                            delay={key.length * 50}
+                          />
+                        )}
+                      </span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
-        )
+        </div>
       )}
 
       {/* Step 2-3: Chart Loading & Chart Display */}
-      {chartDataItems.length > 0 && (
-        (isHistory || step >= 2) && (
-          <div ref={chartRef} className="space-y-6">
-            {/* Time Range Selector */}
-            <div className="flex justify-end">
-              <select
-                value={timeRange}
-                onChange={(e) => setTimeRange(e.target.value)}
-                className="bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-sm"
-              >
-                <option value="today">Today</option>
-                <option value="7days">Last 7 Days</option>
-                <option value="30days">Last 30 Days</option>
-                <option value="all">All Time</option>
-              </select>
-            </div>
+      {chartDataItems.length > 0 && (isHistory || step >= 2) && (
+        <div ref={chartRef} className="space-y-6">
+          {/* Time Range Selector */}
+          <div className="flex justify-end">
+            <select
+              value={timeRange}
+              onChange={(e) => setTimeRange(e.target.value)}
+              className="bg-gray-100 dark:bg-[#1b1c1e] border border-gray-300 dark:border-[#1b1c1e] rounded-md px-3 py-2 text-sm"
+            >
+              <option value="today">Today</option>
+              <option value="7days">Last 7 Days</option>
+              <option value="30days">Last 30 Days</option>
+              <option value="all">All Time</option>
+            </select>
+          </div>
 
-            {isHistory || step === 3 ? (
-              <>
-                {/* Combined Comparison Chart */}
-                {chartDataItems.length > 1 && (
-                  <div className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow">
-                    <h3 className="font-bold text-lg mb-4">Price Comparison Chart</h3>
+          {isHistory || step === 3 ? (
+            <>
+              {/* Combined Comparison Chart */}
+              {chartDataItems.length > 1 && (
+                <div className="bg-white dark:bg-[#1b1c1e] p-6 rounded-lg shadow">
+                  <h3 className="font-bold text-lg mb-4">
+                    Price Comparison Chart
+                  </h3>
+                  {typeof window !== "undefined" && (
+                    <Chart
+                      options={getComparisonChartOptions()}
+                      series={getComparisonChartSeries()}
+                      type="line"
+                      height={350}
+                    />
+                  )}
+                </div>
+              )}
+
+              {/* Individual Charts */}
+              {chartDataItems.map((chartData) => {
+                const key = `${chartData.token}-${chartData.chain}`;
+                const chartSeries = getChartSeries(
+                  chartData.token,
+                  chartData.chain
+                );
+
+                // Skip if no valid data points
+                if (!chartSeries[0]?.data?.length) {
+                  return (
+                    <div
+                      key={key}
+                      className="p-4 text-center text-gray-800 dark:text-gray-200"
+                    >
+                      No valid data points for {chartData.token} on{" "}
+                      {chartData.chain}
+                    </div>
+                  );
+                }
+
+                return (
+                  <div
+                    key={key}
+                    className="bg-white dark:bg-[#1b1c1e] border border-gray-200 dark:border-gray-700 p-6 rounded-lg shadow"
+                  >
+                    <div className="flex justify-between items-center mb-4">
+                      <h3 className="font-bold text-lg">
+                        {chartData.token} on {chartData.chain} - Price Chart
+                      </h3>
+                      <div className="text-sm">
+                        {chartSeries[0].data.length} data points
+                      </div>
+                    </div>
                     {typeof window !== "undefined" && (
                       <Chart
-                        options={getComparisonChartOptions()}
-                        series={getComparisonChartSeries()}
-                        type="line"
-                        height={350}
-                      />
-                    )}
-                  </div>
-                )}
-
-                {/* Individual Charts */}
-                {/* {chartDataItems.map((chartData) => (
-                  <div key={`${chartData.token}-${chartData.chain}`} 
-                       className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow">
-                    {typeof window !== "undefined" && (
-                      <Chart
-                        options={getChartOptions(chartData.token, chartData.chain)}
-                        series={getChartSeries(chartData.token, chartData.chain)}
+                        options={getChartOptions(
+                          chartData.token,
+                          chartData.chain
+                        )}
+                        series={chartSeries}
                         type="candlestick"
                         height={350}
                       />
                     )}
                   </div>
-                ))} */}
-              </>
-            ) : (
-              <div className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow">
-                <div className="space-y-2">
-                  {loadingSteps.map((stepText, index) => (
-                    <div key={index} className="flex items-center">
-                      <div
-                        className="w-4 h-4 rounded-full bg-blue-500 mr-2 animate-pulse"
-                        style={{ animationDelay: `${index * 0.2}s` }}
-                      />
-                      <Typewriter text={stepText} speed={20} delay={index * 1000} />
-                    </div>
-                  ))}
-                </div>
+                );
+              })}
+            </>
+          ) : (
+            <div className="bg-white dark:bg-[#1b1c1e] border border-gray-300 text-black dark:text-white dark:border-[#1b1c1e] p-6 rounded-lg shadow">
+              <div className="space-y-2">
+                {loadingSteps.map((stepText, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center text-black dark:text-white"
+                  >
+                    <div
+                      className="w-4 h-4 rounded-full bg-[#1b1c1e] text-black dark:text-white mr-2 animate-pulse"
+                      style={{ animationDelay: `${index * 0.2}s` }}
+                    />
+                    <Typewriter
+                      text={stepText}
+                      speed={20}
+                      delay={index * 1000}
+                    />
+                  </div>
+                ))}
               </div>
-            )}
-          </div>
-        )
+            </div>
+          )}
+        </div>
       )}
     </div>
   );

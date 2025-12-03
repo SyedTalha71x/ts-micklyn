@@ -587,15 +587,15 @@ const NavigationTabs = () => {
         return;
       }
 
-      if (data?.response_type === "chatoshi") {
-        handleResponseByType(
-          "chatoshi",
-          data.data.replies,
-          data,
-          checkConfirmation
-        );
-        return;
-      }
+     if (data?.response_type === "chatoshi") {
+  handleResponseByType(
+    "chatoshi",
+    data.data.replies, // Pass the replies array
+    data,
+    checkConfirmation
+  );
+  return;
+}
 
       const replies = data?.data?.replies;
       if (!Array.isArray(replies)) {
@@ -1166,14 +1166,23 @@ const NavigationTabs = () => {
                 };
                 break;
 
+              // case "chatoshi":
+              //   content = replyContent;
+              //   isJson = true;
+              //   additionalProps = {
+              //     responseType: "chatoshi",
+              //     chatoshiData: replyContent,
+              //   };
+              //   break;
+
               case "chatoshi":
-                content = replyContent;
-                isJson = true;
-                additionalProps = {
-                  responseType: "chatoshi",
-                  chatoshiData: replyContent,
-                };
-                break;
+  content = replyContent;
+  isJson = true;
+  additionalProps = {
+    responseType: "chatoshi",
+    chatoshiData: replyContent, // This should be data.data.replies[0].reply
+  };
+  break;
 
               case "error":
                 content =
