@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import Chart from "react-apexcharts";
 import { Typewriter } from "@/lib/Typewriter";
+import { ChevronDown } from "lucide-react";
 
 const StaticText = ({ text = "" }) => {
   if (!text || typeof text !== "string") return null;
@@ -67,24 +68,30 @@ const Catoshi = ({ data, isHistory = false }) => {
   const [step, setStep] = useState(0);
   const [loadingSteps, setLoadingSteps] = useState([]);
   const [timeRange, setTimeRange] = useState("all");
-  const [chartType, setChartType] = useState("line"); // "line" or "candlestick"
-  
+  const [chartType, setChartType] = useState("line");
+  const [showTimeRangeDropdown, setShowTimeRangeDropdown] = useState(false);
+  const [showChartTypeDropdown, setShowChartTypeDropdown] = useState(false);
+
   // Use useMemo for filtered data to prevent infinite loops
-  const { filteredChartData, currentDataItems, chartDataItems, descriptionData } = useMemo(() => {
+  const {
+    filteredChartData,
+    currentDataItems,
+    chartDataItems,
+    descriptionData,
+  } = useMemo(() => {
     // Extract all data types from the response
-    const description = data?.find(
-      (item) => item.response_type === "chatoshi_description"
-    ) || null;
+    const description =
+      data?.find((item) => item.response_type === "chatoshi_description") ||
+      null;
 
     // Get all current data items (multiple tokens)
-    const currentItems = data?.filter(
-      (item) => item.response_type === "chatoshi_current_data"
-    ) || [];
+    const currentItems =
+      data?.filter((item) => item.response_type === "chatoshi_current_data") ||
+      [];
 
     // Get all chart data items (multiple tokens)
-    const chartItems = data?.filter(
-      (item) => item.response_type === "chatoshi_chart"
-    ) || [];
+    const chartItems =
+      data?.filter((item) => item.response_type === "chatoshi_chart") || [];
 
     // Filter chart data based on time range for all tokens
     const filteredData = {};
@@ -129,18 +136,18 @@ const Catoshi = ({ data, isHistory = false }) => {
       filteredChartData: filteredData,
       currentDataItems: currentItems,
       chartDataItems: chartItems,
-      descriptionData: description
+      descriptionData: description,
     };
-  }, [data, timeRange]); // Only re-calculate when data or timeRange changes
+  }, [data, timeRange]);
 
   // Dynamic Y-axis configuration based on price range
   const getDynamicYaxisConfig = (chartData) => {
     if (!chartData || !chartData.length) return {};
 
     // Extract all price values
-    const allPrices = chartData.flatMap(item => [
-      item.Open, item.High, item.Low, item.Close
-    ]).filter(price => !isNaN(price) && price !== null);
+    const allPrices = chartData
+      .flatMap((item) => [item.Open, item.High, item.Low, item.Close])
+      .filter((price) => !isNaN(price) && price !== null);
 
     if (allPrices.length === 0) return {};
 
@@ -149,7 +156,7 @@ const Catoshi = ({ data, isHistory = false }) => {
     const priceRange = maxPrice - minPrice;
 
     // Calculate dynamic min and max with padding
-    const padding = priceRange * 0.1 || 0.01; // 10% padding, min 0.01
+    const padding = priceRange * 0.1 || 0.01;
     const yaxisMin = Math.max(0, minPrice - padding);
     const yaxisMax = maxPrice + padding;
 
@@ -160,12 +167,11 @@ const Catoshi = ({ data, isHistory = false }) => {
       forceNiceScale: true,
       labels: {
         style: {
-          colors: '#64748b',
-          fontSize: '12px',
-          fontWeight: 500
+          colors: "#64748b",
+          fontSize: "12px",
+          fontWeight: 500,
         },
         formatter: function (value) {
-          // Format based on price range
           if (maxPrice < 1) {
             return "$" + value.toFixed(4);
           } else if (maxPrice < 10) {
@@ -175,9 +181,9 @@ const Catoshi = ({ data, isHistory = false }) => {
           } else {
             return "$" + value.toFixed(0);
           }
-        }
+        },
       },
-      decimalsInFloat: maxPrice < 1 ? 4 : maxPrice < 10 ? 3 : 2
+      decimalsInFloat: maxPrice < 1 ? 4 : maxPrice < 10 ? 3 : 2,
     };
   };
 
@@ -186,20 +192,20 @@ const Catoshi = ({ data, isHistory = false }) => {
     const key = `${token}-${chain}`;
     const chartData = filteredChartData[key] || [];
     const yaxisConfig = getDynamicYaxisConfig(chartData);
-    
+
     // Calculate maxPrice for this specific chart
-    const allPrices = chartData.flatMap(item => [
-      item.Open, item.High, item.Low, item.Close
-    ]).filter(price => !isNaN(price) && price !== null);
-    
+    const allPrices = chartData
+      .flatMap((item) => [item.Open, item.High, item.Low, item.Close])
+      .filter((price) => !isNaN(price) && price !== null);
+
     const maxPrice = allPrices.length > 0 ? Math.max(...allPrices) : 0;
 
     return {
       chart: {
         type: "line",
         height: 400,
-        background: 'transparent',
-        foreColor: '#9ca3af',
+        background: "transparent",
+        foreColor: "#9ca3af",
         toolbar: {
           show: true,
           tools: {
@@ -209,65 +215,65 @@ const Catoshi = ({ data, isHistory = false }) => {
             zoomin: true,
             zoomout: true,
             pan: false,
-            reset: false
+            reset: false,
           },
-          autoSelected: 'zoom'
+          autoSelected: "zoom",
         },
         animations: {
           enabled: true,
-          speed: 800
+          speed: 800,
         },
         zoom: {
           enabled: true,
-          type: 'x',
-          autoScaleYaxis: true
-        }
+          type: "x",
+          autoScaleYaxis: true,
+        },
       },
       title: {
         text: `${token} on (${chain})`,
-        align: 'left',
+        align: "left",
         style: {
-          fontSize: '18px',
-          fontWeight: '600',
-          color: '#e5e7eb'
-        }
+          fontSize: "18px",
+          fontWeight: "600",
+          color: "#9ca3af",
+        },
       },
       xaxis: {
         type: "datetime",
         labels: {
           style: {
-            colors: '#9ca3af',
-            fontSize: '12px',
-            fontWeight: 500
+            colors: "#9ca3af",
+            fontSize: "12px",
+            fontWeight: 500,
           },
           datetimeFormatter: {
-            year: 'yyyy',
+            year: "yyyy",
             month: "MMM 'yy",
-            day: 'dd MMM',
-            hour: 'HH:mm'
+            day: "dd MMM",
+            hour: "HH:mm",
           },
-          rotate: 0
+          rotate: 0,
         },
         axisBorder: {
           show: true,
-          color: '#374151'
+          color: "#374151",
         },
         axisTicks: {
           show: true,
-          color: '#374151'
-        }
+          color: "#374151",
+        },
       },
       yaxis: {
         ...yaxisConfig,
         tooltip: {
-          enabled: true
+          enabled: true,
         },
         opposite: true,
         labels: {
           style: {
-            colors: '#9ca3af',
-            fontSize: '12px',
-            fontWeight: 500
+            colors: "#9ca3af",
+            fontSize: "12px",
+            fontWeight: 500,
           },
           formatter: function (value) {
             if (maxPrice < 1) {
@@ -279,36 +285,36 @@ const Catoshi = ({ data, isHistory = false }) => {
             } else {
               return "$" + value.toLocaleString();
             }
-          }
+          },
         },
         axisBorder: {
           show: true,
-          color: '#374151'
-        }
+          color: "#374151",
+        },
       },
       stroke: {
         curve: "smooth",
         width: 2,
-        colors: ['#3b82f6'] // Blue line color
+        colors: ["#3b82f6"],
       },
       markers: {
         size: 4,
         hover: {
-          size: 6
-        }
+          size: 6,
+        },
       },
       tooltip: {
         enabled: true,
-        theme: 'dark',
+        theme: "dark",
         style: {
-          fontSize: '13px',
-          fontFamily: 'Inter, sans-serif'
+          fontSize: "13px",
+          fontFamily: "Inter, sans-serif",
         },
         x: {
-          format: 'dd MMM yyyy HH:mm'
+          format: "dd MMM yyyy HH:mm",
         },
         y: {
-          formatter: function(value) {
+          formatter: function (value) {
             if (maxPrice < 1) {
               return "$" + value.toFixed(6);
             } else if (maxPrice < 10) {
@@ -320,66 +326,68 @@ const Catoshi = ({ data, isHistory = false }) => {
             }
           },
           title: {
-            formatter: () => 'Price:'
-          }
-        }
+            formatter: () => "Price:",
+          },
+        },
       },
       grid: {
-        borderColor: '#374151',
+        borderColor: "#374151",
         strokeDashArray: 3,
         xaxis: {
           lines: {
-            show: true
-          }
+            show: true,
+          },
         },
         yaxis: {
           lines: {
-            show: true
-          }
+            show: true,
+          },
         },
         padding: {
           top: 0,
           right: 20,
           bottom: 0,
-          left: 10
-        }
+          left: 10,
+        },
       },
       states: {
         hover: {
           filter: {
-            type: 'lighten',
-            value: 0.1
-          }
+            type: "lighten",
+            value: 0.1,
+          },
         },
         active: {
           filter: {
-            type: 'darken',
-            value: 0.1
-          }
-        }
+            type: "darken",
+            value: 0.1,
+          },
+        },
       },
-      responsive: [{
-        breakpoint: 768,
-        options: {
-          chart: {
-            height: 300
+      responsive: [
+        {
+          breakpoint: 768,
+          options: {
+            chart: {
+              height: 300,
+            },
+            yaxis: {
+              labels: {
+                style: {
+                  fontSize: "10px",
+                },
+              },
+            },
+            xaxis: {
+              labels: {
+                style: {
+                  fontSize: "10px",
+                },
+              },
+            },
           },
-          yaxis: {
-            labels: {
-              style: {
-                fontSize: '10px'
-              }
-            }
-          },
-          xaxis: {
-            labels: {
-              style: {
-                fontSize: '10px'
-              }
-            }
-          }
-        }
-      }]
+        },
+      ],
     };
   };
 
@@ -388,88 +396,88 @@ const Catoshi = ({ data, isHistory = false }) => {
     const key = `${token}-${chain}`;
     const chartData = filteredChartData[key] || [];
     const yaxisConfig = getDynamicYaxisConfig(chartData);
-    
+
     // Calculate maxPrice for this specific chart
-    const allPrices = chartData.flatMap(item => [
-      item.Open, item.High, item.Low, item.Close
-    ]).filter(price => !isNaN(price) && price !== null);
-    
+    const allPrices = chartData
+      .flatMap((item) => [item.Open, item.High, item.Low, item.Close])
+      .filter((price) => !isNaN(price) && price !== null);
+
     const maxPrice = allPrices.length > 0 ? Math.max(...allPrices) : 0;
 
     return {
       chart: {
         type: "candlestick",
         height: 400,
-        background: 'transparent',
-        foreColor: '#9ca3af',
+        background: "transparent",
+        foreColor: "#9ca3af",
         toolbar: {
           show: true,
           tools: {
-            download: true,
-            selection: true,
-            zoom: true,
+            download: false,
+            selection: false,
+            zoom: false,
             zoomin: true,
             zoomout: true,
-            pan: true,
-            reset: true
+            pan: false,
+            reset: false,
           },
-          autoSelected: 'zoom'
+          autoSelected: "zoom",
         },
         animations: {
           enabled: true,
-          speed: 800
+          speed: 800,
         },
         zoom: {
           enabled: true,
-          type: 'x',
-          autoScaleYaxis: true
-        }
+          type: "x",
+          autoScaleYaxis: true,
+        },
       },
       title: {
         text: `${token} on (${chain})`,
-        align: 'left',
+        align: "left",
         style: {
-          fontSize: '18px',
-          fontWeight: '600',
-          color: '#e5e7eb'
-        }
+          fontSize: "18px",
+          fontWeight: "600",
+          color: "gray",
+        },
       },
       xaxis: {
         type: "datetime",
         labels: {
           style: {
-            colors: '#9ca3af',
-            fontSize: '12px',
-            fontWeight: 500
+            colors: "#9ca3af",
+            fontSize: "12px",
+            fontWeight: 500,
           },
           datetimeFormatter: {
-            year: 'yyyy',
+            year: "yyyy",
             month: "MMM 'yy",
-            day: 'dd MMM',
-            hour: 'HH:mm'
+            day: "dd MMM",
+            hour: "HH:mm",
           },
-          rotate: 0
+          rotate: 0,
         },
         axisBorder: {
           show: true,
-          color: '#374151'
+          color: "#374151",
         },
         axisTicks: {
           show: true,
-          color: '#374151'
-        }
+          color: "#374151",
+        },
       },
       yaxis: {
         ...yaxisConfig,
         tooltip: {
-          enabled: true
+          enabled: true,
         },
         opposite: true,
         labels: {
           style: {
-            colors: '#9ca3af',
-            fontSize: '12px',
-            fontWeight: 500
+            colors: "#9ca3af",
+            fontSize: "12px",
+            fontWeight: 500,
           },
           formatter: function (value) {
             if (maxPrice < 1) {
@@ -481,49 +489,49 @@ const Catoshi = ({ data, isHistory = false }) => {
             } else {
               return "$" + value.toLocaleString();
             }
-          }
+          },
         },
         axisBorder: {
           show: true,
-          color: '#374151'
-        }
+          color: "#374151",
+        },
       },
       plotOptions: {
         candlestick: {
           colors: {
-            upward: '#a3e635',    // Bright lime green (bullish)
-            downward: '#f87171'   // Bright red (bearish)
+            upward: "#a3e635",
+            downward: "#f87171",
           },
           wick: {
-            useFillColor: true
-          }
-        }
+            useFillColor: true,
+          },
+        },
       },
       tooltip: {
         enabled: true,
-        theme: 'dark',
+        theme: "dark",
         style: {
-          fontSize: '13px',
-          fontFamily: 'Inter, sans-serif'
+          fontSize: "13px",
+          fontFamily: "Inter, sans-serif",
         },
         x: {
-          format: 'dd MMM yyyy HH:mm'
+          format: "dd MMM yyyy HH:mm",
         },
-        custom: function({ seriesIndex, dataPointIndex, w }) {
+        custom: function ({ seriesIndex, dataPointIndex, w }) {
           const data = w.config.series[seriesIndex]?.data?.[dataPointIndex];
           if (data && data.y) {
             const [open, high, low, close] = data.y;
-            const date = new Date(data.x).toLocaleString('en-US', {
-              month: 'short',
-              day: '2-digit',
-              hour: '2-digit',
-              minute: '2-digit'
+            const date = new Date(data.x).toLocaleString("en-US", {
+              month: "short",
+              day: "2-digit",
+              hour: "2-digit",
+              minute: "2-digit",
             });
-            
+
             const isBullish = close >= open;
             const change = close - open;
             const changePercent = ((change / open) * 100).toFixed(2);
-            
+
             return `
               <div style="
                 background: #1f2937;
@@ -541,22 +549,37 @@ const Catoshi = ({ data, isHistory = false }) => {
                 <div style="display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; font-size: 14px;">
                   <div style="color: #9ca3af;">Open:</div>
                   <div style="font-weight: 700; color: #e5e7eb; text-align: right; font-family: 'Courier New', monospace;">
-                    $${open?.toFixed(maxPrice < 1 ? 6 : maxPrice < 10 ? 4 : 2) || '0.00'}
+                    $${
+                      open?.toFixed(maxPrice < 1 ? 6 : maxPrice < 10 ? 4 : 2) ||
+                      "0.00"
+                    }
                   </div>
                   
                   <div style="color: #9ca3af;">High:</div>
                   <div style="font-weight: 700; color: #a3e635; text-align: right; font-family: 'Courier New', monospace;">
-                    $${high?.toFixed(maxPrice < 1 ? 6 : maxPrice < 10 ? 4 : 2) || '0.00'}
+                    $${
+                      high?.toFixed(maxPrice < 1 ? 6 : maxPrice < 10 ? 4 : 2) ||
+                      "0.00"
+                    }
                   </div>
                   
                   <div style="color: #9ca3af;">Low:</div>
                   <div style="font-weight: 700; color: #f87171; text-align: right; font-family: 'Courier New', monospace;">
-                    $${low?.toFixed(maxPrice < 1 ? 6 : maxPrice < 10 ? 4 : 2) || '0.00'}
+                    $${
+                      low?.toFixed(maxPrice < 1 ? 6 : maxPrice < 10 ? 4 : 2) ||
+                      "0.00"
+                    }
                   </div>
                   
                   <div style="color: #9ca3af;">Close:</div>
-                  <div style="font-weight: 700; color: ${isBullish ? '#a3e635' : '#f87171'}; text-align: right; font-family: 'Courier New', monospace;">
-                    $${close?.toFixed(maxPrice < 1 ? 6 : maxPrice < 10 ? 4 : 2) || '0.00'}
+                  <div style="font-weight: 700; color: ${
+                    isBullish ? "#a3e635" : "#f87171"
+                  }; text-align: right; font-family: 'Courier New', monospace;">
+                    $${
+                      close?.toFixed(
+                        maxPrice < 1 ? 6 : maxPrice < 10 ? 4 : 2
+                      ) || "0.00"
+                    }
                   </div>
                 </div>
                 <div style="
@@ -565,85 +588,89 @@ const Catoshi = ({ data, isHistory = false }) => {
                   border-top: 1px solid #374151; 
                   font-size: 13px; 
                   font-weight: 600;
-                  color: ${isBullish ? '#a3e635' : '#f87171'};
+                  color: ${isBullish ? "#a3e635" : "#f87171"};
                   display: flex;
                   align-items: center;
                   justify-content: space-between;
                 ">
-                  <span>${isBullish ? '▲' : '▼'} ${isBullish ? 'Bullish' : 'Bearish'}</span>
-                  <span>${changePercent > 0 ? '+' : ''}${changePercent}%</span>
+                  <span>${isBullish ? "▲" : "▼"} ${
+              isBullish ? "Bullish" : "Bearish"
+            }</span>
+                  <span>${changePercent > 0 ? "+" : ""}${changePercent}%</span>
                 </div>
               </div>
             `;
           }
-          return '';
-        }
+          return "";
+        },
       },
       grid: {
-        borderColor: '#374151',
+        borderColor: "#374151",
         strokeDashArray: 3,
         xaxis: {
           lines: {
-            show: true
-          }
+            show: true,
+          },
         },
         yaxis: {
           lines: {
-            show: true
-          }
+            show: true,
+          },
         },
         padding: {
           top: 0,
           right: 20,
           bottom: 0,
-          left: 10
-        }
+          left: 10,
+        },
       },
       stroke: {
-        width: 2
+        width: 2,
       },
       states: {
         hover: {
           filter: {
-            type: 'lighten',
-            value: 0.1
-          }
+            type: "lighten",
+            value: 0.1,
+          },
         },
         active: {
           filter: {
-            type: 'darken',
-            value: 0.1
-          }
-        }
+            type: "darken",
+            value: 0.1,
+          },
+        },
       },
-      responsive: [{
-        breakpoint: 768,
-        options: {
-          chart: {
-            height: 300
+      responsive: [
+        {
+          breakpoint: 768,
+          options: {
+            chart: {
+              height: 300,
+            },
+            yaxis: {
+              labels: {
+                style: {
+                  fontSize: "10px",
+                },
+              },
+            },
+            xaxis: {
+              labels: {
+                style: {
+                  fontSize: "10px",
+                },
+              },
+            },
           },
-          yaxis: {
-            labels: {
-              style: {
-                fontSize: '10px'
-              }
-            }
-          },
-          xaxis: {
-            labels: {
-              style: {
-                fontSize: '10px'
-              }
-            }
-          }
-        }
-      }]
+        },
+      ],
     };
   };
 
   // Get chart options based on selected type
   const getChartOptions = (token, chain) => {
-    return chartType === "line" 
+    return chartType === "line"
       ? getLineChartOptions(token, chain)
       : getCandleChartOptions(token, chain);
   };
@@ -655,13 +682,13 @@ const Catoshi = ({ data, isHistory = false }) => {
     if (chartType === "line") {
       const lineData = chartData.map((item) => ({
         x: new Date(item.Date).getTime(),
-        y: parseFloat(item.Close) || 0
+        y: parseFloat(item.Close) || 0,
       }));
       return [
         {
           name: `${token} (${chain})`,
-          type: 'line',
-          data: lineData
+          type: "line",
+          data: lineData,
         },
       ];
     } else {
@@ -671,14 +698,14 @@ const Catoshi = ({ data, isHistory = false }) => {
           parseFloat(item.Open) || 0,
           parseFloat(item.High) || 0,
           parseFloat(item.Low) || 0,
-          parseFloat(item.Close) || 0
-        ]
+          parseFloat(item.Close) || 0,
+        ],
       }));
       return [
         {
           name: `${token} (${chain})`,
-          type: 'candlestick',
-          data: candleData
+          type: "candlestick",
+          data: candleData,
         },
       ];
     }
@@ -686,10 +713,12 @@ const Catoshi = ({ data, isHistory = false }) => {
 
   // Combined comparison chart
   const getComparisonChartOptions = () => {
-    const allSeriesData = chartDataItems.flatMap(chartData => {
+    const allSeriesData = chartDataItems.flatMap((chartData) => {
       const key = `${chartData.token}-${chartData.chain}`;
       const chartDataFiltered = filteredChartData[key] || [];
-      return chartDataFiltered.map(item => item.Close).filter(val => !isNaN(val));
+      return chartDataFiltered
+        .map((item) => item.Close)
+        .filter((val) => !isNaN(val));
     });
 
     const minPrice = allSeriesData.length > 0 ? Math.min(...allSeriesData) : 0;
@@ -710,27 +739,27 @@ const Catoshi = ({ data, isHistory = false }) => {
             zoomin: true,
             zoomout: true,
             pan: true,
-            reset: true
-          }
-        }
+            reset: true,
+          },
+        },
       },
       title: {
         text: "",
-        align: 'left',
+        align: "left",
         style: {
-          fontSize: '16px',
-          fontWeight: 'bold',
-          color: '#1e293b'
-        }
+          fontSize: "18px",
+          fontWeight: "600",
+          color: "#1f2937",
+        },
       },
       xaxis: {
         type: "datetime",
         labels: {
           style: {
-            colors: '#64748b',
-            fontSize: '11px'
-          }
-        }
+            colors: "#64748b",
+            fontSize: "11px",
+          },
+        },
       },
       yaxis: {
         min: Math.max(0, minPrice - padding),
@@ -739,9 +768,9 @@ const Catoshi = ({ data, isHistory = false }) => {
         forceNiceScale: true,
         labels: {
           style: {
-            colors: '#64748b',
-            fontSize: '12px',
-            fontWeight: 500
+            colors: "#64748b",
+            fontSize: "12px",
+            fontWeight: 500,
           },
           formatter: function (value) {
             if (maxPrice < 1) {
@@ -753,9 +782,9 @@ const Catoshi = ({ data, isHistory = false }) => {
             } else {
               return "$" + value.toFixed(0);
             }
-          }
+          },
         },
-        tooltip: { enabled: true }
+        tooltip: { enabled: true },
       },
       stroke: {
         curve: "smooth",
@@ -764,25 +793,25 @@ const Catoshi = ({ data, isHistory = false }) => {
       markers: {
         size: 4,
         hover: {
-          size: 6
-        }
+          size: 6,
+        },
       },
       tooltip: {
         enabled: true,
         shared: true,
         intersect: false,
-        theme: 'light',
+        theme: "light",
         style: {
-          fontSize: '12px',
-          background: '#ffffff',
-          color: '#000000',
-          border: '1px solid #e2e8f0'
-        }
+          fontSize: "12px",
+          background: "#ffffff",
+          color: "#000000",
+          border: "1px solid #e2e8f0",
+        },
       },
       grid: {
-        borderColor: '#A0AEC0',
-        strokeDashArray: 4
-      }
+        borderColor: "#A0AEC0",
+        strokeDashArray: 4,
+      },
     };
   };
 
@@ -798,7 +827,7 @@ const Catoshi = ({ data, isHistory = false }) => {
           x: new Date(item.Date).getTime(),
           y: item.Close,
         })),
-        color: colors[index % colors.length]
+        color: colors[index % colors.length],
       };
     });
   };
@@ -808,14 +837,26 @@ const Catoshi = ({ data, isHistory = false }) => {
     { value: "today", label: "Today" },
     { value: "7days", label: "7D" },
     { value: "30days", label: "30D" },
-    { value: "all", label: "All" }
+    { value: "all", label: "All" },
   ];
 
   // Chart type buttons data
   const chartTypeButtons = [
     { value: "line", label: "Line Chart" },
-    { value: "candlestick", label: "Candle Chart" }
+    { value: "candlestick", label: "Candle Chart" },
   ];
+
+  // Get current label for time range
+  const getTimeRangeLabel = () => {
+    const button = timeRangeButtons.find((btn) => btn.value === timeRange);
+    return button ? button.label : "Today";
+  };
+
+  // Get current label for chart type
+  const getChartTypeLabel = () => {
+    const button = chartTypeButtons.find((btn) => btn.value === chartType);
+    return button ? button.label : "Line Chart";
+  };
 
   // Sequence controller - FIXED: Prevent infinite loop
   useEffect(() => {
@@ -835,8 +876,7 @@ const Catoshi = ({ data, isHistory = false }) => {
           "Almost done...",
         ];
         setLoadingSteps(steps);
-        
-        // Use a single timeout instead of multiple
+
         setTimeout(() => {
           setStep(3);
         }, steps.length * 2000 + 3000);
@@ -844,7 +884,13 @@ const Catoshi = ({ data, isHistory = false }) => {
     }, 100);
 
     return () => clearTimeout(timer);
-  }, [step, isHistory, descriptionData, currentDataItems.length, chartDataItems.length]);
+  }, [
+    step,
+    isHistory,
+    descriptionData,
+    currentDataItems.length,
+    chartDataItems.length,
+  ]);
 
   // Early return if no data
   if (!data || data.length === 0) {
@@ -883,28 +929,30 @@ const Catoshi = ({ data, isHistory = false }) => {
                 className="border rounded-lg dark:bg-[#1b1c1e] border-[#A0AEC0] dark:border-gray-600"
               >
                 <div className="space-y-2">
-                  {Object.entries(currentData.data || {}).map(([key, value]) => (
-                    <div key={key} className="flex justify-between px-4">
-                      <span className="font-medium text-sm text-gray-600 dark:text-gray-300">
-                        {isHistory ? (
-                          <StaticText text={`${key}:`} />
-                        ) : (
-                          <Typewriter text={`${key}:`} speed={30} />
-                        )}
-                      </span>
-                      <span className="font-semibold text-sm">
-                        {isHistory ? (
-                          <StaticText text={String(value)} />
-                        ) : (
-                          <Typewriter
-                            text={String(value)}
-                            speed={30}
-                            delay={key.length * 50}
-                          />
-                        )}
-                      </span>
-                    </div>
-                  ))}
+                  {Object.entries(currentData.data || {}).map(
+                    ([key, value]) => (
+                      <div key={key} className="flex justify-between px-4">
+                        <span className="font-medium text-sm text-gray-600 dark:text-gray-300">
+                          {isHistory ? (
+                            <StaticText text={`${key}:`} />
+                          ) : (
+                            <Typewriter text={`${key}:`} speed={30} />
+                          )}
+                        </span>
+                        <span className="font-semibold text-sm">
+                          {isHistory ? (
+                            <StaticText text={String(value)} />
+                          ) : (
+                            <Typewriter
+                              text={String(value)}
+                              speed={30}
+                              delay={key.length * 50}
+                            />
+                          )}
+                        </span>
+                      </div>
+                    )
+                  )}
                 </div>
               </div>
             ))}
@@ -915,40 +963,124 @@ const Catoshi = ({ data, isHistory = false }) => {
       {/* Step 2-3: Chart Loading & Chart Display */}
       {chartDataItems.length > 0 && (isHistory || step >= 2) && (
         <div ref={chartRef} className="space-y-6">
-          {/* Chart Controls */}
+          {/* Chart Controls - Fixed Mobile Layout */}
           <div className="flex flex-col sm:flex-row justify-between gap-4">
-            {/* Time Range Selector */}
-            <div className="inline-flex rounded-md shadow-sm border border-gray-300 dark:border-gray-600 overflow-hidden">
-              {timeRangeButtons.map((button) => (
-                <button
-                  key={button.value}
-                  onClick={() => setTimeRange(button.value)}
-                  className={`px-4 py-2 text-sm font-medium transition-colors ${
-                    timeRange === button.value
-                      ? 'bg-gray-700 text-white'
-                      : 'bg-white dark:bg-[#1b1c1e] text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
-                  } ${button.value !== 'today' ? 'border-l border-gray-300 dark:border-gray-600' : ''}`}
-                >
-                  {button.label}
-                </button>
-              ))}
+            {/* Mobile: Dropdowns for Time Range and Chart Type in one line */}
+            <div className="block sm:hidden w-full">
+              <div className="flex gap-2">
+                {/* Time Range Dropdown */}
+                <div className="relative flex-1">
+                  <button
+                    onClick={() => {
+                      setShowTimeRangeDropdown(!showTimeRangeDropdown);
+                      setShowChartTypeDropdown(false);
+                    }}
+                    className="w-full flex items-center justify-between px-4 py-2 text-sm font-medium bg-white dark:bg-[#1b1c1e] border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                  >
+                    <span>{getTimeRangeLabel()}</span>
+                    <ChevronDown className="w-4 h-4 ml-2" />
+                  </button>
+                  {showTimeRangeDropdown && (
+                    <div className="absolute z-10 mt-1 w-full bg-white dark:bg-[#1b1c1e] border border-gray-300 dark:border-gray-600 rounded-md shadow-lg">
+                      {timeRangeButtons.map((button) => (
+                        <button
+                          key={button.value}
+                          onClick={() => {
+                            setTimeRange(button.value);
+                            setShowTimeRangeDropdown(false);
+                          }}
+                          className={`w-full text-left px-4 py-2 text-sm ${
+                            timeRange === button.value
+                              ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white"
+                              : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+                          }`}
+                        >
+                          {button.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Chart Type Dropdown */}
+                <div className="relative flex-1 z-50">
+                  <button
+                    onClick={() => {
+                      setShowChartTypeDropdown(!showChartTypeDropdown);
+                      setShowTimeRangeDropdown(false);
+                    }}
+                    className="w-full flex items-center justify-between px-4 py-2 text-sm font-medium bg-white dark:bg-[#1b1c1e] border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                  >
+                    <span>{getChartTypeLabel()}</span>
+                    <ChevronDown className="w-4 h-4 ml-2" />
+                  </button>
+                  {showChartTypeDropdown && (
+                    <div className="absolute z-10 mt-1 w-full bg-white dark:bg-[#1b1c1e] border border-gray-300 dark:border-gray-600 rounded-md shadow-lg">
+                      {chartTypeButtons.map((button) => (
+                        <button
+                          key={button.value}
+                          onClick={() => {
+                            setChartType(button.value);
+                            setShowChartTypeDropdown(false);
+                          }}
+                          className={`w-full text-left px-4 py-2 text-sm ${
+                            chartType === button.value
+                              ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white"
+                              : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+                          }`}
+                        >
+                          {button.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
 
-            {/* Chart Type Selector */}
-            <div className="inline-flex rounded-md shadow-sm border border-gray-300 dark:border-gray-600 overflow-hidden">
-              {chartTypeButtons.map((button) => (
-                <button
-                  key={button.value}
-                  onClick={() => setChartType(button.value)}
-                  className={`px-4 py-2 text-sm font-medium transition-colors ${
-                    chartType === button.value
-                      ? 'bg-gray-700 text-white'
-                      : 'bg-white dark:bg-[#1b1c1e] text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
-                  } ${button.value === 'candlestick' ? 'border-l border-gray-300 dark:border-gray-600' : ''}`}
-                >
-                  {button.label}
-                </button>
-              ))}
+            {/* Desktop: Button groups */}
+            <div className="hidden sm:flex gap-6 w-full justify-between">
+              {/* Time Range Selector */}
+              <div className="inline-flex rounded-md shadow-sm border border-gray-300 dark:border-gray-600 overflow-hidden">
+                {timeRangeButtons.map((button) => (
+                  <button
+                    key={button.value}
+                    onClick={() => setTimeRange(button.value)}
+                    className={`px-4 py-2 text-sm font-medium transition-colors ${
+                      timeRange === button.value
+                        ? "bg-gray-700 text-white"
+                        : "bg-white dark:bg-[#1b1c1e] text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+                    } ${
+                      button.value !== "today"
+                        ? "border-l border-gray-300 dark:border-gray-600"
+                        : ""
+                    }`}
+                  >
+                    {button.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Chart Type Selector */}
+              <div className="inline-flex rounded-md shadow-sm border border-gray-300 dark:border-gray-600 overflow-hidden">
+                {chartTypeButtons.map((button) => (
+                  <button
+                    key={button.value}
+                    onClick={() => setChartType(button.value)}
+                    className={`px-4 py-2 text-sm font-medium transition-colors ${
+                      chartType === button.value
+                        ? "bg-gray-700 text-white"
+                        : "bg-white dark:bg-[#1b1c1e] text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+                    } ${
+                      button.value === "candlestick"
+                        ? "border-l border-gray-300 dark:border-gray-600"
+                        : ""
+                    }`}
+                  >
+                    {button.label}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -1026,11 +1158,7 @@ const Catoshi = ({ data, isHistory = false }) => {
                       className="w-4 h-4 rounded-full bg-[#1b1c1e] text-black dark:text-white mr-2 animate-pulse"
                       style={{ animationDelay: `${idx * 0.2}s` }}
                     />
-                    <Typewriter
-                      text={stepText}
-                      speed={20}
-                      delay={idx * 1000}
-                    />
+                    <Typewriter text={stepText} speed={20} delay={idx * 1000} />
                   </div>
                 ))}
               </div>
