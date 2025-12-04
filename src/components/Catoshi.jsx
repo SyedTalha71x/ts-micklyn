@@ -798,7 +798,7 @@ const Catoshi = ({ data, isHistory = false }) => {
           x: new Date(item.Date).getTime(),
           y: item.Close,
         })),
-        color: colors[index % colors.length],
+        color: colors[index % colors.length]
       };
     });
   };
