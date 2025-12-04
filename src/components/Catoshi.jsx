@@ -67,6 +67,7 @@ const Catoshi = ({ data, isHistory = false }) => {
   const [step, setStep] = useState(0);
   const [loadingSteps, setLoadingSteps] = useState([]);
   const [timeRange, setTimeRange] = useState("all");
+  const [chartType, setChartType] = useState("line"); // "line" or "candlestick"
   
   // Use useMemo for filtered data to prevent infinite loops
   const { filteredChartData, currentDataItems, chartDataItems, descriptionData } = useMemo(() => {
@@ -180,9 +181,210 @@ const Catoshi = ({ data, isHistory = false }) => {
     };
   };
 
-  // Chart options for candlestick
- // Chart options for candlestick - IMPROVED VISIBILITY
-  const getChartOptions = (token, chain) => {
+  // Chart options for LINE chart (default)
+  const getLineChartOptions = (token, chain) => {
+    const key = `${token}-${chain}`;
+    const chartData = filteredChartData[key] || [];
+    const yaxisConfig = getDynamicYaxisConfig(chartData);
+    
+    // Calculate maxPrice for this specific chart
+    const allPrices = chartData.flatMap(item => [
+      item.Open, item.High, item.Low, item.Close
+    ]).filter(price => !isNaN(price) && price !== null);
+    
+    const maxPrice = allPrices.length > 0 ? Math.max(...allPrices) : 0;
+
+    return {
+      chart: {
+        type: "line",
+        height: 400,
+        background: 'transparent',
+        foreColor: '#9ca3af',
+        toolbar: {
+          show: true,
+          tools: {
+            download: false,
+            selection: false,
+            zoom: false,
+            zoomin: true,
+            zoomout: true,
+            pan: false,
+            reset: false
+          },
+          autoSelected: 'zoom'
+        },
+        animations: {
+          enabled: true,
+          speed: 800
+        },
+        zoom: {
+          enabled: true,
+          type: 'x',
+          autoScaleYaxis: true
+        }
+      },
+      title: {
+        text: `${token} on (${chain})`,
+        align: 'left',
+        style: {
+          fontSize: '18px',
+          fontWeight: '600',
+          color: '#e5e7eb'
+        }
+      },
+      xaxis: {
+        type: "datetime",
+        labels: {
+          style: {
+            colors: '#9ca3af',
+            fontSize: '12px',
+            fontWeight: 500
+          },
+          datetimeFormatter: {
+            year: 'yyyy',
+            month: "MMM 'yy",
+            day: 'dd MMM',
+            hour: 'HH:mm'
+          },
+          rotate: 0
+        },
+        axisBorder: {
+          show: true,
+          color: '#374151'
+        },
+        axisTicks: {
+          show: true,
+          color: '#374151'
+        }
+      },
+      yaxis: {
+        ...yaxisConfig,
+        tooltip: {
+          enabled: true
+        },
+        opposite: true,
+        labels: {
+          style: {
+            colors: '#9ca3af',
+            fontSize: '12px',
+            fontWeight: 500
+          },
+          formatter: function (value) {
+            if (maxPrice < 1) {
+              return "$" + value.toFixed(6);
+            } else if (maxPrice < 10) {
+              return "$" + value.toFixed(4);
+            } else if (maxPrice < 1000) {
+              return "$" + value.toFixed(2);
+            } else {
+              return "$" + value.toLocaleString();
+            }
+          }
+        },
+        axisBorder: {
+          show: true,
+          color: '#374151'
+        }
+      },
+      stroke: {
+        curve: "smooth",
+        width: 2,
+        colors: ['#3b82f6'] // Blue line color
+      },
+      markers: {
+        size: 4,
+        hover: {
+          size: 6
+        }
+      },
+      tooltip: {
+        enabled: true,
+        theme: 'dark',
+        style: {
+          fontSize: '13px',
+          fontFamily: 'Inter, sans-serif'
+        },
+        x: {
+          format: 'dd MMM yyyy HH:mm'
+        },
+        y: {
+          formatter: function(value) {
+            if (maxPrice < 1) {
+              return "$" + value.toFixed(6);
+            } else if (maxPrice < 10) {
+              return "$" + value.toFixed(4);
+            } else if (maxPrice < 1000) {
+              return "$" + value.toFixed(2);
+            } else {
+              return "$" + value.toLocaleString();
+            }
+          },
+          title: {
+            formatter: () => 'Price:'
+          }
+        }
+      },
+      grid: {
+        borderColor: '#374151',
+        strokeDashArray: 3,
+        xaxis: {
+          lines: {
+            show: true
+          }
+        },
+        yaxis: {
+          lines: {
+            show: true
+          }
+        },
+        padding: {
+          top: 0,
+          right: 20,
+          bottom: 0,
+          left: 10
+        }
+      },
+      states: {
+        hover: {
+          filter: {
+            type: 'lighten',
+            value: 0.1
+          }
+        },
+        active: {
+          filter: {
+            type: 'darken',
+            value: 0.1
+          }
+        }
+      },
+      responsive: [{
+        breakpoint: 768,
+        options: {
+          chart: {
+            height: 300
+          },
+          yaxis: {
+            labels: {
+              style: {
+                fontSize: '10px'
+              }
+            }
+          },
+          xaxis: {
+            labels: {
+              style: {
+                fontSize: '10px'
+              }
+            }
+          }
+        }
+      }]
+    };
+  };
+
+  // Chart options for CANDLESTICK
+  const getCandleChartOptions = (token, chain) => {
     const key = `${token}-${chain}`;
     const chartData = filteredChartData[key] || [];
     const yaxisConfig = getDynamicYaxisConfig(chartData);
@@ -439,26 +641,47 @@ const Catoshi = ({ data, isHistory = false }) => {
     };
   };
 
+  // Get chart options based on selected type
+  const getChartOptions = (token, chain) => {
+    return chartType === "line" 
+      ? getLineChartOptions(token, chain)
+      : getCandleChartOptions(token, chain);
+  };
+
   const getChartSeries = (token, chain) => {
     const key = `${token}-${chain}`;
     const chartData = filteredChartData[key] || [];
 
-    const candleData = chartData.map((item) => ({
-      x: new Date(item.Date).getTime(),
-      y: [
-        parseFloat(item.Open) || 0,
-        parseFloat(item.High) || 0,
-        parseFloat(item.Low) || 0,
-        parseFloat(item.Close) || 0
-      ]
-    }));
-    return [
-      {
-        name: `${token} (${chain})`,
-        type: 'candlestick',
-        data: candleData
-      },
-    ];
+    if (chartType === "line") {
+      const lineData = chartData.map((item) => ({
+        x: new Date(item.Date).getTime(),
+        y: parseFloat(item.Close) || 0
+      }));
+      return [
+        {
+          name: `${token} (${chain})`,
+          type: 'line',
+          data: lineData
+        },
+      ];
+    } else {
+      const candleData = chartData.map((item) => ({
+        x: new Date(item.Date).getTime(),
+        y: [
+          parseFloat(item.Open) || 0,
+          parseFloat(item.High) || 0,
+          parseFloat(item.Low) || 0,
+          parseFloat(item.Close) || 0
+        ]
+      }));
+      return [
+        {
+          name: `${token} (${chain})`,
+          type: 'candlestick',
+          data: candleData
+        },
+      ];
+    }
   };
 
   // Combined comparison chart
@@ -588,6 +811,12 @@ const Catoshi = ({ data, isHistory = false }) => {
     { value: "all", label: "All" }
   ];
 
+  // Chart type buttons data
+  const chartTypeButtons = [
+    { value: "line", label: "Line Chart" },
+    { value: "candlestick", label: "Candle Chart" }
+  ];
+
   // Sequence controller - FIXED: Prevent infinite loop
   useEffect(() => {
     if (isHistory) return;
@@ -653,9 +882,6 @@ const Catoshi = ({ data, isHistory = false }) => {
                 key={`${currentData.token}-${currentData.chain}-${index}`}
                 className="border rounded-lg dark:bg-[#1b1c1e] border-[#A0AEC0] dark:border-gray-600"
               >
-                {/* <h4 className="font-semibold text-md mb-3 py-2 text-center border-b border-[#A0AEC0] dark:border-gray-600">
-                  {currentData.token} on {currentData.chain}
-                </h4> */}
                 <div className="space-y-2">
                   {Object.entries(currentData.data || {}).map(([key, value]) => (
                     <div key={key} className="flex justify-between px-4">
@@ -689,8 +915,9 @@ const Catoshi = ({ data, isHistory = false }) => {
       {/* Step 2-3: Chart Loading & Chart Display */}
       {chartDataItems.length > 0 && (isHistory || step >= 2) && (
         <div ref={chartRef} className="space-y-6">
-          {/* Time Range Selector - Improved Visibility */}
-          <div className="flex justify-end">
+          {/* Chart Controls */}
+          <div className="flex flex-col sm:flex-row justify-between gap-4">
+            {/* Time Range Selector */}
             <div className="inline-flex rounded-md shadow-sm border border-gray-300 dark:border-gray-600 overflow-hidden">
               {timeRangeButtons.map((button) => (
                 <button
@@ -701,6 +928,23 @@ const Catoshi = ({ data, isHistory = false }) => {
                       ? 'bg-gray-700 text-white'
                       : 'bg-white dark:bg-[#1b1c1e] text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
                   } ${button.value !== 'today' ? 'border-l border-gray-300 dark:border-gray-600' : ''}`}
+                >
+                  {button.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Chart Type Selector */}
+            <div className="inline-flex rounded-md shadow-sm border border-gray-300 dark:border-gray-600 overflow-hidden">
+              {chartTypeButtons.map((button) => (
+                <button
+                  key={button.value}
+                  onClick={() => setChartType(button.value)}
+                  className={`px-4 py-2 text-sm font-medium transition-colors ${
+                    chartType === button.value
+                      ? 'bg-gray-700 text-white'
+                      : 'bg-white dark:bg-[#1b1c1e] text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
+                  } ${button.value === 'candlestick' ? 'border-l border-gray-300 dark:border-gray-600' : ''}`}
                 >
                   {button.label}
                 </button>
@@ -727,7 +971,7 @@ const Catoshi = ({ data, isHistory = false }) => {
                 </div>
               )}
 
-              {/* Individual Candlestick Charts */}
+              {/* Individual Charts */}
               {chartDataItems.map((chartData, index) => {
                 const key = `${chartData.token}-${chartData.chain}`;
                 const chartSeries = getChartSeries(
@@ -753,7 +997,6 @@ const Catoshi = ({ data, isHistory = false }) => {
                     key={`${key}-${index}`}
                     className="bg-white dark:bg-[#1b1c1e] border border-gray-200 dark:border-gray-700 p-6 rounded-lg shadow"
                   >
-
                     {typeof window !== "undefined" && (
                       <div className="relative">
                         <Chart
@@ -762,8 +1005,8 @@ const Catoshi = ({ data, isHistory = false }) => {
                             chartData.chain
                           )}
                           series={chartSeries}
-                          type="candlestick"
-                          height={350}
+                          type={chartType === "line" ? "line" : "candlestick"}
+                          height={400}
                         />
                       </div>
                     )}
