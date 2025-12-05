@@ -235,7 +235,7 @@ const Catoshi = ({ data, isHistory = false }) => {
         style: {
           fontSize: "18px",
           fontWeight: "600",
-          color: "#e5e7eb", // Changed to black for light theme
+          color: "#e5e7eb", 
         },
       },
       xaxis: {
