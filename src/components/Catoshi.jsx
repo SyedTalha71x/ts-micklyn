@@ -235,7 +235,7 @@ const Catoshi = ({ data, isHistory = false }) => {
         style: {
           fontSize: "18px",
           fontWeight: "600",
-          color: "#9ca3af",
+          color: "#e5e7eb", // Changed to black for light theme
         },
       },
       xaxis: {
@@ -268,7 +268,7 @@ const Catoshi = ({ data, isHistory = false }) => {
         tooltip: {
           enabled: true,
         },
-        opposite: true,
+        opposite: true, // Prices on right side
         labels: {
           style: {
             colors: "#9ca3af",
@@ -298,10 +298,7 @@ const Catoshi = ({ data, isHistory = false }) => {
         colors: ["#3b82f6"],
       },
       markers: {
-        size: 4,
-        hover: {
-          size: 6,
-        },
+        size: 0, // Removed dots to keep it clean
       },
       tooltip: {
         enabled: true,
@@ -439,7 +436,7 @@ const Catoshi = ({ data, isHistory = false }) => {
         style: {
           fontSize: "18px",
           fontWeight: "600",
-          color: "gray",
+          color: "#e5e7eb", // Changed to black for light theme
         },
       },
       xaxis: {
@@ -472,7 +469,7 @@ const Catoshi = ({ data, isHistory = false }) => {
         tooltip: {
           enabled: true,
         },
-        opposite: true,
+        opposite: true, // Prices on right side
         labels: {
           style: {
             colors: "#9ca3af",
@@ -749,7 +746,7 @@ const Catoshi = ({ data, isHistory = false }) => {
         style: {
           fontSize: "18px",
           fontWeight: "600",
-          color: "#1f2937",
+          color: "#e5e7eb",
         },
       },
       xaxis: {
@@ -791,10 +788,7 @@ const Catoshi = ({ data, isHistory = false }) => {
         width: 2,
       },
       markers: {
-        size: 4,
-        hover: {
-          size: 6,
-        },
+        size: 0, // Removed dots for clean look
       },
       tooltip: {
         enabled: true,
