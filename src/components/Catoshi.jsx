@@ -230,12 +230,20 @@ const Catoshi = ({ data, isHistory = false }) => {
         },
       },
       title: {
-        text: `${token} on (${chain})`,
+        text: `${
+          token && chain
+            ? `${token} on (${chain})`
+            : token
+            ? token
+            : chain
+            ? chain
+            : ""
+        }`,
         align: "left",
         style: {
           fontSize: "18px",
           fontWeight: "600",
-          color: "#e5e7eb", 
+          color: "#364153", // Black color for light theme, dark mode will override
         },
       },
       xaxis: {
@@ -431,12 +439,20 @@ const Catoshi = ({ data, isHistory = false }) => {
         },
       },
       title: {
-        text: `${token} on (${chain})`,
+        text: `${
+          token && chain
+            ? `${token} on (${chain})`
+            : token
+            ? token
+            : chain
+            ? chain
+            : ""
+        }`,
         align: "left",
         style: {
           fontSize: "18px",
           fontWeight: "600",
-          color: "#e5e7eb", // Changed to black for light theme
+          color: "#364153",
         },
       },
       xaxis: {
@@ -746,7 +762,7 @@ const Catoshi = ({ data, isHistory = false }) => {
         style: {
           fontSize: "18px",
           fontWeight: "600",
-          color: "#e5e7eb",
+          color: "#000000", // Black color for light theme
         },
       },
       xaxis: {
