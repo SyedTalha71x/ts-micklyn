@@ -75,6 +75,7 @@ const Catoshi = ({ data, isHistory = false }) => {
   // Use useMemo for filtered data to prevent infinite loops
   const {
     filteredChartData,
+    filteredLineData,
     currentDataItems,
     chartDataItems,
     descriptionData,
@@ -94,34 +95,61 @@ const Catoshi = ({ data, isHistory = false }) => {
       data?.filter((item) => item.response_type === "chatoshi_chart") || [];
 
     // Filter chart data based on time range for all tokens
-    const filteredData = {};
+    const filteredChart = {};
+    const filteredLine = {};
+
     const now = new Date();
 
     chartItems.forEach((chartData) => {
       const key = `${chartData.token}-${chartData.chain}`;
-      let filteredChart = [...(chartData.data || [])];
+      
+      // Filter candle data
+      let filteredCandleData = [...(chartData.data || [])];
+      
+      // Filter line data
+      let filteredLineChartData = [...(chartData.charts.line_data || [])];
 
       switch (timeRange) {
         case "today":
           const today = new Date(now.setHours(0, 0, 0, 0));
-          filteredChart = (chartData.data || []).filter((item) => {
+          
+          filteredCandleData = (chartData.data || []).filter((item) => {
             const itemDate = new Date(item.Date);
             return itemDate >= today;
           });
+          
+          filteredLineChartData = (chartData.charts.line_data || []).filter((item) => {
+            const itemDate = new Date(item.x);
+            return itemDate >= today;
+          });
           break;
+          
         case "7days":
           const sevenDaysAgo = new Date();
           sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-          filteredChart = (chartData.data || []).filter((item) => {
+          
+          filteredCandleData = (chartData.data || []).filter((item) => {
             const itemDate = new Date(item.Date);
             return itemDate >= sevenDaysAgo;
           });
+          
+          filteredLineChartData = (chartData.charts.line_data || []).filter((item) => {
+            const itemDate = new Date(item.x);
+            return itemDate >= sevenDaysAgo;
+          });
           break;
+          
         case "30days":
           const thirtyDaysAgo = new Date();
           thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-          filteredChart = (chartData.data || []).filter((item) => {
+          
+          filteredCandleData = (chartData.data || []).filter((item) => {
             const itemDate = new Date(item.Date);
+            return itemDate >= thirtyDaysAgo;
+          });
+          
+          filteredLineChartData = (chartData.charts.line_data || []).filter((item) => {
+            const itemDate = new Date(item.x);
             return itemDate >= thirtyDaysAgo;
           });
           break;
@@ -129,11 +157,13 @@ const Catoshi = ({ data, isHistory = false }) => {
           break;
       }
 
-      filteredData[key] = filteredChart;
+      filteredChart[key] = filteredCandleData;
+      filteredLine[key] = filteredLineChartData;
     });
 
     return {
-      filteredChartData: filteredData,
+      filteredChartData: filteredChart,
+      filteredLineData: filteredLine,
       currentDataItems: currentItems,
       chartDataItems: chartItems,
       descriptionData: description,
@@ -141,13 +171,22 @@ const Catoshi = ({ data, isHistory = false }) => {
   }, [data, timeRange]);
 
   // Dynamic Y-axis configuration based on price range
-  const getDynamicYaxisConfig = (chartData) => {
+  const getDynamicYaxisConfig = (chartData, isCandle = false) => {
     if (!chartData || !chartData.length) return {};
 
-    // Extract all price values
-    const allPrices = chartData
-      .flatMap((item) => [item.Open, item.High, item.Low, item.Close])
-      .filter((price) => !isNaN(price) && price !== null);
+    let allPrices = [];
+    
+    if (isCandle) {
+      // For candle data
+      allPrices = chartData
+        .flatMap((item) => [item.Open, item.High, item.Low, item.Close])
+        .filter((price) => !isNaN(price) && price !== null);
+    } else {
+      // For line data
+      allPrices = chartData
+        .map((item) => item.y)
+        .filter((price) => !isNaN(price) && price !== null);
+    }
 
     if (allPrices.length === 0) return {};
 
@@ -187,15 +226,15 @@ const Catoshi = ({ data, isHistory = false }) => {
     };
   };
 
-  // Chart options for LINE chart (default)
+  // Chart options for LINE chart (using line_data directly from API)
   const getLineChartOptions = (token, chain) => {
     const key = `${token}-${chain}`;
-    const chartData = filteredChartData[key] || [];
-    const yaxisConfig = getDynamicYaxisConfig(chartData);
+    const lineData = filteredLineData[key] || [];
+    const yaxisConfig = getDynamicYaxisConfig(lineData, false);
 
     // Calculate maxPrice for this specific chart
-    const allPrices = chartData
-      .flatMap((item) => [item.Open, item.High, item.Low, item.Close])
+    const allPrices = lineData
+      .map((item) => item.y)
       .filter((price) => !isNaN(price) && price !== null);
 
     const maxPrice = allPrices.length > 0 ? Math.max(...allPrices) : 0;
@@ -243,7 +282,7 @@ const Catoshi = ({ data, isHistory = false }) => {
         style: {
           fontSize: "18px",
           fontWeight: "600",
-          color: "#364153", // Black color for light theme, dark mode will override
+          color: "#364153",
         },
       },
       xaxis: {
@@ -258,7 +297,7 @@ const Catoshi = ({ data, isHistory = false }) => {
             year: "yyyy",
             month: "MMM 'yy",
             day: "dd MMM",
-            hour: "HH:mm",
+            // hour: "HH:mm",
           },
           rotate: 0,
         },
@@ -276,7 +315,7 @@ const Catoshi = ({ data, isHistory = false }) => {
         tooltip: {
           enabled: true,
         },
-        opposite: true, // Prices on right side
+        opposite: true,
         labels: {
           style: {
             colors: "#9ca3af",
@@ -306,7 +345,7 @@ const Catoshi = ({ data, isHistory = false }) => {
         colors: ["#3b82f6"],
       },
       markers: {
-        size: 0, // Removed dots to keep it clean
+        size: 0,
       },
       tooltip: {
         enabled: true,
@@ -396,11 +435,11 @@ const Catoshi = ({ data, isHistory = false }) => {
     };
   };
 
-  // Chart options for CANDLESTICK
+  // Chart options for CANDLESTICK (using data directly from API)
   const getCandleChartOptions = (token, chain) => {
     const key = `${token}-${chain}`;
     const chartData = filteredChartData[key] || [];
-    const yaxisConfig = getDynamicYaxisConfig(chartData);
+    const yaxisConfig = getDynamicYaxisConfig(chartData, true);
 
     // Calculate maxPrice for this specific chart
     const allPrices = chartData
@@ -485,7 +524,7 @@ const Catoshi = ({ data, isHistory = false }) => {
         tooltip: {
           enabled: true,
         },
-        opposite: true, // Prices on right side
+        opposite: true,
         labels: {
           style: {
             colors: "#9ca3af",
@@ -690,21 +729,25 @@ const Catoshi = ({ data, isHistory = false }) => {
 
   const getChartSeries = (token, chain) => {
     const key = `${token}-${chain}`;
-    const chartData = filteredChartData[key] || [];
-
+    
     if (chartType === "line") {
-      const lineData = chartData.map((item) => ({
-        x: new Date(item.Date).getTime(),
-        y: parseFloat(item.Close) || 0,
-      }));
+      // Use line_data directly from API
+      const lineData = filteredLineData[key] || [];
+      
       return [
         {
           name: `${token} (${chain})`,
           type: "line",
-          data: lineData,
+          data: lineData.map((item) => ({
+            x: new Date(item.x).getTime(),
+            y: parseFloat(item.y) || 0,
+          })),
         },
       ];
     } else {
+      // Use data directly from API for candlestick
+      const chartData = filteredChartData[key] || [];
+      
       const candleData = chartData.map((item) => ({
         x: new Date(item.Date).getTime(),
         y: [
@@ -714,6 +757,7 @@ const Catoshi = ({ data, isHistory = false }) => {
           parseFloat(item.Close) || 0,
         ],
       }));
+      
       return [
         {
           name: `${token} (${chain})`,
@@ -728,9 +772,9 @@ const Catoshi = ({ data, isHistory = false }) => {
   const getComparisonChartOptions = () => {
     const allSeriesData = chartDataItems.flatMap((chartData) => {
       const key = `${chartData.token}-${chartData.chain}`;
-      const chartDataFiltered = filteredChartData[key] || [];
-      return chartDataFiltered
-        .map((item) => item.Close)
+      const lineData = filteredLineData[key] || [];
+      return lineData
+        .map((item) => item.y)
         .filter((val) => !isNaN(val));
     });
 
@@ -762,7 +806,7 @@ const Catoshi = ({ data, isHistory = false }) => {
         style: {
           fontSize: "18px",
           fontWeight: "600",
-          color: "#000000", // Black color for light theme
+          color: "#000000",
         },
       },
       xaxis: {
@@ -804,7 +848,7 @@ const Catoshi = ({ data, isHistory = false }) => {
         width: 2,
       },
       markers: {
-        size: 0, // Removed dots for clean look
+        size: 0,
       },
       tooltip: {
         enabled: true,
@@ -828,14 +872,14 @@ const Catoshi = ({ data, isHistory = false }) => {
   const getComparisonChartSeries = () => {
     return chartDataItems.map((chartData, index) => {
       const key = `${chartData.token}-${chartData.chain}`;
-      const chartDataFiltered = filteredChartData[key] || [];
+      const lineData = filteredLineData[key] || [];
       const colors = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"];
 
       return {
-        name: "",
-        data: chartDataFiltered.map((item) => ({
-          x: new Date(item.Date).getTime(),
-          y: item.Close,
+        name: `${chartData.token}${chartData.chain ? ` (${chartData.chain})` : ''}`,
+        data: lineData.map((item) => ({
+          x: new Date(item.x).getTime(),
+          y: item.y,
         })),
         color: colors[index % colors.length],
       };

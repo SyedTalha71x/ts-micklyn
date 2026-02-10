@@ -4,11 +4,11 @@ export const baseUrl = "http://64.23.166.88:8016";
 
 // this server api for the chat history & collection
 export const chatHistoryUrl = "http://64.23.166.88:5019";
-// export const chatHistoryUrl = "http://192.168.18.14:5019";
+//  export const chatHistoryUrl = "http://192.168.100.185:5021";
 
 // server ip of Python backend
 export const chatBaseUrl = "http://64.23.166.88:5019";
-// export const chatBaseUrl = "http://192.168.18.14:5019";
+// export const chatBaseUrl = "http://192.168.100.185:5021/";
 
 export const FireApi = async (url, method, data = null, chatHistoryUrl) => {
   const token = localStorage.getItem("user-visited-dashboard");

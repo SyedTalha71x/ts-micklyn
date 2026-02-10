@@ -150,7 +150,7 @@ const NavigationTabs = () => {
     if (window.visualViewport) {
       window.visualViewport.addEventListener(
         "resize",
-        handleVisualViewportChange
+        handleVisualViewportChange,
       );
     }
 
@@ -159,7 +159,7 @@ const NavigationTabs = () => {
       if (window.visualViewport) {
         window.visualViewport.removeEventListener(
           "resize",
-          handleVisualViewportChange
+          handleVisualViewportChange,
         );
       }
     };
@@ -265,7 +265,7 @@ const NavigationTabs = () => {
 
   const toCamelCase = (str) => {
     return str.replace(/([-_][a-z])/g, (group) =>
-      group.toUpperCase().replace("-", "").replace("_", "")
+      group.toUpperCase().replace("-", "").replace("_", ""),
     );
   };
 
@@ -292,7 +292,7 @@ const NavigationTabs = () => {
     responseType,
     reply,
     fullReplyItem,
-    checkConfirmation
+    checkConfirmation,
   ) => {
     switch (responseType) {
       case "simple":
@@ -330,7 +330,7 @@ const NavigationTabs = () => {
                 Object.entries(item).map(([key, val]) => [
                   key.replace(/_([a-z])/g, (g) => g[1].toUpperCase()),
                   val,
-                ])
+                ]),
               );
             }
             return item;
@@ -587,15 +587,15 @@ const NavigationTabs = () => {
         return;
       }
 
-     if (data?.response_type === "chatoshi") {
-  handleResponseByType(
-    "chatoshi",
-    data.data.replies, // Pass the replies array
-    data,
-    checkConfirmation
-  );
-  return;
-}
+      if (data?.response_type === "chatoshi") {
+        handleResponseByType(
+          "chatoshi",
+          data.data.replies, // Pass the replies array
+          data,
+          checkConfirmation,
+        );
+        return;
+      }
 
       const replies = data?.data?.replies;
       if (!Array.isArray(replies)) {
@@ -607,11 +607,11 @@ const NavigationTabs = () => {
       setCheckConfirmation(checkConfirmation);
 
       const transactionReplies = replies.filter(
-        (item) => item.response_type === "transaction"
+        (item) => item.response_type === "transaction",
       );
 
       const nonTransactionReplies = replies.filter(
-        (item) => item.response_type !== "transaction"
+        (item) => item.response_type !== "transaction",
       );
 
       nonTransactionReplies.forEach((replyItem, index) => {
@@ -620,7 +620,7 @@ const NavigationTabs = () => {
           response_type,
           reply,
           replyItem,
-          checkConfirmation
+          checkConfirmation,
         );
       });
 
@@ -663,7 +663,7 @@ const NavigationTabs = () => {
     }
 
     const transactionReplies = replies.filter(
-      (item) => item.response_type === "transaction"
+      (item) => item.response_type === "transaction",
     );
 
     if (processedIntents.length === transactionReplies.length) {
@@ -732,7 +732,7 @@ const NavigationTabs = () => {
 
     const transactionReplies =
       allIntentsData?.data?.replies?.filter(
-        (item) => item.response_type === "transaction"
+        (item) => item.response_type === "transaction",
       ) || [];
 
     if (!allIntentsData) {
@@ -891,7 +891,7 @@ const NavigationTabs = () => {
               Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
             },
             body: formData,
-          }
+          },
         );
 
         const data = await response.json();
@@ -959,7 +959,7 @@ const NavigationTabs = () => {
         `/get-chat-sessions/${userId}/${userInfo.sessionId}`,
         "GET",
         null,
-        chatHistoryUrl
+        chatHistoryUrl,
       );
 
       if (chatRes.data?.messages?.length > 0) {
@@ -979,7 +979,7 @@ const NavigationTabs = () => {
 
     const toCamelCase = (str) => {
       return str.replace(/([-_][a-z])/g, (group) =>
-        group.toUpperCase().replace("-", "").replace("_", "")
+        group.toUpperCase().replace("-", "").replace("_", ""),
       );
     };
 
@@ -1176,13 +1176,13 @@ const NavigationTabs = () => {
               //   break;
 
               case "chatoshi":
-  content = replyContent;
-  isJson = true;
-  additionalProps = {
-    responseType: "chatoshi",
-    chatoshiData: replyContent, // This should be data.data.replies[0].reply
-  };
-  break;
+                content = replyContent;
+                isJson = true;
+                additionalProps = {
+                  responseType: "chatoshi",
+                  chatoshiData: replyContent, // This should be data.data.replies[0].reply
+                };
+                break;
 
               case "error":
                 content =
@@ -1422,7 +1422,7 @@ const NavigationTabs = () => {
                             <h4 className="font-bold mb-2">
                               {msg.content.action
                                 ? `Action: ${convertKeysToCamelCase(
-                                    msg.content.action
+                                    msg.content.action,
                                   )}`
                                 : null}
                             </h4>
@@ -1437,7 +1437,7 @@ const NavigationTabs = () => {
                                     return false;
                                   if (
                                     ["success", "message", "status"].includes(
-                                      key
+                                      key,
                                     )
                                   )
                                     return false;
@@ -1451,14 +1451,14 @@ const NavigationTabs = () => {
                                 .map(([key, value]) => {
                                   const formattedKey = key.replace(
                                     /_([a-z])/g,
-                                    (g) => g[1].toUpperCase()
+                                    (g) => g[1].toUpperCase(),
                                   );
                                   let displayValue =
                                     typeof value === "object" && value !== null
                                       ? JSON.stringify(
                                           convertKeysToCamelCase(value),
                                           null,
-                                          2
+                                          2,
                                         )
                                       : convertKeysToCamelCase(value);
 
@@ -1548,8 +1548,8 @@ const NavigationTabs = () => {
                   recording
                     ? "bg-red-600 animate-pulse scale-105"
                     : message.trim().length > 0
-                    ? "bg-black dark:bg-[#353535] hover:bg-gray-800"
-                    : "bg-black dark:bg-[#353535] hover:bg-gray-800"
+                      ? "bg-black dark:bg-[#353535] hover:bg-gray-800"
+                      : "bg-black dark:bg-[#353535] hover:bg-gray-800"
                 } text-white`}
                 onClick={handleActionButtonClick}
                 disabled={isTyping || (recording && message.trim().length > 0)}
@@ -1603,8 +1603,8 @@ const NavigationTabs = () => {
                 recording
                   ? "bg-red-600 animate-pulse scale-105"
                   : message.trim().length > 0
-                  ? "bg-black dark:bg-[#353535] hover:bg-gray-800"
-                  : "bg-black dark:bg-[#353535] hover:bg-gray-800"
+                    ? "bg-black dark:bg-[#353535] hover:bg-gray-800"
+                    : "bg-black dark:bg-[#353535] hover:bg-gray-800"
               } text-white`}
               onClick={handleActionButtonClick}
               disabled={isTyping || (recording && message.trim().length > 0)}
