@@ -72,6 +72,24 @@ const Catoshi = ({ data, isHistory = false }) => {
   const [showTimeRangeDropdown, setShowTimeRangeDropdown] = useState(false);
   const [showChartTypeDropdown, setShowChartTypeDropdown] = useState(false);
 
+  // Helper function to parse date strings consistently (handles timezone issues)
+  const parseDateString = (dateString) => {
+    // If the date string is in ISO format with T00:00:00, we want to treat it as UTC midnight
+    // to avoid timezone shifts
+    if (dateString.includes('T00:00:00')) {
+      const [datePart] = dateString.split('T');
+      const [year, month, day] = datePart.split('-').map(Number);
+      // Create date at UTC midnight
+      return new Date(Date.UTC(year, month - 1, day, 0, 0, 0));
+    }
+    return new Date(dateString);
+  };
+
+  // Helper function to get start of day in UTC
+  const getUTCMidnight = (date) => {
+    return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0));
+  };
+
   // Use useMemo for filtered data to prevent infinite loops
   const {
     filteredChartData,
@@ -98,7 +116,9 @@ const Catoshi = ({ data, isHistory = false }) => {
     const filteredChart = {};
     const filteredLine = {};
 
+    // Get current date in UTC for consistent comparison
     const now = new Date();
+    const todayUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0));
 
     chartItems.forEach((chartData) => {
       const key = `${chartData.token}-${chartData.chain}`;
@@ -111,51 +131,52 @@ const Catoshi = ({ data, isHistory = false }) => {
 
       switch (timeRange) {
         case "today":
-          const today = new Date(now.setHours(0, 0, 0, 0));
-          
           filteredCandleData = (chartData.data || []).filter((item) => {
-            const itemDate = new Date(item.Date);
-            return itemDate >= today;
+            const itemDate = parseDateString(item.Date);
+            // Compare dates in UTC
+            return itemDate >= todayUTC;
           });
           
           filteredLineChartData = (chartData.charts.line_data || []).filter((item) => {
-            const itemDate = new Date(item.x);
-            return itemDate >= today;
+            const itemDate = parseDateString(item.x);
+            return itemDate >= todayUTC;
           });
           break;
           
         case "7days":
-          const sevenDaysAgo = new Date();
-          sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+          const sevenDaysAgo = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 7, 0, 0, 0));
           
           filteredCandleData = (chartData.data || []).filter((item) => {
-            const itemDate = new Date(item.Date);
+            const itemDate = parseDateString(item.Date);
             return itemDate >= sevenDaysAgo;
           });
           
           filteredLineChartData = (chartData.charts.line_data || []).filter((item) => {
-            const itemDate = new Date(item.x);
+            const itemDate = parseDateString(item.x);
             return itemDate >= sevenDaysAgo;
           });
           break;
           
         case "30days":
-          const thirtyDaysAgo = new Date();
-          thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+          const thirtyDaysAgo = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 30, 0, 0, 0));
           
           filteredCandleData = (chartData.data || []).filter((item) => {
-            const itemDate = new Date(item.Date);
+            const itemDate = parseDateString(item.Date);
             return itemDate >= thirtyDaysAgo;
           });
           
           filteredLineChartData = (chartData.charts.line_data || []).filter((item) => {
-            const itemDate = new Date(item.x);
+            const itemDate = parseDateString(item.x);
             return itemDate >= thirtyDaysAgo;
           });
           break;
         default:
           break;
       }
+
+      // Sort the filtered data by date to ensure proper order
+      filteredCandleData.sort((a, b) => parseDateString(a.Date) - parseDateString(b.Date));
+      filteredLineChartData.sort((a, b) => parseDateString(a.x) - parseDateString(b.x));
 
       filteredChart[key] = filteredCandleData;
       filteredLine[key] = filteredLineChartData;
@@ -231,7 +252,7 @@ const Catoshi = ({ data, isHistory = false }) => {
     const key = `${token}-${chain}`;
     const lineData = filteredLineData[key] || [];
     const yaxisConfig = getDynamicYaxisConfig(lineData, false);
-
+    
     // Calculate maxPrice for this specific chart
     const allPrices = lineData
       .map((item) => item.y)
@@ -297,7 +318,6 @@ const Catoshi = ({ data, isHistory = false }) => {
             year: "yyyy",
             month: "MMM 'yy",
             day: "dd MMM",
-            // hour: "HH:mm",
           },
           rotate: 0,
         },
@@ -355,7 +375,7 @@ const Catoshi = ({ data, isHistory = false }) => {
           fontFamily: "Inter, sans-serif",
         },
         x: {
-          format: "dd MMM yyyy HH:mm",
+          format: "dd MMM yyyy",
         },
         y: {
           formatter: function (value) {
@@ -506,7 +526,6 @@ const Catoshi = ({ data, isHistory = false }) => {
             year: "yyyy",
             month: "MMM 'yy",
             day: "dd MMM",
-            hour: "HH:mm",
           },
           rotate: 0,
         },
@@ -567,7 +586,7 @@ const Catoshi = ({ data, isHistory = false }) => {
           fontFamily: "Inter, sans-serif",
         },
         x: {
-          format: "dd MMM yyyy HH:mm",
+          format: "dd MMM yyyy",
         },
         custom: function ({ seriesIndex, dataPointIndex, w }) {
           const data = w.config.series[seriesIndex]?.data?.[dataPointIndex];
@@ -576,8 +595,8 @@ const Catoshi = ({ data, isHistory = false }) => {
             const date = new Date(data.x).toLocaleString("en-US", {
               month: "short",
               day: "2-digit",
-              hour: "2-digit",
-              minute: "2-digit",
+              year: "numeric",
+              timeZone: "UTC"
             });
 
             const isBullish = close >= open;
@@ -739,7 +758,7 @@ const Catoshi = ({ data, isHistory = false }) => {
           name: `${token} (${chain})`,
           type: "line",
           data: lineData.map((item) => ({
-            x: new Date(item.x).getTime(),
+            x: parseDateString(item.x).getTime(),
             y: parseFloat(item.y) || 0,
           })),
         },
@@ -749,7 +768,7 @@ const Catoshi = ({ data, isHistory = false }) => {
       const chartData = filteredChartData[key] || [];
       
       const candleData = chartData.map((item) => ({
-        x: new Date(item.Date).getTime(),
+        x: parseDateString(item.Date).getTime(),
         y: [
           parseFloat(item.Open) || 0,
           parseFloat(item.High) || 0,
@@ -878,7 +897,7 @@ const Catoshi = ({ data, isHistory = false }) => {
       return {
         name: `${chartData.token}${chartData.chain ? ` (${chartData.chain})` : ''}`,
         data: lineData.map((item) => ({
-          x: new Date(item.x).getTime(),
+          x: parseDateString(item.x).getTime(),
           y: item.y,
         })),
         color: colors[index % colors.length],
