@@ -97,13 +97,13 @@ const Notifications = () => {
         <div className="flex flex-wrap space-x-3">
           <button
             onClick={markAllAsRead}
-            className="px-3 py-1 bg-indigo-600 text-white text-sm rounded-md hover:bg-indigo-700"
+            className="px-3 py-1 bg-indigo-600 text-white text-sm rounded-md hover:bg-indigo-700 transition-colors cursor-pointer"
           >
             Mark All as Read
           </button>
           <button
             onClick={deleteAll}
-            className="px-3 py-1 bg-red-600 text-white text-sm rounded-md hover:bg-red-700"
+            className="px-3 py-1 bg-red-600 text-white text-sm rounded-md hover:bg-red-700 transition-colors cursor-pointer"
           >
             Delete All
           </button>
@@ -136,18 +136,18 @@ const Notifications = () => {
                       {!notification.read && (
                         <button 
                           onClick={() => markAsRead(notification.id)}
-                          className="text-gray-400 hover:text-green-500"
+                          className="p-1 text-gray-400 hover:text-green-500 transition-colors cursor-pointer"
                           title="Mark as read"
                         >
-                          <FiCheck />
+                          <FiCheck size={18} />
                         </button>
                       )}
                       <button 
                         onClick={() => deleteNotification(notification.id)}
-                        className="text-gray-400 hover:text-red-500"
+                        className="p-1 text-gray-400 hover:text-red-500 transition-colors cursor-pointer"
                         title="Delete"
                       >
-                        <FiTrash2 />
+                        <FiTrash2 size={18} />
                       </button>
                     </div>
                   </div>
@@ -173,9 +173,13 @@ const Notifications = () => {
                 <label className="text-sm text-gray-700">Email Notifications</label>
                 <button
                   onClick={() => handleSettingChange('email')}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full ${notificationSettings.email ? 'bg-indigo-600' : 'bg-gray-200'}`}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors cursor-pointer ${
+                    notificationSettings.email ? 'bg-indigo-600' : 'bg-gray-200'
+                  }`}
                 >
-                  <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${notificationSettings.email ? 'translate-x-6' : 'translate-x-1'}`} />
+                  <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    notificationSettings.email ? 'translate-x-6' : 'translate-x-1'
+                  }`} />
                 </button>
               </div>
               
@@ -183,9 +187,13 @@ const Notifications = () => {
                 <label className="text-sm text-gray-700">Push Notifications</label>
                 <button
                   onClick={() => handleSettingChange('push')}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full ${notificationSettings.push ? 'bg-indigo-600' : 'bg-gray-200'}`}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors cursor-pointer ${
+                    notificationSettings.push ? 'bg-indigo-600' : 'bg-gray-200'
+                  }`}
                 >
-                  <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${notificationSettings.push ? 'translate-x-6' : 'translate-x-1'}`} />
+                  <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    notificationSettings.push ? 'translate-x-6' : 'translate-x-1'
+                  }`} />
                 </button>
               </div>
               
@@ -193,9 +201,13 @@ const Notifications = () => {
                 <label className="text-sm text-gray-700">SMS Alerts</label>
                 <button
                   onClick={() => handleSettingChange('sms')}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full ${notificationSettings.sms ? 'bg-indigo-600' : 'bg-gray-200'}`}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors cursor-pointer ${
+                    notificationSettings.sms ? 'bg-indigo-600' : 'bg-gray-200'
+                  }`}
                 >
-                  <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${notificationSettings.sms ? 'translate-x-6' : 'translate-x-1'}`} />
+                  <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    notificationSettings.sms ? 'translate-x-6' : 'translate-x-1'
+                  }`} />
                 </button>
               </div>
               
@@ -203,9 +215,13 @@ const Notifications = () => {
                 <label className="text-sm text-gray-700">Sound Alerts</label>
                 <button
                   onClick={() => handleSettingChange('sound')}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full ${notificationSettings.sound ? 'bg-indigo-600' : 'bg-gray-200'}`}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors cursor-pointer ${
+                    notificationSettings.sound ? 'bg-indigo-600' : 'bg-gray-200'
+                  }`}
                 >
-                  <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${notificationSettings.sound ? 'translate-x-6' : 'translate-x-1'}`} />
+                  <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    notificationSettings.sound ? 'translate-x-6' : 'translate-x-1'
+                  }`} />
                 </button>
               </div>
             </div>
@@ -213,20 +229,20 @@ const Notifications = () => {
             <div className="mt-6">
               <h4 className="text-sm font-medium mb-2">Alert Types</h4>
               <div className="space-y-2">
-                <label className="flex items-center">
-                  <input type="checkbox" className="rounded text-indigo-600" defaultChecked />
+                <label className="flex items-center cursor-pointer">
+                  <input type="checkbox" className="rounded text-indigo-600 cursor-pointer" defaultChecked />
                   <span className="ml-2 text-sm text-gray-700">Transaction Alerts</span>
                 </label>
-                <label className="flex items-center">
-                  <input type="checkbox" className="rounded text-indigo-600" defaultChecked />
+                <label className="flex items-center cursor-pointer">
+                  <input type="checkbox" className="rounded text-indigo-600 cursor-pointer" defaultChecked />
                   <span className="ml-2 text-sm text-gray-700">Referral Alerts</span>
                 </label>
-                <label className="flex items-center">
-                  <input type="checkbox" className="rounded text-indigo-600" defaultChecked />
+                <label className="flex items-center cursor-pointer">
+                  <input type="checkbox" className="rounded text-indigo-600 cursor-pointer" defaultChecked />
                   <span className="ml-2 text-sm text-gray-700">Social Media Alerts</span>
                 </label>
-                <label className="flex items-center">
-                  <input type="checkbox" className="rounded text-indigo-600" defaultChecked />
+                <label className="flex items-center cursor-pointer">
+                  <input type="checkbox" className="rounded text-indigo-600 cursor-pointer" defaultChecked />
                   <span className="ml-2 text-sm text-gray-700">System Alerts</span>
                 </label>
               </div>

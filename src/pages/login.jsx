@@ -107,6 +107,8 @@ export default function Login() {
       window.removeEventListener("resize", checkIsMobile);
     };
   }, []);
+
+  console.log(fcmToken, 'fcmmmmmmmmmmmmmmmmmmmmmm')
   const HandleUserLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -116,7 +118,8 @@ export default function Login() {
       const response = await FireApi("/login", "POST", {
         email,
         password,
-        fcm_token: "ckQgMdBZEhHziy_4dUTPFh:APA91bFKV30ViDE2CwPAZmJUGkRWBlKEg-aYHRgwQoTvtwjIql_vWdzxzjh1ZNRYde6MsnLpZobDqYnH7Rnw3sy1kil-monuOvg8pmABm9D2EwozgnRps_E",
+        // fcm_token: "ckQgMdBZEhHziy_4dUTPFh:APA91bFKV30ViDE2CwPAZmJUGkRWBlKEg-aYHRgwQoTvtwjIql_vWdzxzjh1ZNRYde6MsnLpZobDqYnH7Rnw3sy1kil-monuOvg8pmABm9D2EwozgnRps_E",
+        fcm_token: fcmToken
       });
 
       console.log("Login response:", response);

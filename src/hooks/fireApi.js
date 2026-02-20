@@ -1,6 +1,6 @@
 // server ip
 export const baseUrl = "http://64.23.166.88:8016";
-// export const baseUrl = "https://fd707bc75489.ngrok-free.app";
+// export const baseUrl = "http://192.168.18.4:8001";
 
 // this server api for the chat history & collection
 export const chatHistoryUrl = "http://64.23.166.88:5021";
