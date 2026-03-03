@@ -1,0 +1,368 @@
+{
+  "settingsLayout": {
+    "title": "账户设置"
+  },
+  "sidebar": {
+    "walletConnections": "钱包连接",
+    "token": "代币",
+    "importWallet": "导入钱包",
+    "importTokens": "导入代币",
+    "transferToken": "转账代币",
+    "settings": "设置",
+    "preferences": "偏好设置",
+    "portfolio": "投资组合",
+    "notification": "通知",
+    "profile": "个人资料",
+    "logout": "退出登录"
+  },
+  "wallet": {
+    "createNewWallet": "创建新钱包",
+    "blockchainNetwork": "区块链网络",
+    "createWallet": "创建钱包",
+    "creating": "创建中...",
+    "walletCreatedSuccess": "钱包创建成功",
+    "address": "地址",
+    "copyAddress": "复制地址",
+    "addressCopied": "钱包地址已复制到剪贴板！",
+    "copyFailed": "复制地址失败",
+    "walletCreated": "钱包创建成功！",
+    "walletFailed": "创建钱包失败",
+    "ethereum": "以太坊",
+    "binanceSmartChain": "币安智能链",
+    "polygon": "多边形",
+    "solana": "索拉纳"
+  },
+  "token": {
+    "tabs": {
+      "tokenInfo": "代币信息",
+      "tokenBalance": "代币余额"
+    },
+    "selectNetwork": "选择网络",
+    "selectToken": "选择代币",
+    "loadingTokens": "加载代币中...",
+    "noTokensAvailable": "没有可用代币",
+    "network": "网络",
+    "symbol": "符号",
+    "holders": "持有者",
+    "supply": "供应量",
+    "volume": "交易量",
+    "circulatingSupply": "流通供应量",
+    "tokenBalance": "代币余额",
+    "balance": "余额",
+    "ethereum": "以太坊",
+    "polygon": "多边形",
+    "solana": "索拉纳",
+    "binanceSmartChain": "币安智能链",
+    "walletAddressNotConfigured": "{{network}}未配置钱包地址",
+    "fetchingTokenInfo": "获取代币信息中...",
+    "fetchingBalance": "获取代币余额中..."
+  },
+  "import": {
+    "wallet": {
+      "title": "导入钱包",
+      "blockchain": "区块链",
+      "selectChains": "选择链",
+      "privateKey": "私钥",
+      "privateKeyPlaceholder": "输入您的私钥",
+      "privateKeyHelp": "输入您的私钥或12/24个单词的恢复短语",
+      "importButton": "导入钱包",
+      "importing": "导入中...",
+      "success": "钱包导入成功！",
+      "failed": "导入钱包失败"
+    },
+    "token": {
+      "title": "导入代币",
+      "blockchain": "区块链",
+      "selectChain": "选择链",
+      "contractAddress": "代币合约地址",
+      "contractPlaceholder": "输入代币合约地址",
+      "contractHelp": "输入要导入的代币合约地址",
+      "importButton": "导入代币",
+      "importing": "导入中...",
+      "success": "代币导入成功！",
+      "failed": "导入代币失败",
+      "addressRequired": "请输入合约地址"
+    },
+    "chains": {
+      "ethereum": "以太坊",
+      "bsc": "币安智能链",
+      "polygon": "多边形",
+      "solana": "索拉纳"
+    }
+  },
+  "transfer": {
+    "title": "转账代币",
+    "selectWallet": "选择钱包",
+    "noWallets": "没有可用钱包",
+    "receiverAddress": "接收地址",
+    "receiverPlaceholder": "输入接收地址",
+    "amount": "金额",
+    "amountPlaceholder": "输入金额",
+    "token": "代币",
+    "selectToken": "选择代币",
+    "noTokens": "没有可用代币",
+    "loadingTokens": "加载代币中...",
+    "transferButton": "转账代币",
+    "transferring": "转账中...",
+    "success": "代币转账成功！",
+    "failed": "代币转账失败",
+    "transactionHash": "交易哈希",
+    "hashCopied": "交易哈希已复制到剪贴板！",
+    "copyFailed": "复制交易哈希失败"
+  },
+  "security": {
+    "safeGuard": "安全保护",
+    "lockMethod": "锁定方式",
+    "changePassword": "修改密码",
+    "authentication": "认证",
+    "multifactorAuth": "多因素认证",
+    "mfaUpdated": "多因素认证更新成功",
+    "mfaFailed": "更新多因素认证失败",
+    "transactionPassword": "交易密码",
+    "privacy": "隐私",
+    "hideBalance": "打开应用时隐藏余额",
+    "walletBackups": "钱包备份",
+    "walletNeedsBackup": "{{count}}个钱包需要备份",
+    "walletNeedsBackup_plural": "{{count}}个钱包需要备份",
+    "backupAllWallets": "备份所有钱包",
+    "deactivateAccount": "停用账户",
+    "deactivate": "停用",
+    "deactivating": "停用中...",
+    "deleteAccount": "删除账户",
+    "delete": "删除",
+    "deleting": "删除中...",
+    "accountDeactivated": "账户停用成功",
+    "accountDeleted": "账户删除成功",
+    "deactivateFailed": "停用账户失败",
+    "deleteFailed": "删除账户失败",
+    "deactivationSuccess": "账户停用成功",
+    "deletionSuccess": "账户删除请求已收到",
+    "deactivationMessage": "您将自动退出登录。要重新激活您的账户，请联系",
+    "deletionMessage": "我们的团队将尽快处理您的请求。如有任何疑问，请联系",
+    "contactSupport": "support@abc.com",
+    "modal": {
+      "deactivateTitle": "停用账户",
+      "deactivateDescription": "您的账户将被暂时禁用。您的所有数据将被保留但无法访问。",
+      "deleteTitle": "永久删除账户",
+      "deleteDescription": "此操作无法撤消。您的所有数据将从我们的系统中永久删除。",
+      "confirmDeactivate": "确认停用",
+      "confirmDelete": "确认删除",
+      "cancel": "取消",
+      "deactivateWarning": "停用后，您将自动退出登录。请联系支持团队{{email}}以重新激活您的账户。"
+    }
+  },
+  "portfolio": {
+    "title": "您的投资组合",
+    "allTransactions": "所有交易",
+    "copyTrades": "复制交易",
+    "limitOrder": "限价订单"
+  },
+  "profile": {
+    "title": "用户资料",
+    "editProfile": "编辑资料",
+    "email": "电子邮箱",
+    "name": "姓名",
+    "phone": "电话",
+    "address": "地址",
+    "transactionPassword": "交易密码",
+    "saveChanges": "保存更改",
+    "cancel": "取消",
+    "notProvided": "未提供",
+    "profileUpdated": "资料更新成功",
+    "profileUpdateFailed": "更新资料失败",
+    "loading": "加载中..."
+  },
+  "preferences": {
+    "title": "偏好设置",
+    "currency": "货币",
+    "britishPound": "英镑",
+    "usDollar": "美元",
+    "euro": "欧元",
+    "onOffRampCurrency": "入金/出金货币",
+    "appearance": "外观",
+    "language": "语言",
+    "theme": "主题",
+    "light": "浅色",
+    "dark": "深色",
+    "selectLanguage": "选择语言",
+    "selectCurrency": "选择货币",
+    "selectTheme": "选择主题",
+    "currencyUpdated": "货币更新成功！",
+    "currencyUpdateFailed": "货币更新失败",
+    "loadingCurrencies": "加载货币中..."
+  },
+  "changePassword": {
+    "title": "修改密码",
+    "resetTitle": "重置密码",
+    "currentPassword": "当前密码",
+    "currentPlaceholder": "输入当前密码",
+    "newPassword": "新密码",
+    "newPlaceholder": "输入新密码",
+    "confirmPassword": "确认密码",
+    "confirmPlaceholder": "确认新密码",
+    "button": "确认",
+    "loading": "修改中...",
+    "success": "密码修改成功！",
+    "failed": "修改密码失败",
+    "passwordMismatch": "密码不匹配",
+    "passwordRequired": "所有字段均为必填"
+  },
+  "transactionPassword": {
+    "title": "设置交易密码",
+    "mobileTitle": "设置交易密码",
+    "description": "密码必须恰好为12个字符",
+    "enterPlaceholder": "输入12位密码",
+    "confirmPlaceholder": "确认12位密码",
+    "charactersCount": "{{count}}/12字符",
+    "button": "设置密码",
+    "loading": "设置中...",
+    "success": "交易密码设置成功！",
+    "failed": "设置交易密码失败",
+    "errors": {
+      "exactLength": "交易密码必须恰好为12个字符",
+      "maxLength": "最多允许12个字符",
+      "passwordMismatch": "密码不匹配",
+      "passwordRequirements": "密码必须包含大写字母、小写字母、数字和特殊字符"
+    }
+  },
+  "backup": {
+    "allWallets": {
+      "title": "所有钱包备份",
+      "description": "您是否愿意备份所有钱包以创建以下备份。",
+      "button": "备份钱包",
+      "buttonLoading": "备份中...",
+      "downloadButton": "下载所有钱包",
+      "success": "钱包备份成功！",
+      "failed": "备份钱包失败",
+      "copied": "已复制到剪贴板",
+      "copyFailed": "复制失败",
+      "fields": {
+        "chain": "链",
+        "address": "地址",
+        "privateKey": "私钥",
+        "phrase": "短语"
+      }
+    },
+    "singleWallet": {
+      "title": "钱包备份",
+      "selectBlockchain": "选择区块链",
+      "selectPlaceholder": "选择链",
+      "button": "备份钱包",
+      "buttonLoading": "备份中...",
+      "downloadButton": "下载钱包详情",
+      "success": "钱包备份成功！",
+      "failed": "备份钱包失败",
+      "noChainSelected": "请选择区块链",
+      "copied": "已复制到剪贴板",
+      "copyFailed": "复制失败",
+      "fields": {
+        "chain": "链",
+        "address": "地址",
+        "privateKey": "私钥"
+      },
+      "chains": {
+        "ethereum": "以太坊",
+        "bsc": "币安智能链",
+        "polygon": "多边形",
+        "solana": "索拉纳"
+      }
+    }
+  },
+  "transactions": {
+    "title": "交易历史",
+    "searchPlaceholder": "搜索交易...",
+    "filterAll": "所有交易",
+    "filterPending": "待处理",
+    "filterCompleted": "已完成",
+    "table": {
+      "type": "类型",
+      "from": "从",
+      "to": "至",
+      "amount": "金额",
+      "token": "代币",
+      "chain": "链",
+      "status": "状态",
+      "date": "日期"
+    },
+    "status": {
+      "pending": "待处理",
+      "completed": "已完成",
+      "unknown": "未知"
+    },
+    "type": {
+      "transfer": "转账",
+      "deposit": "存款"
+    },
+    "messages": {
+      "noTransactions": "未找到交易",
+      "copied": "已复制到剪贴板！",
+      "fetchFailed": "获取交易失败",
+      "showing": "显示{{count}}条，共{{total}}条交易",
+      "previous": "上一页",
+      "next": "下一页"
+    },
+    "token": {
+      "native": "原生"
+    },
+    "tooltips": {
+      "copyAddress": "复制地址"
+    }
+  },
+  "copyTrades": {
+    "title": "复制交易历史",
+    "searchPlaceholder": "搜索交易者...",
+    "filterAll": "所有交易",
+    "filterActive": "活跃",
+    "filterInactive": "不活跃",
+    "table": {
+      "traderAddress": "交易者地址",
+      "chain": "链",
+      "amountUSD": "金额（美元）",
+      "status": "状态",
+      "started": "开始时间",
+      "stopped": "停止时间",
+      "actions": "操作"
+    },
+    "status": {
+      "active": "活跃",
+      "inactive": "不活跃"
+    },
+    "actions": {
+      "view": "查看",
+      "stop": "停止",
+      "copyAddress": "复制地址"
+    },
+    "messages": {
+      "noTrades": "未找到复制交易",
+      "copied": "已复制到剪贴板！",
+      "fetchFailed": "获取复制交易失败",
+      "showing": "显示{{count}}条，共{{total}}条复制交易",
+      "previous": "上一页",
+      "next": "下一页",
+      "notAvailable": "无"
+    }
+  },
+  "notifications": {
+    "title": "通知",
+    "unread": "{{count}}条未读",
+    "unread_plural": "{{count}}条未读",
+    "markAllAsRead": "全部标记为已读",
+    "clearAll": "清除全部",
+    "noNotifications": "没有可用通知",
+    "markAsRead": "标记为已读",
+    "delete": "删除",
+    "retry": "重试",
+    "loading": "加载中...",
+    "errors": {
+      "fetchFailed": "获取通知失败",
+      "markFailed": "标记为已读失败",
+      "deleteFailed": "删除通知失败"
+    },
+    "success": {
+      "markedAll": "所有通知已标记为已读",
+      "markedOne": "通知已标记为已读",
+      "deletedAll": "所有通知已清除",
+      "deletedOne": "通知已删除"
+    }
+  }
+}

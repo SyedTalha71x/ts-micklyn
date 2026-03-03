@@ -10,8 +10,10 @@ import {
 } from "react-icons/fi";
 import { FireApi } from "@/hooks/fireApi";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 
 const CopyTrades = () => {
+  const { t } = useTranslation('settings');
   const [copyTrades, setCopyTrades] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -26,12 +28,12 @@ const CopyTrades = () => {
       if (response.success) {
         setCopyTrades(response.copy_trades);
       } else {
-        setError(response.message || "Failed to fetch copy trades");
-        toast.error(response.message || "Failed to fetch copy trades");
+        setError(response.message || t('copyTrades.messages.fetchFailed'));
+        toast.error(response.message || t('copyTrades.messages.fetchFailed'));
       }
     } catch (err) {
       setError(err.message);
-      toast.error(err.message);
+      toast.error(err.message || t('copyTrades.messages.fetchFailed'));
     } finally {
       setLoading(false);
     }
@@ -57,29 +59,29 @@ const CopyTrades = () => {
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
-    toast.success("Copied to clipboard!");
+    toast.success(t('copyTrades.messages.copied'));
   };
 
   const getStatusBadge = (isActive) => {
     return isActive === 1 ? (
       <span className="px-2 py-1 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 text-xs rounded-full flex items-center">
-        <FiPlay className="mr-1" size={12} /> Active
+        <FiPlay className="mr-1" size={12} /> {t('copyTrades.status.active')}
       </span>
     ) : (
       <span className="px-2 py-1 bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200 text-xs rounded-full flex items-center">
-        <FiStopCircle className="mr-1" size={12} /> Inactive
+        <FiStopCircle className="mr-1" size={12} /> {t('copyTrades.status.inactive')}
       </span>
     );
   };
 
   const formatDate = (dateString) => {
-    if (!dateString) return "N/A";
+    if (!dateString) return t('copyTrades.messages.notAvailable');
     const date = new Date(dateString);
     return date.toLocaleString();
   };
 
   const shortenAddress = (address) => {
-    if (!address) return "N/A";
+    if (!address) return t('copyTrades.messages.notAvailable');
     return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
   };
 
@@ -103,7 +105,7 @@ const CopyTrades = () => {
     <div className="bg-white rounded-lg shadow p-6 dark:bg-[#232428] dark:text-white">
       <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-6 gap-4">
         <h2 className="text-xl font-bold text-gray-800 dark:text-white">
-          Copy Trading History
+          {t('copyTrades.title')}
         </h2>
 
         <div className="flex flex-col sm:flex-row gap-3">
@@ -113,7 +115,7 @@ const CopyTrades = () => {
             </div>
             <input
               type="text"
-              placeholder="Search traders..."
+              placeholder={t('copyTrades.searchPlaceholder')}
               className="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white dark:bg-[#2a2b32] dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -126,9 +128,9 @@ const CopyTrades = () => {
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
             >
-              <option value="all">All Trades</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
+              <option value="all">{t('copyTrades.filterAll')}</option>
+              <option value="active">{t('copyTrades.filterActive')}</option>
+              <option value="inactive">{t('copyTrades.filterInactive')}</option>
             </select>
             <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
               <FiFilter className="text-gray-400 dark:text-gray-500" />
@@ -145,43 +147,43 @@ const CopyTrades = () => {
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400"
               >
-                Trader Address
+                {t('copyTrades.table.traderAddress')}
               </th>
               <th
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400"
               >
-                Chain
+                {t('copyTrades.table.chain')}
               </th>
               <th
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400"
               >
-                Amount (USD)
+                {t('copyTrades.table.amountUSD')}
               </th>
               <th
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400"
               >
-                Status
+                {t('copyTrades.table.status')}
               </th>
               <th
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400"
               >
-                Started
+                {t('copyTrades.table.started')}
               </th>
               <th
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400"
               >
-                Stopped
+                {t('copyTrades.table.stopped')}
               </th>
               <th
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400"
               >
-                Actions
+                {t('copyTrades.table.actions')}
               </th>
             </tr>
           </thead>
@@ -197,14 +199,14 @@ const CopyTrades = () => {
                       <button
                         onClick={() => copyToClipboard(trade.traderAddress)}
                         className="ml-2 text-gray-400 hover:text-indigo-600 dark:hover:text-gray-300"
-                        title="Copy address"
+                        title={t('copyTrades.actions.copyAddress')}
                       >
                         <FiCopy size={14} />
                       </button>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white capitalize">
-                    {trade.chain.toLowerCase()}
+                    {trade.chain?.toLowerCase() || ''}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
@@ -221,14 +223,14 @@ const CopyTrades = () => {
                     {formatDate(trade.start_time)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                    {formatDate(trade.stop_time) || "N/A"}
+                    {formatDate(trade.stop_time)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                     <button className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 mr-3">
-                      View
+                      {t('copyTrades.actions.view')}
                     </button>
                     <button className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
-                      Stop
+                      {t('copyTrades.actions.stop')}
                     </button>
                   </td>
                 </tr>
@@ -239,7 +241,7 @@ const CopyTrades = () => {
                   colSpan="7"
                   className="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400"
                 >
-                  No copy trades found
+                  {t('copyTrades.messages.noTrades')}
                 </td>
               </tr>
             )}
@@ -251,20 +253,23 @@ const CopyTrades = () => {
       {filteredCopyTrades.length > 0 && (
         <div className="mt-4 flex justify-between items-center">
           <div className="text-sm text-gray-500 dark:text-gray-400">
-            Showing {filteredCopyTrades.length} of {copyTrades.length} copy trades
+            {t('copyTrades.messages.showing', { 
+              count: filteredCopyTrades.length, 
+              total: copyTrades.length 
+            })}
           </div>
           <div className="flex space-x-2">
             <button
               className="px-3 py-1 border border-gray-300 rounded-md text-sm disabled:opacity-50 dark:border-gray-600 dark:text-white"
               disabled
             >
-              Previous
+              {t('copyTrades.messages.previous')}
             </button>
             <button
               className="px-3 py-1 border border-gray-300 rounded-md text-sm disabled:opacity-50 dark:border-gray-600 dark:text-white"
               disabled
             >
-              Next
+              {t('copyTrades.messages.next')}
             </button>
           </div>
         </div>

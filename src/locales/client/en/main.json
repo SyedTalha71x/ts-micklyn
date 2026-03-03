@@ -1,0 +1,18 @@
+{
+  "chatLayout": {
+    "msginput": "Type a message...",
+    "watchlist": "Watchlist",
+    "history": "History",
+    "balance": "Total Balance",
+    "watchlistError": "No favorite assets found in your watchlist",
+    "historyError": "No chat history found",
+    "newChat": "New Chat",
+    "loadingAssets": "Loading assets...",
+    "removeFromWatchlist": "Remove from Watchlist",
+    "removedSuccess": "{{symbol}} removed from watchlist",
+    "removeFailed": "Failed to remove asset",
+    "userNotAuthenticated": "User not authenticated",
+    "chatDeleted": "Chat deleted successfully",
+    "deleteFailed": "Failed to delete chat"
+  }
+}

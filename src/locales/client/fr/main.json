@@ -1,0 +1,18 @@
+{
+  "chatLayout": {
+    "msginput": "Tapez un message...",
+    "watchlist": "Liste de suivi",
+    "history": "Historique",
+    "balance": "Solde total",
+    "watchlistError": "Aucun actif favori trouvé dans votre liste de suivi",
+    "historyError": "Aucun historique de chat trouvé",
+    "newChat": "Nouvelle discussion",
+    "loadingAssets": "Chargement des actifs...",
+    "removeFromWatchlist": "Retirer de la liste de suivi",
+    "removedSuccess": "{{symbol}} retiré de la liste de suivi",
+    "removeFailed": "Échec du retrait de l'actif",
+    "userNotAuthenticated": "Utilisateur non authentifié",
+    "chatDeleted": "Chat supprimé avec succès",
+    "deleteFailed": "Échec de la suppression du chat"
+  }
+}

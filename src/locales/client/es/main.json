@@ -1,0 +1,18 @@
+{
+  "chatLayout": {
+    "msginput": "Escribe un mensaje...",
+    "watchlist": "Lista de seguimiento",
+    "history": "Historial",
+    "balance": "Saldo total",
+    "watchlistError": "No se encontraron activos favoritos en tu lista de seguimiento",
+    "historyError": "No se encontró historial de chat",
+    "newChat": "Nuevo chat",
+    "loadingAssets": "Cargando activos...",
+    "removeFromWatchlist": "Eliminar de la lista de seguimiento",
+    "removedSuccess": "{{symbol}} eliminado de la lista de seguimiento",
+    "removeFailed": "Error al eliminar el activo",
+    "userNotAuthenticated": "Usuario no autenticado",
+    "chatDeleted": "Chat eliminado con éxito",
+    "deleteFailed": "Error al eliminar el chat"
+  }
+}

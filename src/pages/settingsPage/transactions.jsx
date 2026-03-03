@@ -3,8 +3,10 @@ import { FiArrowUp, FiArrowDown, FiCopy, FiExternalLink, FiFilter, FiSearch } fr
 import { useLocation } from 'react-router-dom';
 import { FireApi } from '@/hooks/fireApi';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 const Transactions = () => {
+  const { t } = useTranslation('settings');
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -20,12 +22,12 @@ const Transactions = () => {
       if (response.success) {
         setTransactions(response.transactions);
       } else {
-        setError(response.message || 'Failed to fetch transactions');
-        toast.error(response.message || 'Failed to fetch transactions');
+        setError(response.message || t('transactions.messages.fetchFailed'));
+        toast.error(response.message || t('transactions.messages.fetchFailed'));
       }
     } catch (err) {
       setError(err.message);
-      toast.error(err.message);
+      toast.error(err.message || t('transactions.messages.fetchFailed'));
     } finally {
       setLoading(false);
     }
@@ -52,14 +54,22 @@ const Transactions = () => {
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
-    toast.success('Copied to clipboard!');
+    toast.success(t('transactions.messages.copied'));
   };
 
   const getTransactionTypeIcon = (type) => {
-    switch(type) {
+    switch(type?.toUpperCase()) {
       case 'TRANSFER': return <FiArrowUp className="text-blue-500 dark:text-blue-400" />;
       case 'DEPOSIT': return <FiArrowDown className="text-green-500 dark:text-green-400" />;
       default: return <FiArrowUp className="text-gray-500 dark:text-gray-400" />;
+    }
+  };
+
+  const getTransactionTypeLabel = (type) => {
+    switch(type?.toUpperCase()) {
+      case 'TRANSFER': return t('transactions.type.transfer');
+      case 'DEPOSIT': return t('transactions.type.deposit');
+      default: return type?.toLowerCase() || '';
     }
   };
 
@@ -68,19 +78,19 @@ const Transactions = () => {
       case 0: 
         return (
           <span className="px-2 py-1 bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 text-xs rounded-full">
-            Pending
+            {t('transactions.status.pending')}
           </span>
         );
       case 1: 
         return (
           <span className="px-2 py-1 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 text-xs rounded-full">
-            Completed
+            {t('transactions.status.completed')}
           </span>
         );
       default: 
         return (
           <span className="px-2 py-1 bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300 text-xs rounded-full">
-            Unknown
+            {t('transactions.status.unknown')}
           </span>
         );
     }
@@ -114,8 +124,10 @@ const Transactions = () => {
 
   return (
     <div className="bg-white rounded-lg shadow p-4 md:p-6 dark:bg-[#232428] dark:text-white">
-      <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-6 gap-4">
-        <h2 className="text-xl font-bold text-gray-800 dark:text-white">Transaction History</h2>
+      <div className="flex flex-wrap flex-col md:flex-row md:justify-between md:items-center mb-6 gap-4">
+        <h2 className="text-xl font-bold text-gray-800 dark:text-white">
+          {t('transactions.title')}
+        </h2>
         
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative">
@@ -124,7 +136,7 @@ const Transactions = () => {
             </div>
             <input
               type="text"
-              placeholder="Search transactions..."
+              placeholder={t('transactions.searchPlaceholder')}
               className="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white dark:bg-[#2a2b32] dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -137,9 +149,9 @@ const Transactions = () => {
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
             >
-              <option value="all">All Transactions</option>
-              <option value="pending">Pending</option>
-              <option value="completed">Completed</option>
+              <option value="all">{t('transactions.filterAll')}</option>
+              <option value="pending">{t('transactions.filterPending')}</option>
+              <option value="completed">{t('transactions.filterCompleted')}</option>
             </select>
             <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
               <FiFilter className="text-gray-400 dark:text-gray-500" />
@@ -153,28 +165,28 @@ const Transactions = () => {
           <thead className="bg-gray-50 dark:bg-[#2a2b32]">
             <tr>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">
-                Type
+                {t('transactions.table.type')}
               </th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">
-                From
+                {t('transactions.table.from')}
               </th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">
-                To
+                {t('transactions.table.to')}
               </th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">
-                Amount
+                {t('transactions.table.amount')}
               </th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">
-                Token
+                {t('transactions.table.token')}
               </th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">
-                Chain
+                {t('transactions.table.chain')}
               </th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">
-                Status
+                {t('transactions.table.status')}
               </th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">
-                Date
+                {t('transactions.table.date')}
               </th>
             </tr>
           </thead>
@@ -188,7 +200,7 @@ const Transactions = () => {
                         {getTransactionTypeIcon(tx.type)}
                       </div>
                       <div className="ml-2 text-sm font-medium text-gray-900 dark:text-white capitalize">
-                        {tx.type.toLowerCase()}
+                        {getTransactionTypeLabel(tx.type)}
                       </div>
                     </div>
                   </td>
@@ -200,7 +212,7 @@ const Transactions = () => {
                       <button 
                         onClick={() => copyToClipboard(tx.address)}
                         className="ml-2 text-gray-400 hover:text-indigo-600 dark:hover:text-gray-300"
-                        title="Copy address"
+                        title={t('transactions.tooltips.copyAddress')}
                       >
                         <FiCopy size={14} />
                       </button>
@@ -214,7 +226,7 @@ const Transactions = () => {
                       <button 
                         onClick={() => copyToClipboard(tx.receiver)}
                         className="ml-2 text-gray-400 hover:text-indigo-600 dark:hover:text-gray-300"
-                        title="Copy address"
+                        title={t('transactions.tooltips.copyAddress')}
                       >
                         <FiCopy size={14} />
                       </button>
@@ -224,10 +236,10 @@ const Transactions = () => {
                     {parseFloat(tx.amount).toFixed(4)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white uppercase">
-                    {tx.token || 'NATIVE'}
+                    {tx.token || t('transactions.token.native')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white capitalize">
-                    {tx.chain.toLowerCase()}
+                    {tx.chain?.toLowerCase() || ''}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {getStatusBadge(tx.status)}
@@ -240,7 +252,7 @@ const Transactions = () => {
             ) : (
               <tr>
                 <td colSpan="8" className="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
-                  No transactions found
+                  {t('transactions.messages.noTransactions')}
                 </td>
               </tr>
             )}
@@ -252,20 +264,23 @@ const Transactions = () => {
       {filteredTransactions.length > 0 && (
         <div className="mt-4 flex justify-between items-center">
           <div className="text-sm text-gray-500 dark:text-gray-400">
-            Showing {filteredTransactions.length} of {transactions.length} transactions
+            {t('transactions.messages.showing', { 
+              count: filteredTransactions.length, 
+              total: transactions.length 
+            })}
           </div>
           <div className="flex space-x-2">
             <button 
               className="px-3 py-1 border border-gray-300 rounded-md text-sm disabled:opacity-50 dark:border-gray-600 dark:text-white" 
               disabled
             >
-              Previous
+              {t('transactions.messages.previous')}
             </button>
             <button 
               className="px-3 py-1 border border-gray-300 rounded-md text-sm disabled:opacity-50 dark:border-gray-600 dark:text-white" 
               disabled
             >
-              Next
+              {t('transactions.messages.next')}
             </button>
           </div>
         </div>

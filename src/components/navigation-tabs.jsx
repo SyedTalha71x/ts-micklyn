@@ -2959,6 +2959,7 @@ import ListTransactions from "./ListTransactions";
 import { ArrowUp, Mic } from "lucide-react";
 import AllTokenBalance from "./tokensBalance";
 import GetTokenInfo from "./GetTokenInfo";
+import { useTranslation } from "react-i18next";
 
 const NavigationTabs = () => {
   // State variables
@@ -3008,6 +3009,9 @@ const NavigationTabs = () => {
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
   const microphoneRef = useRef(null);
+
+const { t } = useTranslation(['chat', 'settings']);
+  
 
   useEffect(() => {
     const checkMobile = () => {
@@ -4453,7 +4457,7 @@ const NavigationTabs = () => {
             <div className="relative flex items-center w-full rounded-3xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-black px-4 py-3 shadow-lg">
               <textarea
                 className="flex-1 bg-transparent overflow-y-clip pt-3 focus:outline-none text-sm text-gray-800 dark:text-gray-200 placeholder-gray-400"
-                placeholder="Write message here..."
+                placeholder={t("chatLayout.msginput")}
                 value={message}
                 onChange={(e) => {
                   setMessage(e.target.value);

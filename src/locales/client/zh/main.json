@@ -1,0 +1,18 @@
+{
+  "chatLayout": {
+    "msginput": "输入消息...",
+    "watchlist": "关注列表",
+    "history": "历史记录",
+    "balance": "总余额",
+    "watchlistError": "关注列表中未找到喜爱的资产",
+    "historyError": "未找到聊天历史",
+    "newChat": "新聊天",
+    "loadingAssets": "加载资产中...",
+    "removeFromWatchlist": "从关注列表移除",
+    "removedSuccess": "{{symbol}} 已从关注列表移除",
+    "removeFailed": "移除资产失败",
+    "userNotAuthenticated": "用户未认证",
+    "chatDeleted": "聊天删除成功",
+    "deleteFailed": "删除聊天失败"
+  }
+}

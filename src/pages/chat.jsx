@@ -8,12 +8,18 @@ import { EyeIcon, EyeOffIcon, Settings } from "lucide-react"
 import { FireApi } from "@/hooks/fireApi"
 import { useNavigate } from "react-router-dom"
 import { IoClose } from "react-icons/io5"
+import { useTranslation } from "react-i18next"
+import { useCurrency } from "@/Context/CurrencyContext"
 
 export default function Chat() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [balances, setBalances] = useState([])
   const [showBalances, setShowBalances] = useState(true)
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  const { t } = useTranslation("chat");
+  const { currencySymbol } = useCurrency();
+  
 
   const addresses = {
     ETH: localStorage.getItem("eth-address"),
@@ -108,7 +114,7 @@ export default function Chat() {
             </div>
             <div className="flex justify-between">
               <span className="capitalize font-medium">USD:</span>
-              <span>{showBalances ? "$0" : "****"}</span>
+              <span>{showBalances ? `${currencySymbol}0` : "****"}</span>
             </div>
           </div>
         </div>
@@ -131,7 +137,7 @@ export default function Chat() {
         {/* Desktop Balances */}
         <div className="hidden lg:block border text-xs flex-col gap-2 border-[#A0AEC0] dark:border-gray-600 bg-white dark:bg-[#1b1c1e] p-2 rounded-lg absolute top-4 shadow-sm z-50">
           <div className="flex flex-row justify-between items-center mb-1 font-bold gap-4">
-            Total Balances
+            {t('chatLayout.balance')}
             <button onClick={() => setShowBalances((prev) => !prev)}>
               {showBalances ? (
                 <EyeIcon size={15} className="mt-[2px]" />
@@ -142,7 +148,7 @@ export default function Chat() {
           </div>
           <div className="flex gap-2">
             <span className="capitalize">USD:</span>
-            <span>{showBalances ? "$0" : "****"}</span>
+            <span className="font-bold">{showBalances ? `${currencySymbol}0` : "****"}</span>
           </div>
         </div>
 

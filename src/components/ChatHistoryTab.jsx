@@ -1,4 +1,3 @@
-// ChatHistoryTab.jsx
 import React from "react";
 import { useHistory } from "@/Context/HistoryContext";
 import { ChevronDown, ChevronUp } from "lucide-react";
@@ -6,10 +5,13 @@ import { MdDeleteOutline } from "react-icons/md";
 import toast from "react-hot-toast";
 import { chatHistoryUrl, FireApi } from "@/hooks/fireApi";
 import { jwtDecode } from "jwt-decode";
+import { useTranslation } from "react-i18next";
 
 const ChatHistoryTab = () => {
   const [openDropdown, setOpenDropdown] = React.useState(true);
   const { apiData, userInfo, setUserInfo, handleGetHistory } = useHistory();
+
+  const { t } = useTranslation(['chat', 'settings']);
 
   // Get userId from token
   const getUserId = () => {
@@ -27,7 +29,7 @@ const ChatHistoryTab = () => {
   const handleGetSessionId = (data) => {
     const userId = getUserId();
     if (!userId) {
-      toast.error("User not authenticated");
+      toast.error(t('chatLayout.userNotAuthenticated') || "User not authenticated");
       return;
     }
     localStorage.setItem('chat_session', data?.session_id)
@@ -42,7 +44,7 @@ const ChatHistoryTab = () => {
     try {
       const userId = getUserId();
       if (!userId) {
-        toast.error("User not authenticated");
+        toast.error(t('chatLayout.userNotAuthenticated') || "User not authenticated");
         return;
       }
 
@@ -52,18 +54,23 @@ const ChatHistoryTab = () => {
         null,
         chatHistoryUrl
       );
-      toast.success("Chat deleted successfully");
+      toast.success(t('chatLayout.chatDeleted') || "Chat deleted successfully");
       handleGetHistory(userInfo?.userId || userId);
     } catch (error) {
       console.log(error);
+      toast.error(t('chatLayout.deleteFailed') || "Failed to delete chat");
     }
   };
 
-  // Safe text rendering function
-  const renderSafeText = (text, fallback = "New Chat") => {
-    if (!text || typeof text !== 'string') return fallback;
-    return text.length > 18 ? text.slice(0, 18) + "..." : text;
-  };
+const renderSafeText = (text) => {
+  if (!text || typeof text !== 'string') {
+    return t('chatLayout.newChat');
+  }
+  if (text.length > 18) {
+    return text.slice(0, 18) + "...";
+  }
+  return text;
+};
 
   return (
     <div className="w-full">
@@ -91,7 +98,9 @@ const ChatHistoryTab = () => {
               </div>
             ))
           ) : (
-            <p className="text-black text-sm dark:text-white">No history found</p>
+            <p className="text-black text-sm dark:text-white">
+              {t('chatLayout.historyError')}
+            </p>
           )}
         </div>
       )}

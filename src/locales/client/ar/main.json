@@ -1,0 +1,18 @@
+{
+  "chatLayout": {
+    "msginput": "اكتب رسالة...",
+    "watchlist": "قائمة المتابعة",
+    "history": "السجل",
+    "balance": "الرصيد الإجمالي",
+    "watchlistError": "لم يتم العثور على أصول مفضلة في قائمة المتابعة",
+    "historyError": "لم يتم العثور على سجل محادثة",
+    "newChat": "محادثة جديدة",
+    "loadingAssets": "جاري تحميل الأصول...",
+    "removeFromWatchlist": "إزالة من قائمة المتابعة",
+    "removedSuccess": "{{symbol}} تمت إزالته من قائمة المتابعة",
+    "removeFailed": "فشل إزالة الأصل",
+    "userNotAuthenticated": "المستخدم غير موثق",
+    "chatDeleted": "تم حذف المحادثة بنجاح",
+    "deleteFailed": "فشل حذف المحادثة"
+  }
+}

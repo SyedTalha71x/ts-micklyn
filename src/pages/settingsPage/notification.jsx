@@ -2,9 +2,12 @@ import { useState, useEffect } from 'react';
 import { Card4, CardContent } from '@/components/ui/card';
 import { useTheme } from '@/Context/ThemeContext';
 import { FireApi } from '@/hooks/fireApi';
+import { useTranslation } from 'react-i18next';
+import toast from 'react-hot-toast';
 
 const NotificationsPage = () => {
   const { theme } = useTheme();
+  const { t } = useTranslation('settings'); 
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -23,11 +26,12 @@ const NotificationsPage = () => {
         const unread = response.notifications.filter(n => n.is_seen === 0).length;
         setUnreadCount(unread);
       } else {
-        throw new Error(response?.message || 'Failed to fetch notifications');
+        throw new Error(response?.message || t('errors.fetchFailed'));
       }
     } catch (err) {
       console.error('Fetch error:', err);
-      setError(err.message || 'Failed to fetch notifications');
+      setError(err.message || t('errors.fetchFailed'));
+      toast.error(err.message || t('errors.fetchFailed'));
     } finally {
       setLoading(false);
     }
@@ -40,24 +44,19 @@ const NotificationsPage = () => {
       setError(null);
       await FireApi('/notifications/seen', 'PATCH', id ? { id } : {});
       
-      // Optimistic update
+      // Success message
       if (id) {
-        // Mark single notification as seen
-        setNotifications(prev => prev.map(n => 
-          n.id === id ? {...n, is_seen: 1} : n
-        ));
-        setUnreadCount(prev => prev - 1);
+        toast.success(t('success.markedOne'));
       } else {
-        // Mark all as seen
-        setNotifications(prev => prev.map(n => ({...n, is_seen: 1})));
-        setUnreadCount(0);
+        toast.success(t('success.markedAll'));
       }
       
       // Refresh to confirm
       await fetchNotifications();
     } catch (err) {
       console.error('Mark as seen error:', err);
-      setError(err.message || 'Failed to mark as seen');
+      setError(err.message || t('errors.markFailed'));
+      toast.error(err.message || t('errors.markFailed'));
       // Revert optimistic update on error
       fetchNotifications();
     } finally {
@@ -72,24 +71,19 @@ const NotificationsPage = () => {
       setError(null);
       await FireApi('/notifications/delete', 'DELETE', id ? { id } : {});
       
-      // Optimistic update
+      // Success message
       if (id) {
-        const toDelete = notifications.find(n => n.id === id);
-        setNotifications(prev => prev.filter(n => n.id !== id));
-        if (toDelete?.is_seen === 0) {
-          setUnreadCount(prev => prev - 1);
-        }
+        toast.success(t('success.deletedOne'));
       } else {
-        // Delete all
-        setNotifications([]);
-        setUnreadCount(0);
+        toast.success(t('success.deletedAll'));
       }
       
       // Refresh to confirm
       await fetchNotifications();
     } catch (err) {
       console.error('Delete error:', err);
-      setError(err.message || 'Failed to delete notification');
+      setError(err.message || t('errors.deleteFailed'));
+      toast.error(err.message || t('errors.deleteFailed'));
       // Revert optimistic update on error
       fetchNotifications();
     } finally {
@@ -108,10 +102,10 @@ const NotificationsPage = () => {
         <div className="space-y-4">
           <div className="flex flex-wrap gap-2 justify-between items-center">
             <div className="flex items-center space-x-2">
-              <h2 className="text-lg font-semibold dark:text-white">Notifications</h2>
+              <h2 className="text-lg font-semibold dark:text-white">{t('notifications.title')}</h2>
               {unreadCount > 0 && (
                 <span className="bg-black dark:bg-[#1e1f22] text-white text-xs px-2 py-1 rounded-full">
-                  {unreadCount} unread
+                  {t('notifications.unread', { count: unreadCount })}
                 </span>
               )}
             </div>
@@ -121,14 +115,14 @@ const NotificationsPage = () => {
                 className="px-3 py-1 text-sm bg-black dark:bg-[#1e1f22] text-white rounded hover:bg-blue-600 transition disabled:opacity-50"
                 disabled={loading || unreadCount === 0}
               >
-                Mark All as Read
+                {t('notifications.markAllAsRead')}
               </button>
               <button
                 onClick={() => deleteNotification()}
                 className="px-3 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600 transition disabled:opacity-50"
                 disabled={loading || notifications.length === 0}
               >
-                Clear All
+                {t('notifications.clearAll')}
               </button>
             </div>
           </div>
@@ -136,24 +130,25 @@ const NotificationsPage = () => {
           {loading && (
             <div className="flex justify-center py-8">
               <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-600"></div>
+              <span className="ml-2 text-gray-600 dark:text-gray-300">{t('notifications.loading')}</span>
             </div>
           )}
 
           {error && (
-            <div className="p-4 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-100 rounded">
-              {error}
+            <div className="p-4 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-100 rounded flex items-center justify-between">
+              <span>{error}</span>
               <button 
                 onClick={fetchNotifications}
-                className="ml-2 text-sm underline"
+                className="ml-2 text-sm underline hover:no-underline"
               >
-                Retry
+                {t('notifications.retry')}
               </button>
             </div>
           )}
 
           {!loading && notifications.length === 0 && (
             <div className="p-4 text-center text-gray-500 dark:text-gray-400">
-              No notifications available
+              {t('notifications.noNotifications')}
             </div>
           )}
 
@@ -168,7 +163,7 @@ const NotificationsPage = () => {
                 }`}
               >
                 <div className="flex justify-between items-start">
-                  <div>
+                  <div className="flex-1">
                     <div className="flex items-center space-x-2">
                       <h3 className="font-medium dark:text-white">{notification.title}</h3>
                       {notification.is_seen === 0 && (
@@ -182,22 +177,22 @@ const NotificationsPage = () => {
                       {notification.topic}
                     </p>
                   </div>
-                  <div className="flex space-x-2">
+                  <div className="flex space-x-2 ml-4">
                     {notification.is_seen === 0 && (
                       <button
                         onClick={() => markAsSeen(notification.id)}
-                        className="text-xs text-white dark:bg-[#1e1f22] bg-black py-1 px-2 rounded-sm hover:text-blue-700 dark:hover:text-blue-400 disabled:opacity-50"
+                        className="text-xs text-white dark:bg-[#1e1f22] bg-black py-1 px-2 rounded-sm hover:opacity-80 disabled:opacity-50 transition"
                         disabled={loading}
                       >
-                        Mark as read
+                        {t('notifications.markAsRead')}
                       </button>
                     )}
                     <button
                       onClick={() => deleteNotification(notification.id)}
-                      className="text-xs text-white bg-red-500 py-1 px-2 rounded-sm hover:text-red-700 dark:hover:text-red-400 disabled:opacity-50"
+                      className="text-xs text-white bg-red-500 py-1 px-2 rounded-sm hover:bg-red-600 disabled:opacity-50 transition"
                       disabled={loading}
                     >
-                      Delete
+                      {t('notifications.delete')}
                     </button>
                   </div>
                 </div>

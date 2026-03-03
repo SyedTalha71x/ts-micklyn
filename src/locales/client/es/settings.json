@@ -1,0 +1,368 @@
+{
+  "settingsLayout": {
+    "title": "Configuración de la Cuenta"
+  },
+  "sidebar": {
+    "walletConnections": "Conexiones de Cartera",
+    "token": "Token",
+    "importWallet": "Importar Cartera",
+    "importTokens": "Importar Tokens",
+    "transferToken": "Transferir Token",
+    "settings": "Configuración",
+    "preferences": "Preferencias",
+    "portfolio": "Portafolio",
+    "notification": "Notificaciones",
+    "profile": "Perfil",
+    "logout": "Cerrar Sesión"
+  },
+  "wallet": {
+    "createNewWallet": "Crear Nueva Cartera",
+    "blockchainNetwork": "Red Blockchain",
+    "createWallet": "Crear Cartera",
+    "creating": "Creando...",
+    "walletCreatedSuccess": "Cartera Creada con Éxito",
+    "address": "Dirección",
+    "copyAddress": "Copiar Dirección",
+    "addressCopied": "¡Dirección de cartera copiada al portapapeles!",
+    "copyFailed": "Error al copiar la dirección",
+    "walletCreated": "¡Cartera creada con éxito!",
+    "walletFailed": "Error al crear la cartera",
+    "ethereum": "Ethereum",
+    "binanceSmartChain": "Binance Smart Chain",
+    "polygon": "Polygon",
+    "solana": "Solana"
+  },
+  "token": {
+    "tabs": {
+      "tokenInfo": "Información del Token",
+      "tokenBalance": "Saldo del Token"
+    },
+    "selectNetwork": "Seleccionar Red",
+    "selectToken": "Seleccionar Token",
+    "loadingTokens": "Cargando tokens...",
+    "noTokensAvailable": "No hay tokens disponibles",
+    "network": "Red",
+    "symbol": "Símbolo",
+    "holders": "Tenedores",
+    "supply": "Suministro",
+    "volume": "Volumen",
+    "circulatingSupply": "Suministro Circulante",
+    "tokenBalance": "Saldo del Token",
+    "balance": "Saldo",
+    "ethereum": "Ethereum",
+    "polygon": "Polygon",
+    "solana": "Solana",
+    "binanceSmartChain": "Binance Smart Chain",
+    "walletAddressNotConfigured": "Dirección de cartera no configurada para {{network}}",
+    "fetchingTokenInfo": "Obteniendo información del token...",
+    "fetchingBalance": "Obteniendo saldo del token..."
+  },
+  "import": {
+    "wallet": {
+      "title": "Importar Cartera",
+      "blockchain": "Blockchain",
+      "selectChains": "Seleccionar cadenas",
+      "privateKey": "Clave Privada",
+      "privateKeyPlaceholder": "Ingrese su clave privada",
+      "privateKeyHelp": "Ingrese su clave privada o frase de recuperación de 12/24 palabras",
+      "importButton": "Importar Cartera",
+      "importing": "Importando...",
+      "success": "¡Cartera importada con éxito!",
+      "failed": "Error al importar la cartera"
+    },
+    "token": {
+      "title": "Importar Token",
+      "blockchain": "Blockchain",
+      "selectChain": "Seleccionar cadena",
+      "contractAddress": "Dirección del Contrato del Token",
+      "contractPlaceholder": "Ingrese la dirección del contrato del token",
+      "contractHelp": "Ingrese la dirección del contrato del token a importar",
+      "importButton": "Importar Token",
+      "importing": "Importando...",
+      "success": "¡Token importado con éxito!",
+      "failed": "Error al importar el token",
+      "addressRequired": "Por favor ingrese una dirección de contrato"
+    },
+    "chains": {
+      "ethereum": "Ethereum",
+      "bsc": "Binance Smart Chain",
+      "polygon": "Polygon",
+      "solana": "Solana"
+    }
+  },
+  "transfer": {
+    "title": "Transferir Token",
+    "selectWallet": "Seleccionar Cartera",
+    "noWallets": "No hay carteras disponibles",
+    "receiverAddress": "Dirección del Destinatario",
+    "receiverPlaceholder": "Ingrese la dirección del destinatario",
+    "amount": "Cantidad",
+    "amountPlaceholder": "Ingrese la cantidad",
+    "token": "Token",
+    "selectToken": "Seleccionar token",
+    "noTokens": "No hay tokens disponibles",
+    "loadingTokens": "Cargando tokens...",
+    "transferButton": "Transferir Token",
+    "transferring": "Transfiriendo...",
+    "success": "¡Transferencia de token exitosa!",
+    "failed": "Error al transferir el token",
+    "transactionHash": "Hash de Transacción",
+    "hashCopied": "¡Hash de transacción copiado al portapapeles!",
+    "copyFailed": "Error al copiar el hash de transacción"
+  },
+  "security": {
+    "safeGuard": "Protección",
+    "lockMethod": "Método de Bloqueo",
+    "changePassword": "Cambiar Contraseña",
+    "authentication": "Autenticación",
+    "multifactorAuth": "Autenticación Multifactor",
+    "mfaUpdated": "MFA actualizado con éxito",
+    "mfaFailed": "Error al actualizar MFA",
+    "transactionPassword": "Contraseña de Transacción",
+    "privacy": "Privacidad",
+    "hideBalance": "Ocultar saldo al abrir la aplicación",
+    "walletBackups": "Copias de Seguridad de Cartera",
+    "walletNeedsBackup": "{{count}} cartera necesita copia de seguridad",
+    "walletNeedsBackup_plural": "{{count}} carteras necesitan copia de seguridad",
+    "backupAllWallets": "Respaldar todas las Carteras",
+    "deactivateAccount": "Desactivar cuenta",
+    "deactivate": "Desactivar",
+    "deactivating": "Desactivando...",
+    "deleteAccount": "Eliminar cuenta",
+    "delete": "Eliminar",
+    "deleting": "Eliminando...",
+    "accountDeactivated": "Cuenta desactivada con éxito",
+    "accountDeleted": "Cuenta eliminada con éxito",
+    "deactivateFailed": "Error al desactivar la cuenta",
+    "deleteFailed": "Error al eliminar la cuenta",
+    "deactivationSuccess": "Desactivación de Cuenta Exitosa",
+    "deletionSuccess": "Solicitud de Eliminación de Cuenta Recibida",
+    "deactivationMessage": "Se cerrará sesión automáticamente. Para reactivar su cuenta, contacte a",
+    "deletionMessage": "Nuestro equipo procesará su solicitud en breve. Para cualquier consulta, contacte a",
+    "contactSupport": "support@abc.com",
+    "modal": {
+      "deactivateTitle": "Desactivar Cuenta",
+      "deactivateDescription": "Su cuenta será desactivada temporalmente. Todos sus datos serán preservados pero inaccesibles.",
+      "deleteTitle": "Eliminar Cuenta Permanentemente",
+      "deleteDescription": "Esta acción no se puede deshacer. Todos sus datos serán borrados permanentemente de nuestros sistemas.",
+      "confirmDeactivate": "Confirmar Desactivación",
+      "confirmDelete": "Confirmar Eliminación",
+      "cancel": "Cancelar",
+      "deactivateWarning": "Después de la desactivación, se cerrará sesión automáticamente. Contacte al soporte en {{email}} para reactivar su cuenta."
+    }
+  },
+  "portfolio": {
+    "title": "Su Portafolio",
+    "allTransactions": "Todas las Transacciones",
+    "copyTrades": "Copiar Operaciones",
+    "limitOrder": "Orden Limitada"
+  },
+  "profile": {
+    "title": "Perfil de Usuario",
+    "editProfile": "Editar Perfil",
+    "email": "Correo Electrónico",
+    "name": "Nombre",
+    "phone": "Teléfono",
+    "address": "Dirección",
+    "transactionPassword": "Contraseña de Transacción",
+    "saveChanges": "Guardar Cambios",
+    "cancel": "Cancelar",
+    "notProvided": "No proporcionado",
+    "profileUpdated": "Perfil actualizado con éxito",
+    "profileUpdateFailed": "Error al actualizar el perfil",
+    "loading": "Cargando..."
+  },
+  "preferences": {
+    "title": "Preferencias",
+    "currency": "Moneda",
+    "britishPound": "Libra esterlina",
+    "usDollar": "Dólar estadounidense",
+    "euro": "Euro",
+    "onOffRampCurrency": "Moneda de Entrada/Salida",
+    "appearance": "Apariencia",
+    "language": "Idioma",
+    "theme": "Tema",
+    "light": "Claro",
+    "dark": "Oscuro",
+    "selectLanguage": "Seleccionar Idioma",
+    "selectCurrency": "Seleccionar Moneda",
+    "selectTheme": "Seleccionar Tema",
+    "currencyUpdated": "¡Moneda actualizada con éxito!",
+    "currencyUpdateFailed": "Error al actualizar la moneda",
+    "loadingCurrencies": "Cargando monedas..."
+  },
+  "changePassword": {
+    "title": "Cambiar Contraseña",
+    "resetTitle": "Restablecer Contraseña",
+    "currentPassword": "Contraseña Actual",
+    "currentPlaceholder": "Ingrese la contraseña actual",
+    "newPassword": "Nueva Contraseña",
+    "newPlaceholder": "Ingrese la nueva contraseña",
+    "confirmPassword": "Confirmar Contraseña",
+    "confirmPlaceholder": "Confirme la nueva contraseña",
+    "button": "Confirmar",
+    "loading": "Cambiando...",
+    "success": "¡Contraseña cambiada con éxito!",
+    "failed": "Error al cambiar la contraseña",
+    "passwordMismatch": "Las contraseñas no coinciden",
+    "passwordRequired": "Todos los campos son obligatorios"
+  },
+  "transactionPassword": {
+    "title": "Establecer Contraseña de Transacción",
+    "mobileTitle": "Establecer Contraseña de Transacción",
+    "description": "La contraseña debe tener exactamente 12 caracteres",
+    "enterPlaceholder": "Ingrese contraseña de 12 caracteres",
+    "confirmPlaceholder": "Confirme contraseña de 12 caracteres",
+    "charactersCount": "{{count}}/12 caracteres",
+    "button": "Establecer Contraseña",
+    "loading": "Configurando...",
+    "success": "¡Contraseña de transacción establecida con éxito!",
+    "failed": "Error al establecer la contraseña de transacción",
+    "errors": {
+      "exactLength": "La contraseña de transacción debe tener exactamente 12 caracteres",
+      "maxLength": "Máximo 12 caracteres permitidos",
+      "passwordMismatch": "Las contraseñas no coinciden",
+      "passwordRequirements": "La contraseña debe contener mayúsculas, minúsculas, números y caracteres especiales"
+    }
+  },
+  "backup": {
+    "allWallets": {
+      "title": "Copia de Seguridad de Todas las Carteras",
+      "description": "¿Desea hacer copia de seguridad de todas sus carteras para crear una copia a continuación?",
+      "button": "Respaldar Carteras",
+      "buttonLoading": "Respaldando...",
+      "downloadButton": "Descargar Todas las Carteras",
+      "success": "¡Carteras respaldadas con éxito!",
+      "failed": "Error al respaldar las carteras",
+      "copied": "Copiado al portapapeles",
+      "copyFailed": "Error al copiar",
+      "fields": {
+        "chain": "Cadena",
+        "address": "Dirección",
+        "privateKey": "Clave Privada",
+        "phrase": "Frase"
+      }
+    },
+    "singleWallet": {
+      "title": "Copia de Seguridad de Cartera",
+      "selectBlockchain": "Seleccionar Blockchain",
+      "selectPlaceholder": "Seleccionar cadena",
+      "button": "Respaldar Cartera",
+      "buttonLoading": "Respaldando...",
+      "downloadButton": "Descargar Detalles de Cartera",
+      "success": "¡Cartera respaldada con éxito!",
+      "failed": "Error al respaldar la cartera",
+      "noChainSelected": "Por favor seleccione una blockchain",
+      "copied": "Copiado al portapapeles",
+      "copyFailed": "Error al copiar",
+      "fields": {
+        "chain": "Cadena",
+        "address": "Dirección",
+        "privateKey": "Clave Privada"
+      },
+      "chains": {
+        "ethereum": "Ethereum",
+        "bsc": "Binance Smart Chain",
+        "polygon": "Polygon",
+        "solana": "Solana"
+      }
+    }
+  },
+  "transactions": {
+    "title": "Historial de Transacciones",
+    "searchPlaceholder": "Buscar transacciones...",
+    "filterAll": "Todas las Transacciones",
+    "filterPending": "Pendientes",
+    "filterCompleted": "Completadas",
+    "table": {
+      "type": "Tipo",
+      "from": "De",
+      "to": "Para",
+      "amount": "Cantidad",
+      "token": "Token",
+      "chain": "Cadena",
+      "status": "Estado",
+      "date": "Fecha"
+    },
+    "status": {
+      "pending": "Pendiente",
+      "completed": "Completado",
+      "unknown": "Desconocido"
+    },
+    "type": {
+      "transfer": "Transferencia",
+      "deposit": "Depósito"
+    },
+    "messages": {
+      "noTransactions": "No se encontraron transacciones",
+      "copied": "¡Copiado al portapapeles!",
+      "fetchFailed": "Error al obtener las transacciones",
+      "showing": "Mostrando {{count}} de {{total}} transacciones",
+      "previous": "Anterior",
+      "next": "Siguiente"
+    },
+    "token": {
+      "native": "NATIVO"
+    },
+    "tooltips": {
+      "copyAddress": "Copiar dirección"
+    }
+  },
+  "copyTrades": {
+    "title": "Historial de Copia de Operaciones",
+    "searchPlaceholder": "Buscar traders...",
+    "filterAll": "Todas las Operaciones",
+    "filterActive": "Activas",
+    "filterInactive": "Inactivas",
+    "table": {
+      "traderAddress": "Dirección del Trader",
+      "chain": "Cadena",
+      "amountUSD": "Cantidad (USD)",
+      "status": "Estado",
+      "started": "Iniciado",
+      "stopped": "Detenido",
+      "actions": "Acciones"
+    },
+    "status": {
+      "active": "Activo",
+      "inactive": "Inactivo"
+    },
+    "actions": {
+      "view": "Ver",
+      "stop": "Detener",
+      "copyAddress": "Copiar dirección"
+    },
+    "messages": {
+      "noTrades": "No se encontraron operaciones copiadas",
+      "copied": "¡Copiado al portapapeles!",
+      "fetchFailed": "Error al obtener operaciones copiadas",
+      "showing": "Mostrando {{count}} de {{total}} operaciones copiadas",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "notAvailable": "N/D"
+    }
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "unread": "{{count}} no leída",
+    "unread_plural": "{{count}} no leídas",
+    "markAllAsRead": "Marcar todo como leído",
+    "clearAll": "Borrar todo",
+    "noNotifications": "No hay notificaciones disponibles",
+    "markAsRead": "Marcar como leído",
+    "delete": "Eliminar",
+    "retry": "Reintentar",
+    "loading": "Cargando...",
+    "errors": {
+      "fetchFailed": "Error al obtener notificaciones",
+      "markFailed": "Error al marcar como visto",
+      "deleteFailed": "Error al eliminar la notificación"
+    },
+    "success": {
+      "markedAll": "Todas las notificaciones marcadas como leídas",
+      "markedOne": "Notificación marcada como leída",
+      "deletedAll": "Todas las notificaciones borradas",
+      "deletedOne": "Notificación eliminada"
+    }
+  }
+}

@@ -13,20 +13,22 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { useTranslation } from "react-i18next";
 
 const ImportWallet = () => {
+  const { t } = useTranslation('settings');
   const [formData, setFormData] = useState({
     chain: ["ETH"],
     key: "", // Combined field for both private key and phrase
   });
   const [loading, setLoading] = useState(false);
 
-  // Supported chains - make sure these match exactly what your backend expects
+  // Supported chains - with translations
   const CHAIN_OPTIONS = [
-    { value: "ETH", label: "Ethereum" },
-    { value: "BSC", label: "Binance Smart Chain" },
-    { value: "POLYGON", label: "Polygon" },
-    { value: "SOLANA", label: "Solana" },
+    { value: "ETH", label: t('import.chains.ethereum') },
+    { value: "BSC", label: t('import.chains.bsc') },
+    { value: "POLYGON", label: t('import.chains.polygon') },
+    { value: "SOLANA", label: t('import.chains.solana') },
   ];
 
   // Handle form changes
@@ -67,7 +69,8 @@ const ImportWallet = () => {
         requestData
       );
 
-      toast.success(response.message || "Wallet imported successfully!");
+      toast.success(response.message || t('import.wallet.success'));
+      
       // Store addresses if returned (modify according to your API response)
       if (response.addresses) {
         Object.entries(response.addresses).forEach(([chain, address]) => {
@@ -81,7 +84,7 @@ const ImportWallet = () => {
       });
     } catch (error) {
       console.error("Error importing wallet:", error);
-      toast.error(error.message || "Failed to import wallet");
+      toast.error(error.message || t('import.wallet.failed'));
     } finally {
       setLoading(false);
     }
@@ -91,19 +94,23 @@ const ImportWallet = () => {
     <div className="container mx-auto p-4 max-w-md">
       <Card className="dark:bg-[#2A2B2E] bg-gray-100">
         <CardHeader>
-          <h2 className="text-xl font-semibold text-center">Import Wallet</h2>
+          <h2 className="text-xl font-semibold text-center">
+            {t('import.wallet.title')}
+          </h2>
         </CardHeader>
 
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Chain Selection - Multi-select */}
             <div className="space-y-2">
-              <label className="block text-sm font-medium">Blockchain</label>
+              <label className="block text-sm font-medium">
+                {t('import.wallet.blockchain')}
+              </label>
               <Select
                 onValueChange={handleChainChange}
               >
-                <SelectTrigger className="text-xs md:text-sm  w-full dark:bg-none dark:text-white dark:border-gray-500">
-                  <SelectValue placeholder="Select chains" />
+                <SelectTrigger className="text-xs md:text-sm w-full dark:bg-none dark:text-white dark:border-gray-500">
+                  <SelectValue placeholder={t('import.wallet.selectChains')} />
                 </SelectTrigger>
                 <SelectContent className="dark:bg-[#2A2B2E]">
                   {CHAIN_OPTIONS.map((chain) => (
@@ -114,18 +121,21 @@ const ImportWallet = () => {
                 </SelectContent>
               </Select>
               <div className="flex flex-wrap gap-2">
-                {formData.chain.map((chain) => (
-                  <Badge key={chain} variant="outline" className="dark:bg-[#232428]">
-                    {CHAIN_OPTIONS.find(c => c.value === chain)?.label || chain}
-                  </Badge>
-                ))}
+                {formData.chain.map((chain) => {
+                  const chainOption = CHAIN_OPTIONS.find(c => c.value === chain);
+                  return (
+                    <Badge key={chain} variant="outline" className="dark:bg-[#232428]">
+                      {chainOption?.label || chain}
+                    </Badge>
+                  );
+                })}
               </div>
             </div>
 
             {/* Input Field */}
             <div className="space-y-2">
               <label className="block text-sm font-medium">
-                Private Key
+                {t('import.wallet.privateKey')}
               </label>
               <Input
                 as="textarea"
@@ -133,24 +143,24 @@ const ImportWallet = () => {
                 name="key"
                 value={formData.key}
                 onChange={handleChange}
-                placeholder="Enter your private key"
+                placeholder={t('import.wallet.privateKeyPlaceholder')}
                 required
                 className="text-xs md:text-sm dark:bg-none dark:outline-none dark:border-gray-500"
               />
-              <p className="text-xs md:text-sm  text-muted-foreground">
-                Enter either your private key or 12/24 word recovery phrase
+              <p className="text-xs md:text-sm text-muted-foreground">
+                {t('import.wallet.privateKeyHelp')}
               </p>
             </div>
 
             <Button
               type="submit"
-            className="w-full py-2 px-4 cursor-pointer bg-[#2A2B2E] dark:text-[#2A2B2E] dark:bg-gray-200 text-white font-semibold rounded-md disabled:opacity-50"
+              className="w-full py-2 px-4 cursor-pointer bg-[#2A2B2E] dark:text-[#2A2B2E] dark:bg-gray-200 text-white font-semibold rounded-md disabled:opacity-50"
               disabled={loading}
             >
               {loading ? (
                 <Loader className="animate-spin mr-2" size={16} />
               ) : null}
-              Import Wallet
+              {loading ? t('import.wallet.importing') : t('import.wallet.importButton')}
             </Button>
           </form>
         </CardContent>

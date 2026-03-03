@@ -1,0 +1,368 @@
+{
+  "settingsLayout": {
+    "title": "Paramètres du compte"
+  },
+  "sidebar": {
+    "walletConnections": "Connexions du Portefeuille",
+    "token": "Jeton",
+    "importWallet": "Importer un Portefeuille",
+    "importTokens": "Importer des Jetons",
+    "transferToken": "Transférer un Jeton",
+    "settings": "Paramètres",
+    "preferences": "Préférences",
+    "portfolio": "Portefeuille",
+    "notification": "Notifications",
+    "profile": "Profil",
+    "logout": "Déconnexion"
+  },
+  "wallet": {
+    "createNewWallet": "Créer un Nouveau Portefeuille",
+    "blockchainNetwork": "Réseau Blockchain",
+    "createWallet": "Créer un Portefeuille",
+    "creating": "Création en cours...",
+    "walletCreatedSuccess": "Portefeuille Créé avec Succès",
+    "address": "Adresse",
+    "copyAddress": "Copier l'Adresse",
+    "addressCopied": "Adresse du portefeuille copiée dans le presse-papier!",
+    "copyFailed": "Échec de la copie de l'adresse",
+    "walletCreated": "Portefeuille créé avec succès!",
+    "walletFailed": "Échec de la création du portefeuille",
+    "ethereum": "Ethereum",
+    "binanceSmartChain": "Binance Smart Chain",
+    "polygon": "Polygon",
+    "solana": "Solana"
+  },
+  "token": {
+    "tabs": {
+      "tokenInfo": "Informations du Jeton",
+      "tokenBalance": "Solde du Jeton"
+    },
+    "selectNetwork": "Sélectionner le Réseau",
+    "selectToken": "Sélectionner le Jeton",
+    "loadingTokens": "Chargement des jetons...",
+    "noTokensAvailable": "Aucun jeton disponible",
+    "network": "Réseau",
+    "symbol": "Symbole",
+    "holders": "Détenteurs",
+    "supply": "Offre",
+    "volume": "Volume",
+    "circulatingSupply": "Offre en Circulation",
+    "tokenBalance": "Solde du Jeton",
+    "balance": "Solde",
+    "ethereum": "Ethereum",
+    "polygon": "Polygon",
+    "solana": "Solana",
+    "binanceSmartChain": "Binance Smart Chain",
+    "walletAddressNotConfigured": "Adresse de portefeuille non configurée pour {{network}}",
+    "fetchingTokenInfo": "Récupération des informations du jeton...",
+    "fetchingBalance": "Récupération du solde du jeton..."
+  },
+  "import": {
+    "wallet": {
+      "title": "Importer un Portefeuille",
+      "blockchain": "Blockchain",
+      "selectChains": "Sélectionner les chaînes",
+      "privateKey": "Clé Privée",
+      "privateKeyPlaceholder": "Entrez votre clé privée",
+      "privateKeyHelp": "Entrez votre clé privée ou votre phrase de récupération de 12/24 mots",
+      "importButton": "Importer le Portefeuille",
+      "importing": "Importation en cours...",
+      "success": "Portefeuille importé avec succès!",
+      "failed": "Échec de l'importation du portefeuille"
+    },
+    "token": {
+      "title": "Importer un Jeton",
+      "blockchain": "Blockchain",
+      "selectChain": "Sélectionner la chaîne",
+      "contractAddress": "Adresse du Contrat du Jeton",
+      "contractPlaceholder": "Entrez l'adresse du contrat du jeton",
+      "contractHelp": "Entrez l'adresse du contrat du jeton à importer",
+      "importButton": "Importer le Jeton",
+      "importing": "Importation en cours...",
+      "success": "Jeton importé avec succès!",
+      "failed": "Échec de l'importation du jeton",
+      "addressRequired": "Veuillez entrer une adresse de contrat"
+    },
+    "chains": {
+      "ethereum": "Ethereum",
+      "bsc": "Binance Smart Chain",
+      "polygon": "Polygon",
+      "solana": "Solana"
+    }
+  },
+  "transfer": {
+    "title": "Transférer un Jeton",
+    "selectWallet": "Sélectionner le Portefeuille",
+    "noWallets": "Aucun portefeuille disponible",
+    "receiverAddress": "Adresse du Destinataire",
+    "receiverPlaceholder": "Entrez l'adresse du destinataire",
+    "amount": "Montant",
+    "amountPlaceholder": "Entrez le montant",
+    "token": "Jeton",
+    "selectToken": "Sélectionner le jeton",
+    "noTokens": "Aucun jeton disponible",
+    "loadingTokens": "Chargement des jetons...",
+    "transferButton": "Transférer le Jeton",
+    "transferring": "Transfert en cours...",
+    "success": "Transfert de jeton réussi!",
+    "failed": "Échec du transfert de jeton",
+    "transactionHash": "Hash de Transaction",
+    "hashCopied": "Hash de transaction copié dans le presse-papier!",
+    "copyFailed": "Échec de la copie du hash de transaction"
+  },
+  "security": {
+    "safeGuard": "Sécurité",
+    "lockMethod": "Méthode de Verrouillage",
+    "changePassword": "Changer le Mot de Passe",
+    "authentication": "Authentification",
+    "multifactorAuth": "Authentification Multifacteur",
+    "mfaUpdated": "AMF mis à jour avec succès",
+    "mfaFailed": "Échec de la mise à jour de l'AMF",
+    "transactionPassword": "Mot de Passe de Transaction",
+    "privacy": "Confidentialité",
+    "hideBalance": "Masquer le solde à l'ouverture de l'app",
+    "walletBackups": "Sauvegardes de Portefeuille",
+    "walletNeedsBackup": "{{count}} portefeuille nécessite une sauvegarde",
+    "walletNeedsBackup_plural": "{{count}} portefeuilles nécessitent une sauvegarde",
+    "backupAllWallets": "Sauvegarder tous les Portefeuilles",
+    "deactivateAccount": "Désactiver le compte",
+    "deactivate": "Désactiver",
+    "deactivating": "Désactivation en cours...",
+    "deleteAccount": "Supprimer le compte",
+    "delete": "Supprimer",
+    "deleting": "Suppression en cours...",
+    "accountDeactivated": "Compte désactivé avec succès",
+    "accountDeleted": "Compte supprimé avec succès",
+    "deactivateFailed": "Échec de la désactivation du compte",
+    "deleteFailed": "Échec de la suppression du compte",
+    "deactivationSuccess": "Désactivation du Compte Réussie",
+    "deletionSuccess": "Demande de Suppression de Compte Reçue",
+    "deactivationMessage": "Vous serez déconnecté automatiquement. Pour réactiver votre compte, veuillez contacter",
+    "deletionMessage": "Notre équipe traitera votre demande sous peu. Pour toute question, contactez",
+    "contactSupport": "support@abc.com",
+    "modal": {
+      "deactivateTitle": "Désactiver le Compte",
+      "deactivateDescription": "Votre compte sera temporairement désactivé. Toutes vos données seront préservées mais inaccessibles.",
+      "deleteTitle": "Supprimer le Compte Définitivement",
+      "deleteDescription": "Cette action ne peut pas être annulée. Toutes vos données seront définitivement effacées de nos systèmes.",
+      "confirmDeactivate": "Confirmer la Désactivation",
+      "confirmDelete": "Confirmer la Suppression",
+      "cancel": "Annuler",
+      "deactivateWarning": "Après la désactivation, vous serez automatiquement déconnecté. Contactez le support à {{email}} pour réactiver votre compte."
+    }
+  },
+  "portfolio": {
+    "title": "Votre Portefeuille",
+    "allTransactions": "Toutes les Transactions",
+    "copyTrades": "Copier les Transactions",
+    "limitOrder": "Ordre Limite"
+  },
+  "profile": {
+    "title": "Profil Utilisateur",
+    "editProfile": "Modifier le Profil",
+    "email": "Email",
+    "name": "Nom",
+    "phone": "Téléphone",
+    "address": "Adresse",
+    "transactionPassword": "Mot de Passe de Transaction",
+    "saveChanges": "Enregistrer les Modifications",
+    "cancel": "Annuler",
+    "notProvided": "Non fourni",
+    "profileUpdated": "Profil mis à jour avec succès",
+    "profileUpdateFailed": "Échec de la mise à jour du profil",
+    "loading": "Chargement..."
+  },
+  "preferences": {
+    "title": "Préférences",
+    "currency": "Devise",
+    "britishPound": "Livre sterling",
+    "usDollar": "Dollar américain",
+    "euro": "Euro",
+    "onOffRampCurrency": "Devise d'Entrée/Sortie",
+    "appearance": "Apparence",
+    "language": "Langue",
+    "theme": "Thème",
+    "light": "Clair",
+    "dark": "Sombre",
+    "selectLanguage": "Sélectionner la langue",
+    "selectCurrency": "Sélectionner la devise",
+    "selectTheme": "Sélectionner le thème",
+    "currencyUpdated": "Devise mise à jour avec succès!",
+    "currencyUpdateFailed": "Échec de la mise à jour de la devise",
+    "loadingCurrencies": "Chargement des devises..."
+  },
+  "changePassword": {
+    "title": "Changer le Mot de Passe",
+    "resetTitle": "Réinitialiser le Mot de Passe",
+    "currentPassword": "Mot de Passe Actuel",
+    "currentPlaceholder": "Entrez le mot de passe actuel",
+    "newPassword": "Nouveau Mot de Passe",
+    "newPlaceholder": "Entrez le nouveau mot de passe",
+    "confirmPassword": "Confirmer le Mot de Passe",
+    "confirmPlaceholder": "Confirmez le nouveau mot de passe",
+    "button": "Confirmer",
+    "loading": "Changement en cours...",
+    "success": "Mot de passe changé avec succès!",
+    "failed": "Échec du changement de mot de passe",
+    "passwordMismatch": "Les mots de passe ne correspondent pas",
+    "passwordRequired": "Tous les champs sont requis"
+  },
+  "transactionPassword": {
+    "title": "Définir le Mot de Passe de Transaction",
+    "mobileTitle": "Définir le Mot de Passe de Transaction",
+    "description": "Le mot de passe doit contenir exactement 12 caractères",
+    "enterPlaceholder": "Entrez un mot de passe de 12 caractères",
+    "confirmPlaceholder": "Confirmez le mot de passe de 12 caractères",
+    "charactersCount": "{{count}}/12 caractères",
+    "button": "Définir le Mot de Passe",
+    "loading": "Configuration en cours...",
+    "success": "Mot de passe de transaction défini avec succès!",
+    "failed": "Échec de la définition du mot de passe de transaction",
+    "errors": {
+      "exactLength": "Le mot de passe de transaction doit contenir exactement 12 caractères",
+      "maxLength": "Maximum 12 caractères autorisés",
+      "passwordMismatch": "Les mots de passe ne correspondent pas",
+      "passwordRequirements": "Le mot de passe doit contenir une majuscule, une minuscule, un chiffre et un caractère spécial"
+    }
+  },
+  "backup": {
+    "allWallets": {
+      "title": "Sauvegarde de Tous les Portefeuilles",
+      "description": "Souhaitez-vous sauvegarder tous vos portefeuilles pour créer une sauvegarde ci-dessous.",
+      "button": "Sauvegarder les Portefeuilles",
+      "buttonLoading": "Sauvegarde en cours...",
+      "downloadButton": "Télécharger Tous les Portefeuilles",
+      "success": "Portefeuilles sauvegardés avec succès!",
+      "failed": "Échec de la sauvegarde des portefeuilles",
+      "copied": "Copié dans le presse-papier",
+      "copyFailed": "Échec de la copie",
+      "fields": {
+        "chain": "Chaîne",
+        "address": "Adresse",
+        "privateKey": "Clé Privée",
+        "phrase": "Phrase"
+      }
+    },
+    "singleWallet": {
+      "title": "Sauvegarde de Portefeuille",
+      "selectBlockchain": "Sélectionner la Blockchain",
+      "selectPlaceholder": "Sélectionner la chaîne",
+      "button": "Sauvegarder le Portefeuille",
+      "buttonLoading": "Sauvegarde en cours...",
+      "downloadButton": "Télécharger les Détails du Portefeuille",
+      "success": "Portefeuille sauvegardé avec succès!",
+      "failed": "Échec de la sauvegarde du portefeuille",
+      "noChainSelected": "Veuillez sélectionner une blockchain",
+      "copied": "Copié dans le presse-papier",
+      "copyFailed": "Échec de la copie",
+      "fields": {
+        "chain": "Chaîne",
+        "address": "Adresse",
+        "privateKey": "Clé Privée"
+      },
+      "chains": {
+        "ethereum": "Ethereum",
+        "bsc": "Binance Smart Chain",
+        "polygon": "Polygon",
+        "solana": "Solana"
+      }
+    }
+  },
+  "transactions": {
+    "title": "Historique des Transactions",
+    "searchPlaceholder": "Rechercher des transactions...",
+    "filterAll": "Toutes les Transactions",
+    "filterPending": "En Attente",
+    "filterCompleted": "Terminées",
+    "table": {
+      "type": "Type",
+      "from": "De",
+      "to": "À",
+      "amount": "Montant",
+      "token": "Jeton",
+      "chain": "Chaîne",
+      "status": "Statut",
+      "date": "Date"
+    },
+    "status": {
+      "pending": "En attente",
+      "completed": "Terminé",
+      "unknown": "Inconnu"
+    },
+    "type": {
+      "transfer": "Transfert",
+      "deposit": "Dépôt"
+    },
+    "messages": {
+      "noTransactions": "Aucune transaction trouvée",
+      "copied": "Copié dans le presse-papier!",
+      "fetchFailed": "Échec de la récupération des transactions",
+      "showing": "Affichage de {{count}} sur {{total}} transactions",
+      "previous": "Précédent",
+      "next": "Suivant"
+    },
+    "token": {
+      "native": "NATIF"
+    },
+    "tooltips": {
+      "copyAddress": "Copier l'adresse"
+    }
+  },
+  "copyTrades": {
+    "title": "Historique de Copy Trading",
+    "searchPlaceholder": "Rechercher des traders...",
+    "filterAll": "Toutes les Transactions",
+    "filterActive": "Actif",
+    "filterInactive": "Inactif",
+    "table": {
+      "traderAddress": "Adresse du Trader",
+      "chain": "Chaîne",
+      "amountUSD": "Montant (USD)",
+      "status": "Statut",
+      "started": "Démarré",
+      "stopped": "Arrêté",
+      "actions": "Actions"
+    },
+    "status": {
+      "active": "Actif",
+      "inactive": "Inactif"
+    },
+    "actions": {
+      "view": "Voir",
+      "stop": "Arrêter",
+      "copyAddress": "Copier l'adresse"
+    },
+    "messages": {
+      "noTrades": "Aucune copie de transaction trouvée",
+      "copied": "Copié dans le presse-papier!",
+      "fetchFailed": "Échec de la récupération des copies de transactions",
+      "showing": "Affichage de {{count}} sur {{total}} copies de transactions",
+      "previous": "Précédent",
+      "next": "Suivant",
+      "notAvailable": "N/D"
+    }
+  },
+    "notifications": {
+    "title": "Notifications",
+    "unread": "{{count}} non lu",
+    "unread_plural": "{{count}} non lus",
+    "markAllAsRead": "Tout marquer comme lu",
+    "clearAll": "Tout effacer",
+    "noNotifications": "Aucune notification disponible",
+    "markAsRead": "Marquer comme lu",
+    "delete": "Supprimer",
+    "retry": "Réessayer",
+    "loading": "Chargement...",
+    "errors": {
+      "fetchFailed": "Échec de la récupération des notifications",
+      "markFailed": "Échec du marquage comme lu",
+      "deleteFailed": "Échec de la suppression de la notification"
+    },
+    "success": {
+      "markedAll": "Toutes les notifications marquées comme lues",
+      "markedOne": "Notification marquée comme lue",
+      "deletedAll": "Toutes les notifications effacées",
+      "deletedOne": "Notification supprimée"
+    }
+  }
+}

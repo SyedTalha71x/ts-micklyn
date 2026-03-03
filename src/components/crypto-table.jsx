@@ -5,6 +5,7 @@ import TotalBalance from "./total-balance";
 import { FireApi } from "@/hooks/fireApi";
 import toast from "react-hot-toast";
 import { useProfile } from "@/Context/ProfileContext";
+import { useTranslation } from "react-i18next";
 
 export default function CryptoTable({ onClose }) {
   const [activeTab, setActiveTab] = useState("watchlist");
@@ -12,6 +13,8 @@ export default function CryptoTable({ onClose }) {
   const tabIndicatorRef = useRef(null);
   const { watchListData, loading, getWatchlistData } = useProfile();
   const [openRow, setOpenRow] = useState(null);
+
+  const { t } = useTranslation("chat");
 
   // Initial data load
   useEffect(() => {
@@ -25,10 +28,10 @@ export default function CryptoTable({ onClose }) {
         chain,
       });
       getWatchlistData();
-      toast.success(`${symbol} removed from watchlist`);
+      toast.success(t('chatLayout.removedSuccess', { symbol }));
       setOpenRow(null);
     } catch (error) {
-      toast.error(error || "Failed to remove asset");
+      toast.error(error || t('chatLayout.removeFailed'));
     }
   };
 
@@ -38,12 +41,13 @@ export default function CryptoTable({ onClose }) {
     }
     return parseFloat(balance).toFixed(2);
   };
+  
   useEffect(() => {
     if (contentRef.current) {
       gsap.fromTo(
         contentRef.current,
         { opacity: 0, x: 50 },
-        { opacity: 1, x: 0, duration: 0.5, ease: "power2.out" }
+        { opacity: 1, x: 0, duration: 0.5, ease: "power2.out" },
       );
     }
   }, [activeTab]);
@@ -82,14 +86,14 @@ export default function CryptoTable({ onClose }) {
           className="absolute left-0 top-0 bottom-0 w-1/2 bg-gray-300 dark:bg-[#232428] border-5 border-white dark:border-[#101010] rounded-lg"
         />
         <button
-          className={`relative flex-1 py-2 inter-font px-4 rounded-md text-sm font-medium z-10 ${
+          className={`relative flex-1 flex-wrap py-2 inter-font px-4 rounded-md text-sm font-medium z-10 ${
             activeTab === "watchlist"
               ? "text-black dark:text-white"
               : "text-gray-700 dark:text-gray-400"
           }`}
           onClick={() => setActiveTab("watchlist")}
         >
-          Watchlist
+          {t('chatLayout.watchlist')}
         </button>
         <button
           className={`relative flex-1 py-2 inter-font px-4 rounded-md text-sm font-medium z-10 ${
@@ -99,7 +103,7 @@ export default function CryptoTable({ onClose }) {
           }`}
           onClick={() => setActiveTab("history")}
         >
-          History
+          {t('chatLayout.history')}
         </button>
       </div>
 
@@ -117,12 +121,12 @@ export default function CryptoTable({ onClose }) {
               <div className="text-center py-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-white mx-auto"></div>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
-                  Loading assets...
+                  {t('chatLayout.loadingAssets')}
                 </p>
               </div>
             ) : watchListData.length === 0 ? (
               <div className="text-center py-8 text-sm text-gray-500 dark:text-gray-400">
-                No favorite assets found in your watchlist
+                {t('chatLayout.watchlistError')}
               </div>
             ) : (
               <div className="space-y-4 pb-4">
@@ -134,7 +138,10 @@ export default function CryptoTable({ onClose }) {
                     onRemoveWatchlist={removeWatchlist}
                     formatBalance={formatBalance}
                     isOpen={openRow === crypto.symbol + crypto.chain}
-                    onToggle={() => handleRowClick(crypto.symbol + crypto.chain)}
+                    onToggle={() =>
+                      handleRowClick(crypto.symbol + crypto.chain)
+                    }
+                    t={t}
                   />
                 ))}
               </div>
@@ -158,8 +165,15 @@ export default function CryptoTable({ onClose }) {
   );
 }
 
-const WatchlistItem = ({ crypto, onRemoveWatchlist, formatBalance, isOpen, onToggle }) => (
-  <div 
+const WatchlistItem = ({
+  crypto,
+  onRemoveWatchlist,
+  formatBalance,
+  isOpen,
+  onToggle,
+  t,
+}) => (
+  <div
     className="relative watchlist-row flex justify-between items-center py-3 dark:border-b dark:border-[#505050] cursor-pointer"
     onClick={onToggle}
   >
@@ -192,7 +206,7 @@ const WatchlistItem = ({ crypto, onRemoveWatchlist, formatBalance, isOpen, onTog
               onRemoveWatchlist(crypto.symbol, crypto.chain);
             }}
           >
-            Remove from Watchlist
+            {t('chatLayout.removeFromWatchlist')}
           </li>
         </ul>
       </div>

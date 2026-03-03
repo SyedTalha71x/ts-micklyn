@@ -1,0 +1,368 @@
+{
+  "settingsLayout": {
+    "title": "Account Settings"
+  },
+  "sidebar": {
+    "walletConnections": "Wallet Connections",
+    "token": "Token",
+    "importWallet": "Import Wallet",
+    "importTokens": "Import Tokens",
+    "transferToken": "Transfer Token",
+    "settings": "Settings",
+    "preferences": "Preferences",
+    "portfolio": "Portfolio",
+    "notification": "Notification",
+    "profile": "Profile",
+    "logout": "Logout"
+  },
+  "wallet": {
+    "createNewWallet": "Create New Wallet",
+    "blockchainNetwork": "Blockchain Network",
+    "createWallet": "Create Wallet",
+    "creating": "Creating...",
+    "walletCreatedSuccess": "Wallet Created Successfully",
+    "address": "Address",
+    "copyAddress": "Copy Address",
+    "addressCopied": "Wallet Address copied to clipboard!",
+    "copyFailed": "Failed to copy address",
+    "walletCreated": "Wallet created successfully!",
+    "walletFailed": "Failed to create wallet",
+    "ethereum": "Ethereum",
+    "binanceSmartChain": "Binance Smart Chain",
+    "polygon": "Polygon",
+    "solana": "Solana"
+  },
+  "token": {
+    "tabs": {
+      "tokenInfo": "Token Info",
+      "tokenBalance": "Token Balance"
+    },
+    "selectNetwork": "Select Network",
+    "selectToken": "Select Token",
+    "loadingTokens": "Loading tokens...",
+    "noTokensAvailable": "No tokens available",
+    "network": "Network",
+    "symbol": "Symbol",
+    "holders": "Holders",
+    "supply": "Supply",
+    "volume": "Volume",
+    "circulatingSupply": "Circulating Supply",
+    "tokenBalance": "Token Balance",
+    "balance": "Balance",
+    "ethereum": "Ethereum",
+    "polygon": "Polygon",
+    "solana": "Solana",
+    "binanceSmartChain": "Binance Smart Chain",
+    "walletAddressNotConfigured": "Wallet address not configured for {{network}}",
+    "fetchingTokenInfo": "Fetching token information...",
+    "fetchingBalance": "Fetching token balance..."
+  },
+  "import": {
+    "wallet": {
+      "title": "Import Wallet",
+      "blockchain": "Blockchain",
+      "selectChains": "Select chains",
+      "privateKey": "Private Key",
+      "privateKeyPlaceholder": "Enter your private key",
+      "privateKeyHelp": "Enter either your private key or 12/24 word recovery phrase",
+      "importButton": "Import Wallet",
+      "importing": "Importing...",
+      "success": "Wallet imported successfully!",
+      "failed": "Failed to import wallet"
+    },
+    "token": {
+      "title": "Import Token",
+      "blockchain": "Blockchain",
+      "selectChain": "Select chain",
+      "contractAddress": "Token Contract Address",
+      "contractPlaceholder": "Enter token contract address",
+      "contractHelp": "Enter the token contract address to import",
+      "importButton": "Import Token",
+      "importing": "Importing...",
+      "success": "Token imported successfully!",
+      "failed": "Failed to import token",
+      "addressRequired": "Please enter a contract address"
+    },
+    "chains": {
+      "ethereum": "Ethereum",
+      "bsc": "Binance Smart Chain",
+      "polygon": "Polygon",
+      "solana": "Solana"
+    }
+  },
+  "transfer": {
+    "title": "Transfer Token",
+    "selectWallet": "Select Wallet",
+    "noWallets": "No wallets available",
+    "receiverAddress": "Receiver Address",
+    "receiverPlaceholder": "Enter receiver address",
+    "amount": "Amount",
+    "amountPlaceholder": "Enter amount",
+    "token": "Token",
+    "selectToken": "Select token",
+    "noTokens": "No tokens available",
+    "loadingTokens": "Loading tokens...",
+    "transferButton": "Transfer Token",
+    "transferring": "Transferring...",
+    "success": "Token transfer successful!",
+    "failed": "Failed to transfer token",
+    "transactionHash": "Transaction Hash",
+    "hashCopied": "Transaction hash copied to clipboard!",
+    "copyFailed": "Failed to copy transaction hash"
+  },
+  "security": {
+    "safeGuard": "Safe guard",
+    "lockMethod": "Lock Method",
+    "changePassword": "Change Password",
+    "authentication": "Authentication",
+    "multifactorAuth": "Multifactor Authentication",
+    "mfaUpdated": "MFA updated successfully",
+    "mfaFailed": "Failed to update MFA",
+    "transactionPassword": "Transaction Password",
+    "privacy": "Privacy",
+    "hideBalance": "Hide balance when opening app",
+    "walletBackups": "Wallet Backups",
+    "walletNeedsBackup": "{{count}} Wallet needs backup",
+    "walletNeedsBackup_plural": "{{count}} Wallets need backup",
+    "backupAllWallets": "Backup all Wallets",
+    "deactivateAccount": "Deactivate account",
+    "deactivate": "Deactivate",
+    "deactivating": "Deactivating...",
+    "deleteAccount": "Delete account",
+    "delete": "Delete",
+    "deleting": "Deleting...",
+    "accountDeactivated": "Account deactivated successfully",
+    "accountDeleted": "Account deleted successfully",
+    "deactivateFailed": "Failed to deactivate account",
+    "deleteFailed": "Failed to delete account",
+    "deactivationSuccess": "Account Deactivation Successful",
+    "deletionSuccess": "Account Deletion Request Received",
+    "deactivationMessage": "You will be logged out automatically. To reactivate your account, please contact",
+    "deletionMessage": "Our team will process your request shortly. For any queries, contact",
+    "contactSupport": "support@abc.com",
+    "modal": {
+      "deactivateTitle": "Deactivate Account",
+      "deactivateDescription": "Your account will be temporarily disabled. All your data will be preserved but inaccessible.",
+      "deleteTitle": "Delete Account Permanently",
+      "deleteDescription": "This action cannot be undone. All your data will be permanently erased from our systems.",
+      "confirmDeactivate": "Confirm Deactivate",
+      "confirmDelete": "Confirm Delete",
+      "cancel": "Cancel",
+      "deactivateWarning": "After deactivation, you will be automatically logged out. Contact support at {{email}} to reactivate your account."
+    }
+  },
+  "portfolio": {
+    "title": "Your Portfolio",
+    "allTransactions": "All Transactions",
+    "copyTrades": "Copy Trades",
+    "limitOrder": "Limit Order"
+  },
+  "profile": {
+    "title": "User Profile",
+    "editProfile": "Edit Profile",
+    "email": "Email",
+    "name": "Name",
+    "phone": "Phone",
+    "address": "Address",
+    "transactionPassword": "Transaction Password",
+    "saveChanges": "Save Changes",
+    "cancel": "Cancel",
+    "notProvided": "Not provided",
+    "profileUpdated": "Profile updated successfully",
+    "profileUpdateFailed": "Failed to update profile",
+    "loading": "Loading..."
+  },
+  "preferences": {
+    "title": "Preferences",
+    "currency": "Currency",
+    "britishPound": "British pound",
+    "usDollar": "US Dollar",
+    "euro": "Euro",
+    "onOffRampCurrency": "On/Off-Ramp Currency",
+    "appearance": "Appearance",
+    "language": "Language",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "selectLanguage": "Select Language",
+    "selectCurrency": "Select Currency",
+    "selectTheme": "Select Theme",
+    "currencyUpdated": "Currency updated successfully!",
+    "currencyUpdateFailed": "Failed to update currency",
+    "loadingCurrencies": "Loading currencies..."
+  },
+  "changePassword": {
+    "title": "Change Password",
+    "resetTitle": "Reset Password",
+    "currentPassword": "Current Password",
+    "currentPlaceholder": "Enter current password",
+    "newPassword": "New Password",
+    "newPlaceholder": "Enter new password",
+    "confirmPassword": "Confirm Password",
+    "confirmPlaceholder": "Confirm new password",
+    "button": "Confirm",
+    "loading": "Changing...",
+    "success": "Password changed successfully!",
+    "failed": "Failed to change password",
+    "passwordMismatch": "Passwords do not match",
+    "passwordRequired": "All fields are required"
+  },
+  "transactionPassword": {
+    "title": "Set Transaction Password",
+    "mobileTitle": "Set Transaction Password",
+    "description": "Password must be exactly 12 characters long",
+    "enterPlaceholder": "Enter 12-character password",
+    "confirmPlaceholder": "Confirm 12-character password",
+    "charactersCount": "{{count}}/12 characters",
+    "button": "Set Password",
+    "loading": "Setting...",
+    "success": "Transaction password set successfully!",
+    "failed": "Failed to set transaction password",
+    "errors": {
+      "exactLength": "Transaction password must be exactly 12 characters",
+      "maxLength": "Maximum 12 characters allowed",
+      "passwordMismatch": "Passwords do not match",
+      "passwordRequirements": "Password must contain uppercase, lowercase, number, and special character"
+    }
+  },
+  "backup": {
+    "allWallets": {
+      "title": "All Wallets Backup",
+      "description": "Are you willing to backup all your wallets to create backup below.",
+      "button": "Backup Wallet",
+      "buttonLoading": "Backing up...",
+      "downloadButton": "Download All Wallets",
+      "success": "Wallets backed up successfully!",
+      "failed": "Failed to backup wallets",
+      "copied": "Copied to clipboard",
+      "copyFailed": "Failed to copy",
+      "fields": {
+        "chain": "Chain",
+        "address": "Address",
+        "privateKey": "Private Key",
+        "phrase": "Phrase"
+      }
+    },
+    "singleWallet": {
+      "title": "Wallet Backup",
+      "selectBlockchain": "Select Blockchain",
+      "selectPlaceholder": "Select chain",
+      "button": "Backup Wallet",
+      "buttonLoading": "Backing up...",
+      "downloadButton": "Download Wallet Details",
+      "success": "Wallet backed up successfully!",
+      "failed": "Failed to backup wallet",
+      "noChainSelected": "Please select a blockchain",
+      "copied": "Copied to clipboard",
+      "copyFailed": "Failed to copy",
+      "fields": {
+        "chain": "Chain",
+        "address": "Address",
+        "privateKey": "Private Key"
+      },
+      "chains": {
+        "ethereum": "Ethereum",
+        "bsc": "Binance Smart Chain",
+        "polygon": "Polygon",
+        "solana": "Solana"
+      }
+    }
+  },
+  "transactions": {
+    "title": "Transaction History",
+    "searchPlaceholder": "Search transactions...",
+    "filterAll": "All Transactions",
+    "filterPending": "Pending",
+    "filterCompleted": "Completed",
+    "table": {
+      "type": "Type",
+      "from": "From",
+      "to": "To",
+      "amount": "Amount",
+      "token": "Token",
+      "chain": "Chain",
+      "status": "Status",
+      "date": "Date"
+    },
+    "status": {
+      "pending": "Pending",
+      "completed": "Completed",
+      "unknown": "Unknown"
+    },
+    "type": {
+      "transfer": "Transfer",
+      "deposit": "Deposit"
+    },
+    "messages": {
+      "noTransactions": "No transactions found",
+      "copied": "Copied to clipboard!",
+      "fetchFailed": "Failed to fetch transactions",
+      "showing": "Showing {{count}} of {{total}} transactions",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "token": {
+      "native": "NATIVE"
+    },
+    "tooltips": {
+      "copyAddress": "Copy address"
+    }
+  },
+  "copyTrades": {
+    "title": "Copy Trading History",
+    "searchPlaceholder": "Search traders...",
+    "filterAll": "All Trades",
+    "filterActive": "Active",
+    "filterInactive": "Inactive",
+    "table": {
+      "traderAddress": "Trader Address",
+      "chain": "Chain",
+      "amountUSD": "Amount (USD)",
+      "status": "Status",
+      "started": "Started",
+      "stopped": "Stopped",
+      "actions": "Actions"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "actions": {
+      "view": "View",
+      "stop": "Stop",
+      "copyAddress": "Copy address"
+    },
+    "messages": {
+      "noTrades": "No copy trades found",
+      "copied": "Copied to clipboard!",
+      "fetchFailed": "Failed to fetch copy trades",
+      "showing": "Showing {{count}} of {{total}} copy trades",
+      "previous": "Previous",
+      "next": "Next",
+      "notAvailable": "N/A"
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "unread": "{{count}} unread",
+    "unread_plural": "{{count}} unread",
+    "markAllAsRead": "Mark All as Read",
+    "clearAll": "Clear All",
+    "noNotifications": "No notifications available",
+    "markAsRead": "Mark as read",
+    "delete": "Delete",
+    "retry": "Retry",
+    "loading": "Loading...",
+    "errors": {
+      "fetchFailed": "Failed to fetch notifications",
+      "markFailed": "Failed to mark as seen",
+      "deleteFailed": "Failed to delete notification"
+    },
+    "success": {
+      "markedAll": "All notifications marked as read",
+      "markedOne": "Notification marked as read",
+      "deletedAll": "All notifications cleared",
+      "deletedOne": "Notification deleted"
+    }
+  }
+}

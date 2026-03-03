@@ -1,9 +1,10 @@
 import { FireApi } from "@/hooks/fireApi";
 import React, { useEffect, useState } from "react";
-// import toast from "react-hot-toast";
 import { Loader } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const AboutToken = () => {
+  const { t } = useTranslation('settings');
   const [activeTab, setActiveTab] = useState(0);
   const [selectedNetwork, setSelectedNetwork] = useState("ethereum");
   const [selectedToken, setSelectedToken] = useState("");
@@ -36,55 +37,56 @@ const AboutToken = () => {
   const [availableTokens, setAvailableTokens] = useState([]);
   const [loadingTokens, setLoadingTokens] = useState(false);
 
-  const tabs = [{ label: "Token Info" }, { label: "Token Balance" }];
+  const tabs = [
+    { label: t('token.tabs.tokenInfo'), key: "tokenInfo" },
+    { label: t('token.tabs.tokenBalance'), key: "tokenBalance" }
+  ];
 
   const networks = [
-    { value: "ethereum", label: "Ethereum" },
-    { value: "polygon", label: "Polygon" },
-    { value: "solana", label: "Solana" },
-    { value: "bsc", label: "Binance Smart Chain" },
+    { value: "ethereum", label: t('token.ethereum') },
+    { value: "polygon", label: t('token.polygon') },
+    { value: "solana", label: t('token.solana') },
+    { value: "bsc", label: t('token.binanceSmartChain') },
   ];
 
   const chainMap = {
-  ethereum: "ETH",
-  polygon: "POLYGON",
-  solana: "SOLANA",
-  bsc: "BSC",
-};
+    ethereum: "ETH",
+    polygon: "POLYGON",
+    solana: "SOLANA",
+    bsc: "BSC",
+  };
 
+  const fetchAvailableTokens = async () => {
+    try {
+      setLoadingTokens(true);
 
- const fetchAvailableTokens = async () => {
-  try {
-    setLoadingTokens(true);
+      const chainCode = chainMap[selectedNetwork] || selectedNetwork.toUpperCase();
 
-    const chainCode = chainMap[selectedNetwork] || selectedNetwork.toUpperCase();
-
-    const response = await FireApi(
-      `/get-imported-tokens?chain=${chainCode}`,
-      "GET"
-    );
-    
-    if (response.success && response.importedTokens) {
-      const tokenOptions = response.importedTokens.map(token => ({
-        value: token.symbol,
-        label: token.symbol,
-        contractAddress: token.contract_address
-      }));
+      const response = await FireApi(
+        `/get-imported-tokens?chain=${chainCode}`,
+        "GET"
+      );
       
-      setAvailableTokens(tokenOptions);
-      
-      if (tokenOptions.length > 0 && !selectedToken) {
-        setSelectedToken(tokenOptions[0].value);
+      if (response.success && response.importedTokens) {
+        const tokenOptions = response.importedTokens.map(token => ({
+          value: token.symbol,
+          label: token.symbol,
+          contractAddress: token.contract_address
+        }));
+        
+        setAvailableTokens(tokenOptions);
+        
+        if (tokenOptions.length > 0 && !selectedToken) {
+          setSelectedToken(tokenOptions[0].value);
+        }
       }
+    } catch (error) {
+      console.error("Error fetching tokens:", error);
+      setAvailableTokens([]);
+    } finally {
+      setLoadingTokens(false);
     }
-  } catch (error) {
-    console.error("Error fetching tokens:", error);
-    setAvailableTokens([]);
-  } finally {
-    setLoadingTokens(false);
-  }
-};
-
+  };
 
   // Get the appropriate wallet address based on selected network
   const getWalletAddress = () => {
@@ -136,7 +138,6 @@ const AboutToken = () => {
       });
     } catch (error) {
       console.log(error);
-      // toast.error(error.message);
       setTokenInfo((prev) => ({ ...prev, loading: false }));
     }
   };
@@ -147,7 +148,7 @@ const AboutToken = () => {
       const walletAddress = getWalletAddress();
 
       if (!walletAddress) {
-        throw new Error(`Wallet address not configured for ${selectedNetwork}`);
+        throw new Error(t('token.walletAddressNotConfigured', { network: selectedNetwork }));
       }
 
       // Find the contract address for the selected token
@@ -186,9 +187,14 @@ const AboutToken = () => {
 
   // Format numbers for display
   const formatValue = (value) => {
-    if (value === "N/A") return value;
+    if (value === "N/A" || value === "N/A") return value;
     if (typeof value === "number") return value.toLocaleString();
     return value;
+  };
+
+  // Capitalize first letter helper
+  const capitalizeFirst = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
   return (
@@ -215,6 +221,7 @@ const AboutToken = () => {
             value={selectedNetwork}
             onChange={(e) => setSelectedNetwork(e.target.value)}
             className="px-4 py-2 rounded-md bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white font-semibold"
+            aria-label={t('token.selectNetwork')}
           >
             {networks.map((network) => (
               <option key={network.value} value={network.value}>
@@ -224,9 +231,9 @@ const AboutToken = () => {
           </select>
 
           {loadingTokens ? (
-            <div className="px-4 py-2 rounded-md bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white font-semibold">
+            <div className="px-4 py-2 rounded-md bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white font-semibold flex items-center">
               <Loader className="animate-spin inline mr-2" size={16} />
-              Loading tokens...
+              {t('token.loadingTokens')}
             </div>
           ) : (
             <select
@@ -234,9 +241,10 @@ const AboutToken = () => {
               onChange={(e) => setSelectedToken(e.target.value)}
               className="px-4 py-2 rounded-md bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white font-semibold"
               disabled={availableTokens.length === 0}
+              aria-label={t('token.selectToken')}
             >
               {availableTokens.length === 0 ? (
-                <option value="">No tokens available</option>
+                <option value="">{t('token.noTokensAvailable')}</option>
               ) : (
                 availableTokens.map((token) => (
                   <option key={token.value} value={token.value}>
@@ -249,46 +257,62 @@ const AboutToken = () => {
         </div>
 
         {tokenInfo.loading || tokenBalance.loading ? (
-          <div className="flex justify-center items-center">
-            <Loader className="animate-spin" />
+          <div className="flex justify-center items-center py-8">
+            <Loader className="animate-spin h-8 w-8 text-gray-500" />
+            <span className="ml-2 text-gray-600 dark:text-gray-300">
+              {activeTab === 0 ? t('token.fetchingTokenInfo') : t('token.fetchingBalance')}
+            </span>
           </div>
         ) : (
           <>
             {activeTab === 0 && (
-              <ul className="list-disc pl-6 space-y-1">
+              <ul className="list-disc pl-6 space-y-2 text-gray-700 dark:text-gray-300">
                 <li>
-                  Network:{" "}
-                  {selectedNetwork.charAt(0).toUpperCase() +
-                    selectedNetwork.slice(1)}
+                  <span className="font-semibold">{t('token.network')}:</span>{" "}
+                  {capitalizeFirst(selectedNetwork)}
                 </li>
-                <li>Symbol: {tokenInfo.symbol || selectedToken}</li>
-                <li>Holders: {formatValue(tokenInfo.holders)}</li>
-                <li>Supply: {formatValue(tokenInfo.supply)}</li>
-                <li>Volume: {formatValue(tokenInfo.total_volume)}</li>
                 <li>
-                  Circulating Supply:{" "}
+                  <span className="font-semibold">{t('token.symbol')}:</span>{" "}
+                  {tokenInfo.symbol || selectedToken}
+                </li>
+                <li>
+                  <span className="font-semibold">{t('token.holders')}:</span>{" "}
+                  {formatValue(tokenInfo.holders)}
+                </li>
+                <li>
+                  <span className="font-semibold">{t('token.supply')}:</span>{" "}
+                  {formatValue(tokenInfo.supply)}
+                </li>
+                <li>
+                  <span className="font-semibold">{t('token.volume')}:</span>{" "}
+                  {formatValue(tokenInfo.total_volume)}
+                </li>
+                <li>
+                  <span className="font-semibold">{t('token.circulatingSupply')}:</span>{" "}
                   {formatValue(tokenInfo.circulating_supply)}
                 </li>
               </ul>
             )}
             {activeTab === 1 && (
-              <ul className="list-disc pl-6 space-y-1">
+              <ul className="list-disc pl-6 space-y-2 text-gray-700 dark:text-gray-300">
                 <li>
-                  Network:{" "}
-                  {selectedNetwork.charAt(0).toUpperCase() +
-                    selectedNetwork.slice(1)}
+                  <span className="font-semibold">{t('token.network')}:</span>{" "}
+                  {capitalizeFirst(selectedNetwork)}
                 </li>
                 <li>
-                  {selectedNetwork.charAt(0).toUpperCase() +
-                    selectedNetwork.slice(1)}{" "}
-                  Balance: {formatValue(tokenBalance.balance)}
-                </li>{" "}
-                <li>
-                  Token Balance: {selectedToken === 'USDC' ? tokenBalance?.usdc : 
-                  selectedToken === 'USDT' ? tokenBalance?.usdt :
-                  tokenBalance.balance}
+                  <span className="font-semibold">{t('token.balance')} ({capitalizeFirst(selectedNetwork)}):</span>{" "}
+                  {formatValue(tokenBalance.balance)}
                 </li>
-                <li>Symbol: {selectedToken}</li>
+                <li>
+                  <span className="font-semibold">{t('token.tokenBalance')}:</span>{" "}
+                  {selectedToken === 'USDC' ? tokenBalance?.usdc : 
+                   selectedToken === 'USDT' ? tokenBalance?.usdt :
+                   tokenBalance.balance}
+                </li>
+                <li>
+                  <span className="font-semibold">{t('token.symbol')}:</span>{" "}
+                  {selectedToken}
+                </li>
               </ul>
             )}
           </>

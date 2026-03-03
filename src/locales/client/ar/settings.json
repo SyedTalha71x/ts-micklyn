@@ -1,0 +1,368 @@
+{
+  "settingsLayout": {
+    "title": "إعدادات الحساب"
+  },
+  "sidebar": {
+    "walletConnections": "اتصالات المحفظة",
+    "token": "رمز",
+    "importWallet": "استيراد محفظة",
+    "importTokens": "استيراد الرموز",
+    "transferToken": "تحويل الرمز",
+    "settings": "الإعدادات",
+    "preferences": "التفضيلات",
+    "portfolio": "محفظة الاستثمارات",
+    "notification": "الإشعارات",
+    "profile": "الملف الشخصي",
+    "logout": "تسجيل الخروج"
+  },
+  "wallet": {
+    "createNewWallet": "إنشاء محفظة جديدة",
+    "blockchainNetwork": "شبكة البلوكتشين",
+    "createWallet": "إنشاء محفظة",
+    "creating": "جاري الإنشاء...",
+    "walletCreatedSuccess": "تم إنشاء المحفظة بنجاح",
+    "address": "العنوان",
+    "copyAddress": "نسخ العنوان",
+    "addressCopied": "تم نسخ عنوان المحفظة إلى الحافظة!",
+    "copyFailed": "فشل نسخ العنوان",
+    "walletCreated": "تم إنشاء المحفظة بنجاح!",
+    "walletFailed": "فشل إنشاء المحفظة",
+    "ethereum": "إيثريوم",
+    "binanceSmartChain": "سلسلة بي إن بي الذكية",
+    "polygon": "بوليغون",
+    "solana": "سولانا"
+  },
+  "token": {
+    "tabs": {
+      "tokenInfo": "معلومات الرمز",
+      "tokenBalance": "رصيد الرمز"
+    },
+    "selectNetwork": "اختر الشبكة",
+    "selectToken": "اختر الرمز",
+    "loadingTokens": "جاري تحميل الرموز...",
+    "noTokensAvailable": "لا توجد رموز متاحة",
+    "network": "الشبكة",
+    "symbol": "الرمز",
+    "holders": "الحائزون",
+    "supply": "العرض",
+    "volume": "الحجم",
+    "circulatingSupply": "العرض المتداول",
+    "tokenBalance": "رصيد الرمز",
+    "balance": "الرصيد",
+    "ethereum": "إيثريوم",
+    "polygon": "بوليغون",
+    "solana": "سولانا",
+    "binanceSmartChain": "سلسلة بي إن بي الذكية",
+    "walletAddressNotConfigured": "عنوان المحفظة غير مهيأ لـ {{network}}",
+    "fetchingTokenInfo": "جاري جلب معلومات الرمز...",
+    "fetchingBalance": "جاري جلب رصيد الرمز..."
+  },
+  "import": {
+    "wallet": {
+      "title": "استيراد محفظة",
+      "blockchain": "البلوكتشين",
+      "selectChains": "اختر السلاسل",
+      "privateKey": "المفتاح الخاص",
+      "privateKeyPlaceholder": "أدخل مفتاحك الخاص",
+      "privateKeyHelp": "أدخل مفتاحك الخاص أو عبارة الاسترداد المكونة من 12/24 كلمة",
+      "importButton": "استيراد المحفظة",
+      "importing": "جاري الاستيراد...",
+      "success": "تم استيراد المحفظة بنجاح!",
+      "failed": "فشل استيراد المحفظة"
+    },
+    "token": {
+      "title": "استيراد رمز",
+      "blockchain": "البلوكتشين",
+      "selectChain": "اختر السلسلة",
+      "contractAddress": "عنوان عقد الرمز",
+      "contractPlaceholder": "أدخل عنوان عقد الرمز",
+      "contractHelp": "أدخل عنوان عقد الرمز المراد استيراده",
+      "importButton": "استيراد الرمز",
+      "importing": "جاري الاستيراد...",
+      "success": "تم استيراد الرمز بنجاح!",
+      "failed": "فشل استيراد الرمز",
+      "addressRequired": "الرجاء إدخال عنوان العقد"
+    },
+    "chains": {
+      "ethereum": "إيثريوم",
+      "bsc": "سلسلة بي إن بي الذكية",
+      "polygon": "بوليغون",
+      "solana": "سولانا"
+    }
+  },
+  "transfer": {
+    "title": "تحويل الرمز",
+    "selectWallet": "اختر المحفظة",
+    "noWallets": "لا توجد محافظ متاحة",
+    "receiverAddress": "عنوان المستلم",
+    "receiverPlaceholder": "أدخل عنوان المستلم",
+    "amount": "المبلغ",
+    "amountPlaceholder": "أدخل المبلغ",
+    "token": "الرمز",
+    "selectToken": "اختر الرمز",
+    "noTokens": "لا توجد رموز متاحة",
+    "loadingTokens": "جاري تحميل الرموز...",
+    "transferButton": "تحويل الرمز",
+    "transferring": "جاري التحويل...",
+    "success": "تم تحويل الرمز بنجاح!",
+    "failed": "فشل تحويل الرمز",
+    "transactionHash": "تجزئة المعاملة",
+    "hashCopied": "تم نسخ تجزئة المعاملة إلى الحافظة!",
+    "copyFailed": "فشل نسخ تجزئة المعاملة"
+  },
+  "security": {
+    "safeGuard": "الحماية",
+    "lockMethod": "طريقة القفل",
+    "changePassword": "تغيير كلمة المرور",
+    "authentication": "المصادقة",
+    "multifactorAuth": "المصادقة متعددة العوامل",
+    "mfaUpdated": "تم تحديث المصادقة متعددة العوامل بنجاح",
+    "mfaFailed": "فشل تحديث المصادقة متعددة العوامل",
+    "transactionPassword": "كلمة مرور المعاملة",
+    "privacy": "الخصوصية",
+    "hideBalance": "إخفاء الرصيد عند فتح التطبيق",
+    "walletBackups": "نسخ احتياطية للمحفظة",
+    "walletNeedsBackup": "{{count}} محفظة تحتاج إلى نسخ احتياطي",
+    "walletNeedsBackup_plural": "{{count}} محافظ تحتاج إلى نسخ احتياطي",
+    "backupAllWallets": "نسخ احتياطي لجميع المحافظ",
+    "deactivateAccount": "تعطيل الحساب",
+    "deactivate": "تعطيل",
+    "deactivating": "جاري التعطيل...",
+    "deleteAccount": "حذف الحساب",
+    "delete": "حذف",
+    "deleting": "جاري الحذف...",
+    "accountDeactivated": "تم تعطيل الحساب بنجاح",
+    "accountDeleted": "تم حذف الحساب بنجاح",
+    "deactivateFailed": "فشل تعطيل الحساب",
+    "deleteFailed": "فشل حذف الحساب",
+    "deactivationSuccess": "تم تعطيل الحساب بنجاح",
+    "deletionSuccess": "تم استلام طلب حذف الحساب",
+    "deactivationMessage": "سيتم تسجيل خروجك تلقائيًا. لإعادة تنشيط حسابك، يرجى الاتصال بـ",
+    "deletionMessage": "سيعالج فريقنا طلبك قريبًا. لأي استفسارات، اتصل بـ",
+    "contactSupport": "support@abc.com",
+    "modal": {
+      "deactivateTitle": "تعطيل الحساب",
+      "deactivateDescription": "سيتم تعطيل حسابك مؤقتًا. سيتم الاحتفاظ بجميع بياناتك ولكن لن يمكن الوصول إليها.",
+      "deleteTitle": "حذف الحساب نهائيًا",
+      "deleteDescription": "لا يمكن التراجع عن هذا الإجراء. سيتم مسح جميع بياناتك نهائيًا من أنظمتنا.",
+      "confirmDeactivate": "تأكيد التعطيل",
+      "confirmDelete": "تأكيد الحذف",
+      "cancel": "إلغاء",
+      "deactivateWarning": "بعد التعطيل، سيتم تسجيل خروجك تلقائيًا. اتصل بالدعم على {{email}} لإعادة تنشيط حسابك."
+    }
+  },
+  "portfolio": {
+    "title": "محفظتك الاستثمارية",
+    "allTransactions": "جميع المعاملات",
+    "copyTrades": "نسخ التداولات",
+    "limitOrder": "أمر محدد"
+  },
+  "profile": {
+    "title": "الملف الشخصي",
+    "editProfile": "تعديل الملف الشخصي",
+    "email": "البريد الإلكتروني",
+    "name": "الاسم",
+    "phone": "الهاتف",
+    "address": "العنوان",
+    "transactionPassword": "كلمة مرور المعاملة",
+    "saveChanges": "حفظ التغييرات",
+    "cancel": "إلغاء",
+    "notProvided": "غير مقدم",
+    "profileUpdated": "تم تحديث الملف الشخصي بنجاح",
+    "profileUpdateFailed": "فشل تحديث الملف الشخصي",
+    "loading": "جاري التحميل..."
+  },
+  "preferences": {
+    "title": "التفضيلات",
+    "currency": "العملة",
+    "britishPound": "الجنيه الإسترليني",
+    "usDollar": "الدولار الأمريكي",
+    "euro": "اليورو",
+    "onOffRampCurrency": "عملة الإيداع/السحب",
+    "appearance": "المظهر",
+    "language": "اللغة",
+    "theme": "السمة",
+    "light": "فاتح",
+    "dark": "داكن",
+    "selectLanguage": "اختر اللغة",
+    "selectCurrency": "اختر العملة",
+    "selectTheme": "اختر السمة",
+    "currencyUpdated": "تم تحديث العملة بنجاح!",
+    "currencyUpdateFailed": "فشل تحديث العملة",
+    "loadingCurrencies": "جاري تحميل العملات..."
+  },
+  "changePassword": {
+    "title": "تغيير كلمة المرور",
+    "resetTitle": "إعادة تعيين كلمة المرور",
+    "currentPassword": "كلمة المرور الحالية",
+    "currentPlaceholder": "أدخل كلمة المرور الحالية",
+    "newPassword": "كلمة المرور الجديدة",
+    "newPlaceholder": "أدخل كلمة المرور الجديدة",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "confirmPlaceholder": "تأكيد كلمة المرور الجديدة",
+    "button": "تأكيد",
+    "loading": "جاري التغيير...",
+    "success": "تم تغيير كلمة المرور بنجاح!",
+    "failed": "فشل تغيير كلمة المرور",
+    "passwordMismatch": "كلمتا المرور غير متطابقتين",
+    "passwordRequired": "جميع الحقول مطلوبة"
+  },
+  "transactionPassword": {
+    "title": "تعيين كلمة مرور المعاملة",
+    "mobileTitle": "تعيين كلمة مرور المعاملة",
+    "description": "يجب أن تتكون كلمة المرور من 12 حرفًا بالضبط",
+    "enterPlaceholder": "أدخل كلمة مرور من 12 حرفًا",
+    "confirmPlaceholder": "تأكيد كلمة مرور من 12 حرفًا",
+    "charactersCount": "{{count}}/12 حرفًا",
+    "button": "تعيين كلمة المرور",
+    "loading": "جاري الإعداد...",
+    "success": "تم تعيين كلمة مرور المعاملة بنجاح!",
+    "failed": "فشل تعيين كلمة مرور المعاملة",
+    "errors": {
+      "exactLength": "يجب أن تتكون كلمة مرور المعاملة من 12 حرفًا بالضبط",
+      "maxLength": "الحد الأقصى 12 حرفًا مسموح به",
+      "passwordMismatch": "كلمتا المرور غير متطابقتين",
+      "passwordRequirements": "يجب أن تحتوي كلمة المرور على أحرف كبيرة وصغيرة وأرقام ورموز خاصة"
+    }
+  },
+  "backup": {
+    "allWallets": {
+      "title": "نسخ احتياطي لجميع المحافظ",
+      "description": "هل ترغب في عمل نسخة احتياطية لجميع محافظك لإنشاء نسخة احتياطية أدناه.",
+      "button": "نسخ احتياطي للمحافظ",
+      "buttonLoading": "جاري النسخ الاحتياطي...",
+      "downloadButton": "تنزيل جميع المحافظ",
+      "success": "تم النسخ الاحتياطي للمحافظ بنجاح!",
+      "failed": "فشل النسخ الاحتياطي للمحافظ",
+      "copied": "تم النسخ إلى الحافظة",
+      "copyFailed": "فشل النسخ",
+      "fields": {
+        "chain": "السلسلة",
+        "address": "العنوان",
+        "privateKey": "المفتاح الخاص",
+        "phrase": "العبارة"
+      }
+    },
+    "singleWallet": {
+      "title": "نسخ احتياطي للمحفظة",
+      "selectBlockchain": "اختر البلوكتشين",
+      "selectPlaceholder": "اختر السلسلة",
+      "button": "نسخ احتياطي للمحفظة",
+      "buttonLoading": "جاري النسخ الاحتياطي...",
+      "downloadButton": "تنزيل تفاصيل المحفظة",
+      "success": "تم النسخ الاحتياطي للمحفظة بنجاح!",
+      "failed": "فشل النسخ الاحتياطي للمحفظة",
+      "noChainSelected": "الرجاء اختيار بلوكتشين",
+      "copied": "تم النسخ إلى الحافظة",
+      "copyFailed": "فشل النسخ",
+      "fields": {
+        "chain": "السلسلة",
+        "address": "العنوان",
+        "privateKey": "المفتاح الخاص"
+      },
+      "chains": {
+        "ethereum": "إيثريوم",
+        "bsc": "سلسلة بي إن بي الذكية",
+        "polygon": "بوليغون",
+        "solana": "سولانا"
+      }
+    }
+  },
+  "transactions": {
+    "title": "سجل المعاملات",
+    "searchPlaceholder": "البحث في المعاملات...",
+    "filterAll": "جميع المعاملات",
+    "filterPending": "معلقة",
+    "filterCompleted": "مكتملة",
+    "table": {
+      "type": "النوع",
+      "from": "من",
+      "to": "إلى",
+      "amount": "المبلغ",
+      "token": "الرمز",
+      "chain": "السلسلة",
+      "status": "الحالة",
+      "date": "التاريخ"
+    },
+    "status": {
+      "pending": "معلق",
+      "completed": "مكتمل",
+      "unknown": "غير معروف"
+    },
+    "type": {
+      "transfer": "تحويل",
+      "deposit": "إيداع"
+    },
+    "messages": {
+      "noTransactions": "لم يتم العثور على معاملات",
+      "copied": "تم النسخ إلى الحافظة!",
+      "fetchFailed": "فشل جلب المعاملات",
+      "showing": "عرض {{count}} من {{total}} معاملة",
+      "previous": "السابق",
+      "next": "التالي"
+    },
+    "token": {
+      "native": "أصلي"
+    },
+    "tooltips": {
+      "copyAddress": "نسخ العنوان"
+    }
+  },
+  "copyTrades": {
+    "title": "سجل نسخ التداولات",
+    "searchPlaceholder": "البحث عن المتداولين...",
+    "filterAll": "جميع التداولات",
+    "filterActive": "نشط",
+    "filterInactive": "غير نشط",
+    "table": {
+      "traderAddress": "عنوان المتداول",
+      "chain": "السلسلة",
+      "amountUSD": "المبلغ (دولار أمريكي)",
+      "status": "الحالة",
+      "started": "بدأ",
+      "stopped": "توقف",
+      "actions": "الإجراءات"
+    },
+    "status": {
+      "active": "نشط",
+      "inactive": "غير نشط"
+    },
+    "actions": {
+      "view": "عرض",
+      "stop": "إيقاف",
+      "copyAddress": "نسخ العنوان"
+    },
+    "messages": {
+      "noTrades": "لم يتم العثور على تداولات منسوخة",
+      "copied": "تم النسخ إلى الحافظة!",
+      "fetchFailed": "فشل جلب التداولات المنسوخة",
+      "showing": "عرض {{count}} من {{total}} تداول منسوخ",
+      "previous": "السابق",
+      "next": "التالي",
+      "notAvailable": "غير متوفر"
+    }
+  },
+  "notifications": {
+    "title": "الإشعارات",
+    "unread": "{{count}} غير مقروء",
+    "unread_plural": "{{count}} غير مقروءة",
+    "markAllAsRead": "تحديد الكل كمقروء",
+    "clearAll": "مسح الكل",
+    "noNotifications": "لا توجد إشعارات",
+    "markAsRead": "تحديد كمقروء",
+    "delete": "حذف",
+    "retry": "إعادة المحاولة",
+    "loading": "جاري التحميل...",
+    "errors": {
+      "fetchFailed": "فشل جلب الإشعارات",
+      "markFailed": "فشل تحديد كمقروء",
+      "deleteFailed": "فشل حذف الإشعار"
+    },
+    "success": {
+      "markedAll": "تم تحديد جميع الإشعارات كمقروءة",
+      "markedOne": "تم تحديد الإشعار كمقروء",
+      "deletedAll": "تم مسح جميع الإشعارات",
+      "deletedOne": "تم حذف الإشعار"
+    }
+  }
+}

@@ -3,6 +3,7 @@ import { ArrowLeft, ChevronLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import MobileSidebar from "@/components/ui/mobile-sidebar";
+import { useTranslation } from "react-i18next";
 
 const SettingsLayout = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -10,6 +11,8 @@ const SettingsLayout = () => {
   const [showContent, setShowContent] = useState(!isMobile);
   const location = useLocation();
   const navigate = useNavigate();
+
+  const { t } = useTranslation("settings");
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -57,42 +60,41 @@ const SettingsLayout = () => {
     <div className="flex justify-center md:items-center min-h-screen md:p-4 dark:bg-black bg-gray-50">
       <div className="flex flex-col w-full max-w-4xl md:bg-white bg-[#FAFAFA]  md:dark:bg-[#101010] dark:bg-black md:shadow-lg shadow-none rounded-lg overflow-hidden">
         <div className="p-4 flex items-center justify-between">
-         {isMobile && showContent ? (
-  <>
-    <ChevronLeft
-      size={24}
-      className="cursor-pointer"
-      onClick={handleBack}
-    />
-    <h1 className="text-xl manrope-font text-center flex-1">
-      {getPageTitle()}
-    </h1>
-    <div className="w-6"></div>
-  </>
-) : (
-  <div className="relative flex items-center w-full py-2 md:px-4">
-    {/* Left Side: Arrow */}
-    <ChevronLeft
-      size={24}
-      className="absolute left-2 md:left-4 cursor-pointer"
-      onClick={() => navigate("/chat")}
-    />
+          {isMobile && showContent ? (
+            <>
+              <ChevronLeft
+                size={24}
+                className="cursor-pointer"
+                onClick={handleBack}
+              />
+              <h1 className="text-xl manrope-font text-center flex-1">
+                {getPageTitle()}
+              </h1>
+              <div className="w-6"></div>
+            </>
+          ) : (
+            <div className="relative flex items-center w-full py-2 md:px-4">
+              {/* Left Side: Arrow */}
+              <ChevronLeft
+                size={24}
+                className="absolute left-2 md:left-4 cursor-pointer"
+                onClick={() => navigate("/chat")}
+              />
 
-    {/* Center Heading */}
-    <h3 className="mx-auto text-xl dark:text-white font-bold manrope-font">
-      Account Setting
-    </h3>
+              {/* Center Heading */}
+              <h3 className="mx-auto text-xl dark:text-white font-bold manrope-font">
+                {t("settingsLayout.title")}
+              </h3>
 
-    {/* Right Side: Button */}
-    {/* <button
+              {/* Right Side: Button */}
+              {/* <button
       onClick={() => navigate("/chat")}
       className="absolute right-2 md:right-4 hidden md:block hover:cursor-pointer hover:bg-black/70 text-sm md:text-base px-4 py-2 bg-black text-white dark:bg-[#202229] dark:text-white rounded-lg"
     >
       Back to Chat
     </button> */}
-  </div>
-)}
-
+            </div>
+          )}
         </div>
         {/* Content area */}
         <div className="flex flex-1 overflow-hidden">
@@ -109,7 +111,7 @@ const SettingsLayout = () => {
               </div>
               <main
                 className="flex-1 p-4 overflow-y-auto"
-                style={{ height: "500px" }}
+                // style={{ height: "500px" }}
               >
                 <Outlet />
               </main>

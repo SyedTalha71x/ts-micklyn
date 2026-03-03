@@ -133,8 +133,8 @@ export default function ForgotPassword() {
                 className="text-sm border border-[#687588] dark:bg-[#080808] mb-4"
               />{" "}
               <div className="flex justify-center items-center mb-6">
-                <span className="text-sm text-gray-600 dark:text-white manrope-font-500 text-center">
-                  Didn't receive OTP? <span className="text-black font-bold cursor-pointer">Resend</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400 manrope-font-500 text-center">
+                  Didn't receive OTP? <span className="text-black dark:text-white font-bold cursor-pointer">Resend</span>
                 </span>
               </div>
               <div className="space-y-2">

@@ -7,6 +7,7 @@ import { jwtDecode } from "jwt-decode";
 import { useHistory } from "@/Context/HistoryContext";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 
 export const handleCreateSession = async ({
   userId,
@@ -39,6 +40,8 @@ export default function TotalBalance() {
   const [userId, setUserId] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const { setUserInfo, handleGetHistory } = useHistory();
+
+  const {t} = useTranslation(["chat", "settings"])
 
   useEffect(() => {
     const userToken = localStorage.getItem("user-visited-dashboard");
@@ -80,7 +83,7 @@ export default function TotalBalance() {
           onClick={handleNewChat}
           className="w-[98%] rounded-md cursor-pointer shadow-md gap-2 dark:bg-[#101010] dark:border dark:shadow-sm text-sm font-semibold text-black bg-[#d1d5dc] text-center py-2 dark:text-white hover:opacity-90 transition-opacity"
         >
-          New Chat
+          {t("chatLayout.newChat")}
         </button>
       </div>
 

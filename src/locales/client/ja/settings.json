@@ -1,0 +1,368 @@
+{
+  "settingsLayout": {
+    "title": "アカウント設定"
+  },
+  "sidebar": {
+    "walletConnections": "ウォレット接続",
+    "token": "トークン",
+    "importWallet": "ウォレットをインポート",
+    "importTokens": "トークンをインポート",
+    "transferToken": "トークンを送金",
+    "settings": "設定",
+    "preferences": "環境設定",
+    "portfolio": "ポートフォリオ",
+    "notification": "通知",
+    "profile": "プロフィール",
+    "logout": "ログアウト"
+  },
+  "wallet": {
+    "createNewWallet": "新規ウォレット作成",
+    "blockchainNetwork": "ブロックチェーンネットワーク",
+    "createWallet": "ウォレット作成",
+    "creating": "作成中...",
+    "walletCreatedSuccess": "ウォレットが正常に作成されました",
+    "address": "アドレス",
+    "copyAddress": "アドレスをコピー",
+    "addressCopied": "ウォレットアドレスをクリップボードにコピーしました！",
+    "copyFailed": "アドレスのコピーに失敗しました",
+    "walletCreated": "ウォレットが正常に作成されました！",
+    "walletFailed": "ウォレットの作成に失敗しました",
+    "ethereum": "イーサリアム",
+    "binanceSmartChain": "バイナンススマートチェーン",
+    "polygon": "ポリゴン",
+    "solana": "ソラナ"
+  },
+  "token": {
+    "tabs": {
+      "tokenInfo": "トークン情報",
+      "tokenBalance": "トークン残高"
+    },
+    "selectNetwork": "ネットワークを選択",
+    "selectToken": "トークンを選択",
+    "loadingTokens": "トークンを読み込み中...",
+    "noTokensAvailable": "利用可能なトークンがありません",
+    "network": "ネットワーク",
+    "symbol": "シンボル",
+    "holders": "保有者数",
+    "supply": "供給量",
+    "volume": "取引量",
+    "circulatingSupply": "循環供給量",
+    "tokenBalance": "トークン残高",
+    "balance": "残高",
+    "ethereum": "イーサリアム",
+    "polygon": "ポリゴン",
+    "solana": "ソラナ",
+    "binanceSmartChain": "バイナンススマートチェーン",
+    "walletAddressNotConfigured": "{{network}}のウォレットアドレスが設定されていません",
+    "fetchingTokenInfo": "トークン情報を取得中...",
+    "fetchingBalance": "トークン残高を取得中..."
+  },
+  "import": {
+    "wallet": {
+      "title": "ウォレットをインポート",
+      "blockchain": "ブロックチェーン",
+      "selectChains": "チェーンを選択",
+      "privateKey": "秘密鍵",
+      "privateKeyPlaceholder": "秘密鍵を入力してください",
+      "privateKeyHelp": "秘密鍵または12/24語のリカバリーフレーズを入力してください",
+      "importButton": "ウォレットをインポート",
+      "importing": "インポート中...",
+      "success": "ウォレットが正常にインポートされました！",
+      "failed": "ウォレットのインポートに失敗しました"
+    },
+    "token": {
+      "title": "トークンをインポート",
+      "blockchain": "ブロックチェーン",
+      "selectChain": "チェーンを選択",
+      "contractAddress": "トークンコントラクトアドレス",
+      "contractPlaceholder": "トークンコントラクトアドレスを入力",
+      "contractHelp": "インポートするトークンのコントラクトアドレスを入力してください",
+      "importButton": "トークンをインポート",
+      "importing": "インポート中...",
+      "success": "トークンが正常にインポートされました！",
+      "failed": "トークンのインポートに失敗しました",
+      "addressRequired": "コントラクトアドレスを入力してください"
+    },
+    "chains": {
+      "ethereum": "イーサリアム",
+      "bsc": "バイナンススマートチェーン",
+      "polygon": "ポリゴン",
+      "solana": "ソラナ"
+    }
+  },
+  "transfer": {
+    "title": "トークンを送金",
+    "selectWallet": "ウォレットを選択",
+    "noWallets": "利用可能なウォレットがありません",
+    "receiverAddress": "受取人アドレス",
+    "receiverPlaceholder": "受取人アドレスを入力",
+    "amount": "金額",
+    "amountPlaceholder": "金額を入力",
+    "token": "トークン",
+    "selectToken": "トークンを選択",
+    "noTokens": "利用可能なトークンがありません",
+    "loadingTokens": "トークンを読み込み中...",
+    "transferButton": "トークンを送金",
+    "transferring": "送金中...",
+    "success": "トークンの送金に成功しました！",
+    "failed": "トークンの送金に失敗しました",
+    "transactionHash": "トランザクションハッシュ",
+    "hashCopied": "トランザクションハッシュをクリップボードにコピーしました！",
+    "copyFailed": "トランザクションハッシュのコピーに失敗しました"
+  },
+  "security": {
+    "safeGuard": "セーフガード",
+    "lockMethod": "ロック方法",
+    "changePassword": "パスワード変更",
+    "authentication": "認証",
+    "multifactorAuth": "多要素認証",
+    "mfaUpdated": "MFAが正常に更新されました",
+    "mfaFailed": "MFAの更新に失敗しました",
+    "transactionPassword": "取引パスワード",
+    "privacy": "プライバシー",
+    "hideBalance": "アプリ起動時に残高を非表示",
+    "walletBackups": "ウォレットバックアップ",
+    "walletNeedsBackup": "{{count}}個のウォレットのバックアップが必要です",
+    "walletNeedsBackup_plural": "{{count}}個のウォレットのバックアップが必要です",
+    "backupAllWallets": "すべてのウォレットをバックアップ",
+    "deactivateAccount": "アカウントを無効化",
+    "deactivate": "無効化",
+    "deactivating": "無効化中...",
+    "deleteAccount": "アカウントを削除",
+    "delete": "削除",
+    "deleting": "削除中...",
+    "accountDeactivated": "アカウントが正常に無効化されました",
+    "accountDeleted": "アカウントが正常に削除されました",
+    "deactivateFailed": "アカウントの無効化に失敗しました",
+    "deleteFailed": "アカウントの削除に失敗しました",
+    "deactivationSuccess": "アカウント無効化完了",
+    "deletionSuccess": "アカウント削除リクエストを受付ました",
+    "deactivationMessage": "自動的にログアウトされます。アカウントを再活性化するには、お問い合わせください",
+    "deletionMessage": "弊社チームがまもなくリクエストを処理します。ご質問がある場合は、お問い合わせください",
+    "contactSupport": "support@abc.com",
+    "modal": {
+      "deactivateTitle": "アカウントを無効化",
+      "deactivateDescription": "アカウントは一時的に無効化されます。すべてのデータは保存されますが、アクセスできなくなります。",
+      "deleteTitle": "アカウントを完全に削除",
+      "deleteDescription": "この操作は元に戻せません。すべてのデータがシステムから完全に消去されます。",
+      "confirmDeactivate": "無効化を確認",
+      "confirmDelete": "削除を確認",
+      "cancel": "キャンセル",
+      "deactivateWarning": "無効化後、自動的にログアウトされます。アカウントを再活性化するには、{{email}}までお問い合わせください。"
+    }
+  },
+  "portfolio": {
+    "title": "あなたのポートフォリオ",
+    "allTransactions": "すべての取引",
+    "copyTrades": "トレードをコピー",
+    "limitOrder": "指値注文"
+  },
+  "profile": {
+    "title": "ユーザープロフィール",
+    "editProfile": "プロフィール編集",
+    "email": "メールアドレス",
+    "name": "名前",
+    "phone": "電話番号",
+    "address": "住所",
+    "transactionPassword": "取引パスワード",
+    "saveChanges": "変更を保存",
+    "cancel": "キャンセル",
+    "notProvided": "未提供",
+    "profileUpdated": "プロフィールが正常に更新されました",
+    "profileUpdateFailed": "プロフィールの更新に失敗しました",
+    "loading": "読み込み中..."
+  },
+  "preferences": {
+    "title": "環境設定",
+    "currency": "通貨",
+    "britishPound": "英国ポンド",
+    "usDollar": "米ドル",
+    "euro": "ユーロ",
+    "onOffRampCurrency": "オン/オフランプ通貨",
+    "appearance": "外観",
+    "language": "言語",
+    "theme": "テーマ",
+    "light": "ライト",
+    "dark": "ダーク",
+    "selectLanguage": "言語を選択",
+    "selectCurrency": "通貨を選択",
+    "selectTheme": "テーマを選択",
+    "currencyUpdated": "通貨が正常に更新されました！",
+    "currencyUpdateFailed": "通貨の更新に失敗しました",
+    "loadingCurrencies": "通貨を読み込み中..."
+  },
+  "changePassword": {
+    "title": "パスワードを変更",
+    "resetTitle": "パスワードをリセット",
+    "currentPassword": "現在のパスワード",
+    "currentPlaceholder": "現在のパスワードを入力",
+    "newPassword": "新しいパスワード",
+    "newPlaceholder": "新しいパスワードを入力",
+    "confirmPassword": "パスワードを確認",
+    "confirmPlaceholder": "新しいパスワードを確認",
+    "button": "確認",
+    "loading": "変更中...",
+    "success": "パスワードが正常に変更されました！",
+    "failed": "パスワードの変更に失敗しました",
+    "passwordMismatch": "パスワードが一致しません",
+    "passwordRequired": "すべての項目は必須です"
+  },
+  "transactionPassword": {
+    "title": "取引パスワードを設定",
+    "mobileTitle": "取引パスワードを設定",
+    "description": "パスワードは12文字である必要があります",
+    "enterPlaceholder": "12文字のパスワードを入力",
+    "confirmPlaceholder": "12文字のパスワードを確認",
+    "charactersCount": "{{count}}/12文字",
+    "button": "パスワードを設定",
+    "loading": "設定中...",
+    "success": "取引パスワードが正常に設定されました！",
+    "failed": "取引パスワードの設定に失敗しました",
+    "errors": {
+      "exactLength": "取引パスワードは正確に12文字である必要があります",
+      "maxLength": "最大12文字まで許可されています",
+      "passwordMismatch": "パスワードが一致しません",
+      "passwordRequirements": "パスワードには大文字、小文字、数字、特殊文字を含める必要があります"
+    }
+  },
+  "backup": {
+    "allWallets": {
+      "title": "全ウォレットのバックアップ",
+      "description": "以下のバックアップを作成するために、すべてのウォレットをバックアップしますか？",
+      "button": "ウォレットをバックアップ",
+      "buttonLoading": "バックアップ中...",
+      "downloadButton": "全ウォレットをダウンロード",
+      "success": "ウォレットが正常にバックアップされました！",
+      "failed": "ウォレットのバックアップに失敗しました",
+      "copied": "クリップボードにコピーしました",
+      "copyFailed": "コピーに失敗しました",
+      "fields": {
+        "chain": "チェーン",
+        "address": "アドレス",
+        "privateKey": "秘密鍵",
+        "phrase": "フレーズ"
+      }
+    },
+    "singleWallet": {
+      "title": "ウォレットバックアップ",
+      "selectBlockchain": "ブロックチェーンを選択",
+      "selectPlaceholder": "チェーンを選択",
+      "button": "ウォレットをバックアップ",
+      "buttonLoading": "バックアップ中...",
+      "downloadButton": "ウォレット詳細をダウンロード",
+      "success": "ウォレットが正常にバックアップされました！",
+      "failed": "ウォレットのバックアップに失敗しました",
+      "noChainSelected": "ブロックチェーンを選択してください",
+      "copied": "クリップボードにコピーしました",
+      "copyFailed": "コピーに失敗しました",
+      "fields": {
+        "chain": "チェーン",
+        "address": "アドレス",
+        "privateKey": "秘密鍵"
+      },
+      "chains": {
+        "ethereum": "イーサリアム",
+        "bsc": "バイナンススマートチェーン",
+        "polygon": "ポリゴン",
+        "solana": "ソラナ"
+      }
+    }
+  },
+  "transactions": {
+    "title": "取引履歴",
+    "searchPlaceholder": "取引を検索...",
+    "filterAll": "すべての取引",
+    "filterPending": "保留中",
+    "filterCompleted": "完了",
+    "table": {
+      "type": "タイプ",
+      "from": "送信元",
+      "to": "送信先",
+      "amount": "金額",
+      "token": "トークン",
+      "chain": "チェーン",
+      "status": "ステータス",
+      "date": "日付"
+    },
+    "status": {
+      "pending": "保留中",
+      "completed": "完了",
+      "unknown": "不明"
+    },
+    "type": {
+      "transfer": "送金",
+      "deposit": "入金"
+    },
+    "messages": {
+      "noTransactions": "取引が見つかりません",
+      "copied": "クリップボードにコピーしました！",
+      "fetchFailed": "取引の取得に失敗しました",
+      "showing": "{{total}}件中{{count}}件の取引を表示",
+      "previous": "前へ",
+      "next": "次へ"
+    },
+    "token": {
+      "native": "ネイティブ"
+    },
+    "tooltips": {
+      "copyAddress": "アドレスをコピー"
+    }
+  },
+  "copyTrades": {
+    "title": "コピートレード履歴",
+    "searchPlaceholder": "トレーダーを検索...",
+    "filterAll": "すべての取引",
+    "filterActive": "アクティブ",
+    "filterInactive": "非アクティブ",
+    "table": {
+      "traderAddress": "トレーダーアドレス",
+      "chain": "チェーン",
+      "amountUSD": "金額（USD）",
+      "status": "ステータス",
+      "started": "開始日時",
+      "stopped": "停止日時",
+      "actions": "アクション"
+    },
+    "status": {
+      "active": "アクティブ",
+      "inactive": "非アクティブ"
+    },
+    "actions": {
+      "view": "表示",
+      "stop": "停止",
+      "copyAddress": "アドレスをコピー"
+    },
+    "messages": {
+      "noTrades": "コピートレードが見つかりません",
+      "copied": "クリップボードにコピーしました！",
+      "fetchFailed": "コピートレードの取得に失敗しました",
+      "showing": "{{total}}件中{{count}}件のコピートレードを表示",
+      "previous": "前へ",
+      "next": "次へ",
+      "notAvailable": "N/A"
+    }
+  },
+  "notifications": {
+    "title": "通知",
+    "unread": "{{count}}件の未読",
+    "unread_plural": "{{count}}件の未読",
+    "markAllAsRead": "すべて既読にする",
+    "clearAll": "すべてクリア",
+    "noNotifications": "通知はありません",
+    "markAsRead": "既読にする",
+    "delete": "削除",
+    "retry": "再試行",
+    "loading": "読み込み中...",
+    "errors": {
+      "fetchFailed": "通知の取得に失敗しました",
+      "markFailed": "既読マークに失敗しました",
+      "deleteFailed": "通知の削除に失敗しました"
+    },
+    "success": {
+      "markedAll": "すべての通知を既読にしました",
+      "markedOne": "通知を既読にしました",
+      "deletedAll": "すべての通知を削除しました",
+      "deletedOne": "通知を削除しました"
+    }
+  }
+}

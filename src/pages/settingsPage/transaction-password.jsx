@@ -9,8 +9,10 @@ import {
 import { FireApi } from "@/hooks/fireApi";
 import toast from "react-hot-toast";
 import { Loader } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function TransactionPassword() {
+  const { t } = useTranslation('settings');
   const [confirmPassword, setConfirmPassword] = useState("");
   const [transactionPassword, setTransactionPassword] = useState("");
   const [isMobile, setIsMobile] = useState(false);
@@ -33,11 +35,11 @@ export default function TransactionPassword() {
   const validatePassword = () => {
     // Strict 12 character validation
     if (transactionPassword.length !== 12) {
-      setPasswordError("Transaction password must be exactly 12 characters");
+      setPasswordError(t('transactionPassword.errors.exactLength'));
       return false;
     }
     if (transactionPassword !== confirmPassword) {
-      setPasswordError("Passwords do not match");
+      setPasswordError(t('transactionPassword.errors.passwordMismatch'));
       return false;
     }
     setPasswordError("");
@@ -54,12 +56,12 @@ export default function TransactionPassword() {
       const response = await FireApi("/update", "PUT", {
         transaction_password: transactionPassword,
       });
-      toast.success(response.message);
+      toast.success(response.message || t('transactionPassword.success'));
       setTransactionPassword("");
       setConfirmPassword("");
     } catch (error) {
       console.log(error, "error");
-      toast.error(error.message || "Password must contain uppercase, lowercase, number, and special character.");
+      toast.error(error.message || t('transactionPassword.errors.passwordRequirements'));
     } finally {
       setIsLoading(false);
     }
@@ -72,9 +74,9 @@ export default function TransactionPassword() {
       {isMobile ? (
         <div className="w-full max-w-md">
           <div className="flex flex-col items-center space-y-4 pt-6">
-                        <h1 className="text-lg manrope-font-700">Set Transaction Password</h1>
+            <h1 className="text-lg manrope-font-700">{t('transactionPassword.mobileTitle')}</h1>
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              Password must be exactly 12 characters long
+              {t('transactionPassword.description')}
             </p>
           </div>
 
@@ -83,13 +85,13 @@ export default function TransactionPassword() {
               <div className="space-y-2">
                 <Input
                   type="password"
-                  placeholder="Enter 12-character password"
+                  placeholder={t('transactionPassword.enterPlaceholder')}
                   value={transactionPassword}
                   onChange={(e) => {
                     setTransactionPassword(e.target.value);
                     // Immediate validation feedback
                     if (e.target.value.length > 12) {
-                      setPasswordError("Maximum 12 characters allowed");
+                      setPasswordError(t('transactionPassword.errors.maxLength'));
                     } else {
                       setPasswordError("");
                     }
@@ -101,14 +103,14 @@ export default function TransactionPassword() {
                   <span className={`text-xs ${
                     transactionPassword.length === 12 ? 'text-green-500' : 'text-gray-500'
                   }`}>
-                    {transactionPassword.length}/12 characters
+                    {t('transactionPassword.charactersCount', { count: transactionPassword.length })}
                   </span>
                 </div>
               </div>
 
               <Input
                 type="password"
-                placeholder="Confirm 12-character password"
+                placeholder={t('transactionPassword.confirmPlaceholder')}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 maxLength={12}
@@ -129,7 +131,10 @@ export default function TransactionPassword() {
                 type="submit"
                 disabled={isFormEmpty || isLoading || passwordError || transactionPassword.length !== 12}
               >
-                {isLoading ? <Loader className="animate-spin" /> : "Set Password"}
+                {isLoading ? (
+                  <Loader className="animate-spin mr-2" size={16} />
+                ) : null}
+                {isLoading ? t('transactionPassword.loading') : t('transactionPassword.button')}
               </Button>
             </form>
           </div>
@@ -137,10 +142,9 @@ export default function TransactionPassword() {
       ) : (
         <Card3 className="w-full max-w-md" bgColor="dark:bg-[#2A2B2E] bg-gray-100">
           <CardHeader className="flex flex-col items-center space-y-4 pt-6">
-           
-            <h1 className="text-xl manrope-font-700">Set Transaction Password</h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Password must be exactly 12 characters long
+            <h1 className="text-xl manrope-font-700 text-center">{t('transactionPassword.title')}</h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
+              {t('transactionPassword.description')}
             </p>
           </CardHeader>
 
@@ -149,13 +153,13 @@ export default function TransactionPassword() {
               <div className="space-y-2">
                 <Input
                   type="password"
-                  placeholder="Enter 12-character password"
+                  placeholder={t('transactionPassword.enterPlaceholder')}
                   value={transactionPassword}
                   onChange={(e) => {
                     setTransactionPassword(e.target.value);
                     // Immediate validation feedback
                     if (e.target.value.length > 12) {
-                      setPasswordError("Maximum 12 characters allowed");
+                      setPasswordError(t('transactionPassword.errors.maxLength'));
                     } else {
                       setPasswordError("");
                     }
@@ -167,14 +171,14 @@ export default function TransactionPassword() {
                   <span className={`text-xs ${
                     transactionPassword.length === 12 ? 'text-green-500' : 'text-gray-500'
                   }`}>
-                    {transactionPassword.length}/12 characters
+                    {t('transactionPassword.charactersCount', { count: transactionPassword.length })}
                   </span>
                 </div>
               </div>
 
               <Input
                 type="password"
-                placeholder="Confirm 12-character password"
+                placeholder={t('transactionPassword.confirmPlaceholder')}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 maxLength={12}
@@ -195,7 +199,10 @@ export default function TransactionPassword() {
                 type="submit"
                 disabled={isFormEmpty || isLoading || passwordError || transactionPassword.length !== 12}
               >
-                {isLoading ? <Loader className="animate-spin" /> : "Set Password"}
+                {isLoading ? (
+                  <Loader className="animate-spin mr-2" size={16} />
+                ) : null}
+                {isLoading ? t('transactionPassword.loading') : t('transactionPassword.button')}
               </Button>
             </form>
           </CardContent>

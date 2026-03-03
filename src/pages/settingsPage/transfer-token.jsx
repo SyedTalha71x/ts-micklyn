@@ -13,8 +13,10 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useTranslation } from "react-i18next";
 
 const TransferToken = () => {
+  const { t } = useTranslation('settings');
   const [formData, setFormData] = useState({
     address: "",
     receiverAddress: "",
@@ -68,7 +70,7 @@ const TransferToken = () => {
       return res;
     } catch (error) {
       console.log(error, "error");
-      toast.error(error.message || "Failed to fetch wallet addresses");
+      toast.error(error.message || t('transfer.failed'));
     }
   };
 
@@ -98,7 +100,7 @@ const TransferToken = () => {
       }
     } catch (error) {
       console.error("Error fetching imported tokens:", error);
-      toast.error(error.message || "Failed to fetch imported tokens");
+      toast.error(error.message || t('transfer.failed'));
     } finally {
       setTokensLoading(false);
     }
@@ -117,7 +119,7 @@ const TransferToken = () => {
         token: formData.token,
       });
 
-      toast.success("Token transfer successful!");
+      toast.success(t('transfer.success'));
       setFormData({
         ...formData,
         receiverAddress: "",
@@ -126,7 +128,7 @@ const TransferToken = () => {
       setMessage(response.transactionHash);
     } catch (error) {
       console.error("Error transferring token:", error);
-      toast.error(error.message || "Failed to transfer token");
+      toast.error(error.message || t('transfer.failed'));
     } finally {
       setLoading(false);
     }
@@ -135,7 +137,9 @@ const TransferToken = () => {
   const copyToClipboard = () => {
     if (message) {
       navigator.clipboard.writeText(message).then(() => {
-        toast.success("Transaction hash copied to clipboard!");
+        toast.success(t('transfer.hashCopied'));
+      }).catch(() => {
+        toast.error(t('transfer.copyFailed'));
       });
     }
   };
@@ -145,7 +149,7 @@ const TransferToken = () => {
       <Card className="dark:bg-[#2A2B2E] bg-gray-100">
         <CardHeader>
           <CardTitle className="text-center text-xl font-semibold">
-            Transfer Token
+            {t('transfer.title')}
           </CardTitle>
         </CardHeader>
         
@@ -153,20 +157,22 @@ const TransferToken = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Wallet Address Selection */}
             <div className="space-y-2">
-              <label className="block text-sm font-medium">Select Wallet</label>
+              <label className="block text-sm font-medium">
+                {t('transfer.selectWallet')}
+              </label>
               <Select value={formData.address} onValueChange={handleAddressChange}>
                 <SelectTrigger className="text-xs md:text-sm w-full dark:bg-none dark:text-white dark:border-gray-500">
-                  <SelectValue placeholder="Select wallet" />
+                  <SelectValue placeholder={t('transfer.selectWallet')} />
                 </SelectTrigger>
                 <SelectContent className="dark:bg-[#2A2B2E]">
                   {walletDetails.length === 0 ? (
                     <SelectItem value="no-wallets" disabled>
-                      No wallets available
+                      {t('transfer.noWallets')}
                     </SelectItem>
                   ) : (
                     walletDetails.map((wallet) => (
                       <SelectItem key={wallet.address} value={wallet.address}>
-                        {wallet.chain}: {wallet.address}
+                        {wallet.chain}: {wallet.address.substring(0, 25)}...
                       </SelectItem>
                     ))
                   )}
@@ -176,7 +182,7 @@ const TransferToken = () => {
               {formData.address && (
                 <div className="flex flex-wrap gap-2">
                   <Badge variant="outline" className="dark:bg-[#232428]">
-                    {walletDetails.find(w => w.address === formData.address)?.chain || 'Selected'}
+                    {walletDetails.find(w => w.address === formData.address)?.chain || t('transfer.selectWallet')}
                   </Badge>
                 </div>
               )}
@@ -184,12 +190,14 @@ const TransferToken = () => {
 
             {/* Receiver Address */}
             <div className="space-y-2">
-              <label className="block text-sm font-medium">Receiver Address</label>
+              <label className="block text-sm font-medium">
+                {t('transfer.receiverAddress')}
+              </label>
               <Input
                 name="receiverAddress"
                 value={formData.receiverAddress}
                 onChange={(e) => handleChange("receiverAddress", e.target.value)}
-                placeholder="Enter receiver address"
+                placeholder={t('transfer.receiverPlaceholder')}
                 required
                 className="text-xs md:text-sm dark:bg-none dark:outline-none dark:border-gray-500"
               />
@@ -197,13 +205,15 @@ const TransferToken = () => {
 
             {/* Amount */}
             <div className="space-y-2">
-              <label className="block text-sm font-medium">Amount</label>
+              <label className="block text-sm font-medium">
+                {t('transfer.amount')}
+              </label>
               <Input
                 name="amount"
                 type="number"
                 value={formData.amount}
                 onChange={(e) => handleChange("amount", e.target.value)}
-                placeholder="Enter amount"
+                placeholder={t('transfer.amountPlaceholder')}
                 min="0"
                 step="0.00000001"
                 required
@@ -213,21 +223,23 @@ const TransferToken = () => {
 
             {/* Token Selection */}
             <div className="space-y-2">
-              <label className="block text-sm font-medium">Token</label>
+              <label className="block text-sm font-medium">
+                {t('transfer.token')}
+              </label>
               {tokensLoading ? (
                 <div className="flex items-center text-sm text-muted-foreground">
                   <Loader className="h-4 w-4 animate-spin mr-2" />
-                  Loading tokens...
+                  {t('transfer.loadingTokens')}
                 </div>
               ) : (
                 <Select value={formData.token} onValueChange={(value) => handleChange("token", value)}>
                   <SelectTrigger className="text-xs md:text-sm w-full dark:bg-none dark:text-white dark:border-gray-500">
-                    <SelectValue placeholder="Select token" />
+                    <SelectValue placeholder={t('transfer.selectToken')} />
                   </SelectTrigger>
                   <SelectContent className="dark:bg-[#2A2B2E]">
                     {importedTokens.length === 0 ? (
                       <SelectItem value="no-tokens" disabled>
-                        No tokens available
+                        {t('transfer.noTokens')}
                       </SelectItem>
                     ) : (
                       importedTokens.map((token) => (
@@ -261,10 +273,10 @@ const TransferToken = () => {
               {loading ? (
                 <>
                   <Loader className="animate-spin mr-2" size={16} />
-                  Transferring...
+                  {t('transfer.transferring')}
                 </>
               ) : (
-                "Transfer Token"
+                t('transfer.transferButton')
               )}
             </Button>
           </form>
@@ -272,7 +284,7 @@ const TransferToken = () => {
           {/* Transaction Hash Display */}
           {message && (
             <div className="mt-4 p-3 bg-muted rounded-md dark:bg-[#232428]">
-              <p className="text-sm font-medium">Transaction Hash:</p>
+              <p className="text-sm font-medium">{t('transfer.transactionHash')}:</p>
               <div className="flex items-center justify-between mt-1">
                 <p className="text-sm break-all mr-2 text-xs">{message}</p>
                 <Button 

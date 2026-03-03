@@ -1,0 +1,18 @@
+{
+  "chatLayout": {
+    "msginput": "メッセージを入力...",
+    "watchlist": "ウォッチリスト",
+    "history": "履歴",
+    "balance": "総残高",
+    "watchlistError": "ウォッチリストにお気に入りの資産が見つかりません",
+    "historyError": "チャット履歴が見つかりません",
+    "newChat": "新しいチャット",
+    "loadingAssets": "資産を読み込み中...",
+    "removeFromWatchlist": "ウォッチリストから削除",
+    "removedSuccess": "{{symbol}}をウォッチリストから削除しました",
+    "removeFailed": "資産の削除に失敗しました",
+    "userNotAuthenticated": "ユーザーが認証されていません",
+    "chatDeleted": "チャットを削除しました",
+    "deleteFailed": "チャットの削除に失敗しました"
+  }
+}

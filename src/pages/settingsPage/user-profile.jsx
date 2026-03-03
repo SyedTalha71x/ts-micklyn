@@ -1,13 +1,12 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { useState, useEffect } from "react";
 import { FireApi } from "@/hooks/fireApi";
 import toast from "react-hot-toast";
-import { Loader } from "lucide-react";
+import { Loader, Edit2, X, Check, Mail, User, Phone, MapPin } from "lucide-react";
 import { useProfile } from "@/Context/ProfileContext";
+import { useTranslation } from "react-i18next";
 
 export default function UserProfile() {
+  const { t } = useTranslation('settings');
   const { profile, setProfile } = useProfile();
   const [editMode, setEditMode] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -20,7 +19,7 @@ export default function UserProfile() {
   });
 
   // Initialize form data when profile is available
-  useState(() => {
+  useEffect(() => {
     if (profile?.user) {
       setFormData({
         email: profile.user.email || "",
@@ -60,10 +59,10 @@ export default function UserProfile() {
         }
       });
       
-      toast.success(response.message);
+      toast.success(response.message || t('profile.profileUpdated'));
       setEditMode(false);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.message || t('profile.profileUpdateFailed'));
     } finally {
       setIsUpdating(false);
     }
@@ -71,133 +70,202 @@ export default function UserProfile() {
 
   if (!profile?.user) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <Loader className="animate-spin" size={24} />
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500 dark:border-indigo-400"></div>
+        <span className="ml-2 text-gray-600 dark:text-gray-300">
+          {t('profile.loading')}
+        </span>
       </div>
     );
   }
 
+  // Custom Input Component
+  const CustomInput = ({ type = "text", name, value, onChange, label, required = false, icon: Icon }) => (
+    <div className="space-y-1">
+      <label className="block text-xs font-medium text-gray-700 dark:text-gray-300">
+        {label}
+      </label>
+      <div className="relative">
+        {Icon && (
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <Icon className="h-4 w-4 text-gray-400" />
+          </div>
+        )}
+        <input
+          type={type}
+          name={name}
+          value={value}
+          onChange={onChange}
+          required={required}
+          className={`w-full px-3 py-2 text-sm border border-gray-300 dark:bg-none dark:border-gray-500 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:text-white ${
+            Icon ? 'pl-10' : ''
+          }`}
+        />
+      </div>
+    </div>
+  );
+
+  // Custom Button Component
+  const CustomButton = ({ onClick, children, variant = "primary", disabled = false, type = "button", icon: Icon }) => {
+    const baseClasses = "px-4 py-2 text-sm font-medium rounded-md cursor-pointer transition-colors duration-200 flex items-center justify-center gap-2";
+    
+    const variants = {
+      primary: "bg-[#2A2B2E] dark:text-[#2A2B2E] dark:bg-gray-200 text-white hover:opacity-90 disabled:opacity-50",
+      outline: "border border-gray-300 dark:border-gray-600 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
+    };
+
+    return (
+      <button
+        type={type}
+        onClick={onClick}
+        disabled={disabled}
+        className={`${baseClasses} ${variants[variant]} ${disabled ? 'cursor-not-allowed' : ''}`}
+      >
+        {Icon && <Icon className="h-4 w-4" />}
+        {children}
+      </button>
+    );
+  };
+
   return (
     <div className="container mx-auto p-4 max-w-2xl">
-      <Card className="dark:bg-[#2A2B2E]">
-        <CardHeader className="border-b dark:border-gray-700 pb-3">
+      <div className="dark:bg-[#2A2B2E] bg-white rounded-lg shadow overflow-hidden">
+        {/* Header */}
+        <div className="border-b dark:border-gray-700 p-6">
           <div className="flex justify-between items-center">
-            <h1 className="text-base font-semibold">User Profile</h1>
+            <h1 className="text-xl font-semibold dark:text-white">{t('profile.title')}</h1>
             {!editMode && (
-              <Button
-                variant="outline"
+              <CustomButton
                 onClick={() => setEditMode(true)}
-                className="dark:bg-[#232428] h-8 text-xs cursor-pointer"
+                variant="outline"
+                icon={Edit2}
               >
-                Edit Profile
-              </Button>
+                {t('profile.editProfile')}
+              </CustomButton>
             )}
           </div>
-        </CardHeader>
+        </div>
 
-        <CardContent className="mt-2">
+        {/* Content */}
+        <div className="p-6">
           {editMode ? (
-            <form onSubmit={handleUpdateProfile} className="space-y-3">
-              <div>
-                <label className="block text-xs font-medium mb-1">Email</label>
-                <Input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className="w-full dark:bg-[#080808] text-sm h-8"
-                  required
-                />
-              </div>
+            /* Edit Mode Form */
+            <form onSubmit={handleUpdateProfile} className="space-y-4">
+              <CustomInput
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                label={t('profile.email')}
+                required
+                icon={Mail}
+              />
 
-              <div>
-                <label className="block text-xs font-medium mb-1">Name</label>
-                <Input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  className="w-full dark:bg-[#080808] text-sm h-8"
-                />
-              </div>
+              <CustomInput
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                label={t('profile.name')}
+                icon={User}
+              />
 
-              <div>
-                <label className="block text-xs font-medium mb-1">Phone</label>
-                <Input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  className="w-full dark:bg-[#080808] text-sm h-8"
-                />
-              </div>
+              <CustomInput
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={handleInputChange}
+                label={t('profile.phone')}
+                icon={Phone}
+              />
 
-              <div>
-                <label className="block text-xs font-medium mb-1">Address</label>
-                <Input
-                  type="text"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleInputChange}
-                  className="w-full dark:bg-[#080808] text-sm h-8"
-                />
-              </div>
+              <CustomInput
+                type="text"
+                name="address"
+                value={formData.address}
+                onChange={handleInputChange}
+                label={t('profile.address')}
+                icon={MapPin}
+              />
 
-              <div className="flex space-x-2 pt-2">
-                <Button
+              {/* Action Buttons */}
+              <div className="flex space-x-3 pt-4">
+                <CustomButton
                   type="submit"
-                  className="bg-black text-white hover:bg-gray-800 h-8 text-xs cursor-pointer"
+                  variant="primary"
                   disabled={isUpdating}
+                  icon={isUpdating ? Loader : Check}
                 >
-                  {isUpdating ? (
-                    <Loader className="animate-spin mr-1" size={14} />
-                  ) : null}
-                  Save Changes
-                </Button>
-                <Button
-                  variant="outline"
+                  {isUpdating ? t('profile.updating') : t('profile.saveChanges')}
+                </CustomButton>
+                
+                <CustomButton
                   onClick={() => setEditMode(false)}
-                  className="dark:bg-[#232428] h-8 text-xs cursor-pointer"
+                  variant="outline"
+                  icon={X}
                 >
-                  Cancel
-                </Button>
+                  {t('profile.cancel')}
+                </CustomButton>
               </div>
             </form>
           ) : (
-            <div className="space-y-3">
-              <div>
-                <h3 className="text-xs font-medium text-gray-500 dark:text-gray-400">
-                  Email
-                </h3>
-                <p className="mt-1 text-sm">{profile.user.email || "Not provided"}</p>
+            /* View Mode */
+            <div className="space-y-4">
+              {/* Email */}
+              <div className="flex items-start space-x-3 p-3 bg-gray-50 dark:bg-[#232428] rounded-lg">
+                <Mail className="h-5 w-5 text-gray-400 mt-0.5" />
+                <div className="flex-1">
+                  <h3 className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    {t('profile.email')}
+                  </h3>
+                  <p className="mt-1 text-sm dark:text-white">
+                    {profile.user.email || t('profile.notProvided')}
+                  </p>
+                </div>
               </div>
 
-              <div>
-                <h3 className="text-xs font-medium text-gray-500 dark:text-gray-400">
-                  Name
-                </h3>
-                <p className="mt-1 text-sm">{profile.user.name || "Not provided"}</p>
+              {/* Name */}
+              <div className="flex items-start space-x-3 p-3 bg-gray-50 dark:bg-[#232428] rounded-lg">
+                <User className="h-5 w-5 text-gray-400 mt-0.5" />
+                <div className="flex-1">
+                  <h3 className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    {t('profile.name')}
+                  </h3>
+                  <p className="mt-1 text-sm dark:text-white">
+                    {profile.user.name || t('profile.notProvided')}
+                  </p>
+                </div>
               </div>
 
-              <div>
-                <h3 className="text-xs font-medium text-gray-500 dark:text-gray-400">
-                  Phone
-                </h3>
-                <p className="mt-1 text-sm">{profile.user.phone || "Not provided"}</p>
+              {/* Phone */}
+              <div className="flex items-start space-x-3 p-3 bg-gray-50 dark:bg-[#232428] rounded-lg">
+                <Phone className="h-5 w-5 text-gray-400 mt-0.5" />
+                <div className="flex-1">
+                  <h3 className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    {t('profile.phone')}
+                  </h3>
+                  <p className="mt-1 text-sm dark:text-white">
+                    {profile.user.phone || t('profile.notProvided')}
+                  </p>
+                </div>
               </div>
 
-              <div>
-                <h3 className="text-xs font-medium text-gray-500 dark:text-gray-400">
-                  Address
-                </h3>
-                <p className="mt-1 text-sm">
-                  {profile.user.address || "Not provided"}
-                </p>
+              {/* Address */}
+              <div className="flex items-start space-x-3 p-3 bg-gray-50 dark:bg-[#232428] rounded-lg">
+                <MapPin className="h-5 w-5 text-gray-400 mt-0.5" /> 
+                <div className="flex-1">
+                  <h3 className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    {t('profile.address')}
+                  </h3>
+                  <p className="mt-1 text-sm dark:text-white">
+                    {profile.user.address || t('profile.notProvided')}
+                  </p>
+                </div>
               </div>
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }
