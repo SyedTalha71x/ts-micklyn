@@ -6,6 +6,7 @@ import { FireApi } from "@/hooks/fireApi";
 import toast from "react-hot-toast";
 import { useProfile } from "@/Context/ProfileContext";
 import { useTranslation } from "react-i18next";
+import { useCurrency } from "@/Context/CurrencyContext";
 
 export default function CryptoTable({ onClose }) {
   const [activeTab, setActiveTab] = useState("watchlist");
@@ -15,7 +16,7 @@ export default function CryptoTable({ onClose }) {
   const [openRow, setOpenRow] = useState(null);
 
   const { t } = useTranslation("chat");
-
+  const {currencySymbol} = useCurrency();
   // Initial data load
   useEffect(() => {
     getWatchlistData();
@@ -37,7 +38,7 @@ export default function CryptoTable({ onClose }) {
 
   const formatBalance = (balance) => {
     if (balance === "0" || balance === "0.0" || parseFloat(balance) === 0) {
-      return "$ 0.00";
+      return `${currencySymbol} 0.00`;
     }
     return parseFloat(balance).toFixed(2);
   };
