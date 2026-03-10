@@ -172,7 +172,7 @@ const ProfileManagement = () => {
               />
             </div>
 
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Position
               </label>
@@ -201,7 +201,7 @@ const ProfileManagement = () => {
                 <option value="Finance">Finance</option>
                 <option value="HR">Human Resources</option>
               </select>
-            </div>
+            </div> */}
           </div>
 
           <div className="mt-6 flex justify-end">
@@ -351,7 +351,7 @@ const ProfileManagement = () => {
                 </label>
               </div>
 
-              <div className="flex items-center justify-between">
+              {/* <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-700">SMS Alerts</p>
                   <p className="text-sm text-gray-500">Receive critical alerts via text</p>
@@ -360,7 +360,7 @@ const ProfileManagement = () => {
                   <input type="checkbox" className="sr-only peer" />
                   <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
                 </label>
-              </div>
+              </div> */}
             </div>
           </div>
 
@@ -382,14 +382,14 @@ const ProfileManagement = () => {
                   <p className="text-sm font-medium text-gray-700">Login History</p>
                   <p className="text-sm text-gray-500">View recent account activity</p>
                 </div>
-                <button className="px-3 py-1 border border-gray-300 text-sm rounded-md hover:bg-gray-50">
+                <button className="px-3 py-1 border border-gray-300 text-sm text-black rounded-md hover:bg-gray-50">
                   View Logs
                 </button>
               </div>
             </div>
           </div>
 
-          <div className="border-t border-gray-200 pt-6">
+          {/* <div className="border-t border-gray-200 pt-6">
             <h3 className="text-lg font-medium mb-4 text-red-600">Danger Zone</h3>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
@@ -412,7 +412,7 @@ const ProfileManagement = () => {
                 </button>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       )}
     </div>

@@ -6,6 +6,7 @@ const TaskManagement = () => {
     { id: 1, title: 'Daily Login', description: 'User logs in for 5 consecutive days', reward: '10 tokens', status: 'active' },
     { id: 2, title: 'Complete Profile', description: 'User completes their profile information', reward: '15 tokens', status: 'active' },
     { id: 3, title: 'First Transaction', description: 'User makes their first transaction', reward: '20 tokens', status: 'inactive' },
+        { id: 4, title: 'Transaction Bonus', description: 'User makes their Transaction Bonus', reward: '10 tokens', status: 'inactive' },
   ]);
   
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -59,7 +60,7 @@ const TaskManagement = () => {
         {tasks.map((task) => (
           <div key={task.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
             <div className="flex justify-between items-start">
-              <h3 className="font-medium text-lg">{task.title}</h3>
+              <h3 className="font-medium text-lg text-black">{task.title}</h3>
               <button 
                 onClick={() => toggleTaskStatus(task.id)}
                 className={`p-1 rounded-full ${task.status === 'active' ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-600'}`}

@@ -19,22 +19,22 @@ const Notifications = () => {
       time: '1 hour ago', 
       read: false 
     },
-    { 
-      id: 3, 
-      title: 'Referral Reward Claimed', 
-      message: 'Maria Garcia has claimed her referral reward', 
-      type: 'referral', 
-      time: '3 hours ago', 
-      read: true 
-    },
-    { 
-      id: 4, 
-      title: 'Social Media Share', 
-      message: 'James Smith has shared on Twitter', 
-      type: 'social', 
-      time: '5 hours ago', 
-      read: true 
-    },
+    // { 
+    //   id: 3, 
+    //   title: 'Referral Reward Claimed', 
+    //   message: 'Maria Garcia has claimed her referral reward', 
+    //   type: 'referral', 
+    //   time: '3 hours ago', 
+    //   read: true 
+    // },
+    // { 
+    //   id: 4, 
+    //   title: 'Social Media Share', 
+    //   message: 'James Smith has shared on Twitter', 
+    //   type: 'social', 
+    //   time: '5 hours ago', 
+    //   read: true 
+    // },
     { 
       id: 5, 
       title: 'System Alert', 
@@ -197,7 +197,7 @@ const Notifications = () => {
                 </button>
               </div>
               
-              <div className="flex items-center justify-between">
+              {/* <div className="flex items-center justify-between">
                 <label className="text-sm text-gray-700">SMS Alerts</label>
                 <button
                   onClick={() => handleSettingChange('sms')}
@@ -209,7 +209,7 @@ const Notifications = () => {
                     notificationSettings.sms ? 'translate-x-6' : 'translate-x-1'
                   }`} />
                 </button>
-              </div>
+              </div> */}
               
               <div className="flex items-center justify-between">
                 <label className="text-sm text-gray-700">Sound Alerts</label>
@@ -233,14 +233,14 @@ const Notifications = () => {
                   <input type="checkbox" className="rounded text-indigo-600 cursor-pointer" defaultChecked />
                   <span className="ml-2 text-sm text-gray-700">Transaction Alerts</span>
                 </label>
-                <label className="flex items-center cursor-pointer">
+                {/* <label className="flex items-center cursor-pointer">
                   <input type="checkbox" className="rounded text-indigo-600 cursor-pointer" defaultChecked />
                   <span className="ml-2 text-sm text-gray-700">Referral Alerts</span>
                 </label>
                 <label className="flex items-center cursor-pointer">
                   <input type="checkbox" className="rounded text-indigo-600 cursor-pointer" defaultChecked />
                   <span className="ml-2 text-sm text-gray-700">Social Media Alerts</span>
-                </label>
+                </label> */}
                 <label className="flex items-center cursor-pointer">
                   <input type="checkbox" className="rounded text-indigo-600 cursor-pointer" defaultChecked />
                   <span className="ml-2 text-sm text-gray-700">System Alerts</span>

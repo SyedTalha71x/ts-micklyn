@@ -5,8 +5,8 @@ const stats = [
   { name: 'Total Rewards Distributed', value: '12,450', icon: FiAward, change: '+12%', changeType: 'positive' },
   { name: 'Active Tasks', value: '24', icon: FiList, change: '+3', changeType: 'positive' },
   { name: 'Active Users', value: '1,234', icon: FiUsers, change: '-2%', changeType: 'negative' },
-  { name: 'Daily Activities', value: '342', icon: FiActivity, change: '+24%', changeType: 'positive' },
-  { name: 'Unread Notifications', value: '15', icon: FiBell, change: '+5', changeType: 'positive' },
+  // { name: 'Daily Activities', value: '342', icon: FiActivity, change: '+24%', changeType: 'positive' },
+  // { name: 'Unread Notifications', value: '15', icon: FiBell, change: '+5', changeType: 'positive' },
 ];
 
 const DashboardHome = () => {
@@ -14,7 +14,7 @@ const DashboardHome = () => {
     <div>
       <h2 className="text-2xl font-bold text-gray-800 mb-6">Dashboard Overview</h2>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         {stats.map((stat) => (
           <div key={stat.name} className="bg-white p-4 rounded-lg shadow border border-gray-100">
             <div className="flex items-center justify-between">

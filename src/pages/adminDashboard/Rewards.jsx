@@ -5,7 +5,7 @@ const Rewards = () => {
   const [rewards, setRewards] = useState([
     { id: 1, name: 'Transaction Bonus', type: 'transaction', amount: '10 tokens', condition: 'Complete 5 transactions' },
     { id: 2, name: 'Referral Reward', type: 'referral', amount: '50 tokens', condition: 'Refer 3 friends' },
-    { id: 3, name: 'Social Media Share', type: 'social', amount: '20 tokens', condition: 'Share on 2 platforms' },
+    // { id: 3, name: 'Social Media Share', type: 'social', amount: '20 tokens', condition: 'Share on 2 platforms' },
   ]);
   
   const [isModalOpen, setIsModalOpen] = useState(false);

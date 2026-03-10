@@ -74,7 +74,7 @@ const Header = () => {
               <div className="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center">
                 <FiUser className="text-indigo-600" />
               </div>
-              <span className="text-sm font-medium">Admin</span>
+              <span className="text-sm font-medium text-black">Admin</span>
               <FiChevronDown className="text-gray-500" />
             </button>
             

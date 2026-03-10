@@ -14,22 +14,22 @@ const UserActivity = () => {
       reward: '10 tokens', 
       timestamp: '2023-05-15 14:30' 
     },
-    { 
-      id: 2, 
-      user: 'Maria Garcia', 
-      type: 'referral', 
-      details: 'Referred James Smith', 
-      reward: '50 tokens', 
-      timestamp: '2023-05-15 12:45' 
-    },
-    { 
-      id: 3, 
-      user: 'James Smith', 
-      type: 'social', 
-      details: 'Shared on Twitter', 
-      reward: '20 tokens', 
-      timestamp: '2023-05-15 10:20' 
-    },
+    // { 
+    //   id: 2, 
+    //   user: 'Maria Garcia', 
+    //   type: 'referral', 
+    //   details: 'Referred James Smith', 
+    //   reward: '50 tokens', 
+    //   timestamp: '2023-05-15 12:45' 
+    // },
+    // { 
+    //   id: 3, 
+    //   user: 'James Smith', 
+    //   type: 'social', 
+    //   details: 'Shared on Twitter', 
+    //   reward: '20 tokens', 
+    //   timestamp: '2023-05-15 10:20' 
+    // },
     { 
       id: 4, 
       user: 'Sarah Williams', 
@@ -94,7 +94,7 @@ const UserActivity = () => {
         >
           Transactions
         </button>
-        <button
+        {/* <button
           onClick={() => setActiveTab('referral')}
           className={`py-2 px-4 font-medium text-sm ${activeTab === 'referral' ? 'border-b-2 border-indigo-500 text-indigo-600' : 'text-gray-500 hover:text-gray-700'}`}
         >
@@ -105,7 +105,7 @@ const UserActivity = () => {
           className={`py-2 px-4 font-medium text-sm ${activeTab === 'social' ? 'border-b-2 border-indigo-500 text-indigo-600' : 'text-gray-500 hover:text-gray-700'}`}
         >
           Social Media
-        </button>
+        </button> */}
         <button
           onClick={() => setActiveTab('task')}
           className={`py-2 px-4 font-medium text-sm ${activeTab === 'task' ? 'border-b-2 border-indigo-500 text-indigo-600' : 'text-gray-500 hover:text-gray-700'}`}

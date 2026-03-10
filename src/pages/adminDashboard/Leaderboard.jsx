@@ -41,9 +41,9 @@ const Leaderboard = () => {
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rank</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Points</th>
+              {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Points</th> */}
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Transactions</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Referrals</th>
+              {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Referrals</th> */}
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
@@ -75,14 +75,14 @@ const Leaderboard = () => {
                     </div>
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center">
+                {/* <td className="px-6 py-4 whitespace-nowrap"> */}
+                  {/* <div className="flex items-center">
                     <FiTrendingUp className="text-green-500 mr-1" />
                     <span className="font-medium">{user.points}</span>
-                  </div>
-                </td>
+                  </div> */}
+                {/* </td> */}
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.transactions}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.referrals}</td>
+                {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.referrals}</td> */}
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <button className="text-indigo-600 hover:text-indigo-900">View Details</button>
                 </td>
